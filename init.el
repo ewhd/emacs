@@ -152,4 +152,25 @@
   )
 ;(elpaca-wait) ; I'm unsure if this is needed
 
+(use-package gruvbox-theme
+  :config
+  (load-theme 'gruvbox-dark-medium t)
+  )
+
+(use-package which-key
+  :init
+  (which-key-mode)
+  :config
+  (which-key-setup-side-window-bottom)
+  (setq which-key-sort-order 'which-key-key-order)
+  ;; Allow C-h to trigger which-key before it is done automatically
+  (setq which-key-show-early-on-C-h t)
+  ;; make sure which-key doesn't show normally but refreshes quickly after it is
+  ;; triggered.
+  (setq which-key-idle-delay 10)
+  (setq which-key-idle-secondary-delay 0.05)
+  :bind (("C-h m" . which-key-show-top-level))
+  :delight which-key-mode)
+
+
 
