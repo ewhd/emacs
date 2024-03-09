@@ -13,6 +13,7 @@ auto-save-list
 tramp
 .\#*
 /eln-cache/
+/elpaca/
 
 # Org-mode
 .org-id-locations
