@@ -79,7 +79,7 @@
 (menu-bar-mode -1)
 (tooltip-mode -1)
 (delete-selection-mode 1)     ; Replace region when inserting text
-(desktop-save-mode 1)
+(desktop-save-mode -1)
 
 ;; Revert Buffer Behavior:
 ;; - Automatically revert files which have been changed on disk, unless the buffer contains unsaved changes
@@ -135,7 +135,6 @@
 ;; General Key Remapping:
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "M-v") 'kill-ring-save)
-(global-set-key (kbd "C-z") 'undo-tree-undo)
 ;; (global-set-key (kbd "C-S-v") 'scroll-up-command)
 (global-set-key (kbd "C-:") 'eval-expression)
 (global-set-key (kbd "C-h n") nil)
@@ -184,13 +183,44 @@
            ))
 
 
+;;;; Undo/Redo:
+(use-package undo-fu
+  :config
+  (global-unset-key (kbd "C-z"))
+  (global-set-key (kbd "C-z")   'undo-fu-only-undo)
+  (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
 
-;; (use-package undo-tree
-;;   :delight undo-tree-mode
-;;   :config
-;;   (progn
-;;     (global-undo-tree-mode t)
-;;     (setq undo-tree-visualizer-timestamps t)
-;;     (setq undo-tree-visualizer-diff t))
-;;  )
+;; Vundo config mostly borrowed from https://www.reddit.com/r/emacs/comments/txwwfi/vundo_is_great_visual_undotree_for_emacs28/
+(use-package vundo
+  :commands (vundo)
+
+  :config
+  ;; Take less on-screen space.
+  (setq vundo-compact-display t)
+
+  ;; Use prettier Unicode characters
+  (setq vundo-glyph-alist vundo-unicode-symbols)
+  
+  ;; Better contrasting highlight.
+  (custom-set-faces
+    '(vundo-node ((t (:foreground "#808080"))))
+    '(vundo-stem ((t (:foreground "#808080"))))
+    '(vundo-highlight ((t (:foreground "#FFFF00")))))
+
+  ;; Use `HJKL` VIM-like motion, also Home/End to jump around.
+  (define-key vundo-mode-map (kbd "l") #'vundo-forward)
+  (define-key vundo-mode-map (kbd "<right>") #'vundo-forward)
+  (define-key vundo-mode-map (kbd "h") #'vundo-backward)
+  (define-key vundo-mode-map (kbd "<left>") #'vundo-backward)
+  (define-key vundo-mode-map (kbd "j") #'vundo-next)
+  (define-key vundo-mode-map (kbd "<down>") #'vundo-next)
+  (define-key vundo-mode-map (kbd "k") #'vundo-previous)
+  (define-key vundo-mode-map (kbd "<up>") #'vundo-previous)
+  (define-key vundo-mode-map (kbd "<home>") #'vundo-stem-root)
+  (define-key vundo-mode-map (kbd "<end>") #'vundo-stem-end)
+  (define-key vundo-mode-map (kbd "q") #'vundo-quit)
+  (define-key vundo-mode-map (kbd "C-g") #'vundo-quit)
+  (define-key vundo-mode-map (kbd "RET") #'vundo-confirm))
+
+(global-set-key (kbd "C-M-u") 'vundo)
 
