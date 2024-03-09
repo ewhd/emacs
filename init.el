@@ -172,5 +172,25 @@
   :bind (("C-h m" . which-key-show-top-level))
   :delight which-key-mode)
 
+(use-package multiple-cursors
+  :ensure   t
+  :bind (("H-SPC" . set-rectangular-region-anchor)
+         ("C-M-SPC" . set-rectangular-region-anchor)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C->" . mc/mark-all-like-this)
+         ("C-c C-SPC" . mc/edit-lines)
+	   ("C-S-<mouse-1>" . 'mc/add-cursor-on-click)
+           ))
 
+
+
+;; (use-package undo-tree
+;;   :delight undo-tree-mode
+;;   :config
+;;   (progn
+;;     (global-undo-tree-mode t)
+;;     (setq undo-tree-visualizer-timestamps t)
+;;     (setq undo-tree-visualizer-diff t))
+;;  )
 
