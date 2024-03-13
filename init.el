@@ -73,7 +73,9 @@
       scroll-margin 2             ; Add a margin when scrolling vertically
       mouse-wheel-scroll-amount '(1)
       sentence-end-double-space nil
-      column-number-mode t)
+      column-number-mode t
+      dired-kill-when-opening-new-dired-buffer t   ; prevent dired from creating new buffers for every dir visited
+      )
 
 (global-visual-line-mode 1)
 (global-hl-line-mode 1)       ; highlight current line
