@@ -2,6 +2,20 @@
 
 
 
+;; Ensure Transient is the most recent version (needed for magit):
+(use-package transient
+  :ensure t)
+
+;;;; Source Control:
+;; Magit:
+(use-package magit
+  :after transient
+  :ensure t
+  :bind (("C-x g" . magit)))
+
+
+
+
 ;;;; Modeline:
 ;; Delight enables you to easily customise how major and minor modes appear in the ModeLine.
 ;; As per use-package README: delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with “-mode” appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely.
@@ -127,7 +141,6 @@
   (define-key vundo-mode-map (kbd "RET") #'vundo-confirm))
 
 (global-set-key (kbd "C-M-u") 'vundo)
-
 
 
 
