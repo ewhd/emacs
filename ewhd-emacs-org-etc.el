@@ -15,20 +15,45 @@
 )
 
 
-
 (use-package org-modern
     :ensure t
-    :custom
-    (org-modern-hide-stars t)		; adds extra indentation
-    (org-modern-table t)
-    (org-modern-list 
-     '(;; (?- . "-")
-       (?* . "•")
-       (?+ . "‣")))
-    ;(org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
-    :hook
-    (org-mode . org-modern-mode)
-    (org-agenda-finalize . org-modern-agenda))
+    ;; :custom
+    ;; (org-modern-hide-stars t)		; adds extra indentation
+    ;; (org-modern-table t)
+    ;; (org-modern-list 
+    ;;  '(;; (?- . "-")
+    ;;    (?* . "•")
+    ;;    (?+ . "‣")))
+    ;; ;(org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
+    ;; :hook
+    ;; (org-mode . org-modern-mode)
+    ;; (org-agenda-finalize . org-modern-agenda)
+    )
+
+
+
+(setq
+   ;; Edit settings
+   ;; org-fold-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+
+   ;; Org styling, hide markup etc.
+   ;;org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"
+   )
+
+
+(setq org-modern-hide-stars t)                ; adds extra indentation
+(setq org-modern-table t)
+(setq org-modern-list
+ '(;; (?- . "-")
+   (?* . "•")
+   (?+ . "‣")))
+(org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
+
+
 
 
 
