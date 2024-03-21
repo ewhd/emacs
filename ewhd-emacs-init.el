@@ -19,3 +19,8 @@
 ;; Universal Packages
 ;; Packages and their settings which I will always want
 (load (locate-user-emacs-file "ewhd-emacs-universal-packages.el") nil :nomessage)
+
+;; Org Mode, Org Roam, and attending packages
+(load (locate-user-emacs-file "ewhd-emacs-org-etc.el") nil :nomessage)
+
+
