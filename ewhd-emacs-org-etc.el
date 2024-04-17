@@ -11,7 +11,23 @@
 	 ("C-S-l" . org-toggle-link-display)
          )
   :config
-;  (setq org-indent-mode t)
+  (setq
+   org-startup-indented t
+   org-fold-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+   ;;org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"
+   org-src-fontify-natively t
+   org-src-window-setup 'current-window ;; edit in current window
+   org-src-strip-leading-and-trailing-blank-lines t
+   org-src-preserve-indentation t ;; do not put two spaces on the left
+   org-src-tab-acts-natively t
+   org-log-into-drawer t
+   org-startup-with-inline-images t   ; only displays in the format [[file:path-to-file]], nothing else.
+   org-image-actual-width '(300)
+   )
 )
 
 
@@ -28,22 +44,9 @@
     ;; :hook
     ;; (org-mode . org-modern-mode)
     ;; (org-agenda-finalize . org-modern-agenda)
+    :config
+    (setq org-modern-mode t)
     )
-
-
-
-(setq
-   ;; Edit settings
-   ;; org-fold-catch-invisible-edits 'show-and-error
-   org-special-ctrl-a/e t
-   org-insert-heading-respect-content t
-
-   ;; Org styling, hide markup etc.
-   ;;org-hide-emphasis-markers t
-   org-pretty-entities t
-   org-ellipsis "…"
-   )
-
 
 (setq org-modern-hide-stars t)                ; adds extra indentation
 (setq org-modern-table t)
@@ -55,17 +58,43 @@
 
 
 
+;;;; ORG-MODE GENERAL BEHAVIOR
+(setq
+   ;; Edit settings
+   org-fold-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+   ;;org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"
+   org-src-fontify-natively t
+   org-src-window-setup 'current-window ;; edit in current window
+   org-src-strip-leading-and-trailing-blank-lines t
+   org-src-preserve-indentation t ;; do not put two spaces on the left
+   org-src-tab-acts-natively t
+   org-log-into-drawer t
+   org-startup-with-inline-images t   ; only displays in the format [[file:path-to-file]], nothing else.
+   org-image-actual-width '(300)
+   )
+
+
+
+
+
+
 
 
 ;;;;;; OTHER ORG-MODE PACKAGES
 ;;;; Show hidden emphasis markers
 (use-package org-appear
+  :ensure t
   :hook
   (org-mode . org-appear-mode)
   :config
-  (setq ;org-appear-autolinks nil
-        org-appear-autosubmarkers t
-        ;org-appear-delay .7
-        )
+  (setq
+   org-appear-autolinks nil
+   org-appear-autosubmarkers t
+   ;org-appear-delay .7
+   )
   )
 
