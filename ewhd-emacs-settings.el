@@ -36,8 +36,8 @@
 (add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode)
 
 ;; Line Numbers:
-(setq display-line-numbers 'relative)
 (global-display-line-numbers-mode 1)
+(setq display-line-numbers-type 'relative) ;sets the default line number type
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
 		term-mode-hook
