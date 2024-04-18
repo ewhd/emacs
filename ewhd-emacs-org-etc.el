@@ -45,7 +45,7 @@
     ;; (org-mode . org-modern-mode)
     ;; (org-agenda-finalize . org-modern-agenda)
     :config
-    (setq org-modern-mode t)
+    (setq global-org-modern-mode t)
     )
 
 (setq org-modern-hide-stars t)                ; adds extra indentation
