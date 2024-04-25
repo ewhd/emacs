@@ -134,7 +134,7 @@
 (setq org-agenda-files
       (seq-filter
        'file-exists-p
-       (directory-files-recursively "~/Documents/notes" t "^[^\.#].*_gtd.*\\.org$")))
+       (directory-files-recursively "~/Documents/notes" "^[^\.#].*_gtd.*\\.org$")))
 
 
 
