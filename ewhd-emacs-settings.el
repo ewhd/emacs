@@ -14,6 +14,7 @@
       sentence-end-double-space nil
       column-number-mode t
       dired-kill-when-opening-new-dired-buffer t   ; prevent dired from creating new buffers for every dir visited
+      desktop-dirname "/tmp/"
       )
 
 (global-visual-line-mode 1)
@@ -46,6 +47,7 @@
                 eshell-mode-hook
                 help-mode-hook
                 org-agenda-mode-hook
+		chart-mode
 		))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
