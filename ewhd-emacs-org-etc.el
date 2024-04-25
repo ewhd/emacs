@@ -54,7 +54,7 @@
  '(;; (?- . "-")
    (?* . "•")
    (?+ . "‣")))
-(org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
+(setq org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
 
 
 
