@@ -58,33 +58,36 @@
 	      )
   )
 
-(use-package spell-fu
-  :config
-  (setq spell-fu-word-delimit-camel-case t)
-  )
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
-(add-hook 'org-mode-hook
-  (lambda ()
-    (setq spell-fu-faces-exclude
-     '(org-block-begin-line
-       org-block-end-line
-       org-code
-       org-date
-       org-drawer org-document-info-keyword
-       org-ellipsis
-       org-link
-       org-meta-line
-       org-properties
-       org-properties-value
-       org-special-keyword
-       org-src
-       org-tag
-       org-verbatim))
-    (spell-fu-mode)))
+;; (use-package spell-fu
+  ;; :config
+  ;; (setq spell-fu-word-delimit-camel-case t)
+  ;; )
 
-(add-hook 'emacs-lisp-mode-hook
-  (lambda ()
-    (spell-fu-mode)))
+;; (add-hook 'org-mode-hook
+;;   (lambda ()
+;;     (setq spell-fu-faces-exclude
+;;      '(org-block-begin-line
+;;        org-block-end-line
+;;        org-code
+;;        org-date
+;;        org-drawer org-document-info-keyword
+;;        org-ellipsis
+;;        org-link
+;;        org-meta-line
+;;        org-properties
+;;        org-properties-value
+;;        org-special-keyword
+;;        org-src
+;;        org-tag
+;;        org-verbatim))
+;;     (spell-fu-mode)))
+
+;; (add-hook 'emacs-lisp-mode-hook
+;;   (lambda ()
+;;     (spell-fu-mode)))
 
 
 ;;;; Multiple Cursors:
