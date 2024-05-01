@@ -82,10 +82,91 @@
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "M-v") 'kill-ring-save)
 ;; (global-set-key (kbd "C-S-v") 'scroll-up-command)
-(global-set-key (kbd "C-:") 'eval-expression)
+(global-set-key (kbd "C-:") 'comment-region)
 (global-set-key (kbd "C-h n") nil)
 (global-set-key (kbd "C-h C-n") nil)
 ;(global-set-key (kbd "C-x 4-s") 'window-swap-states) ; not working
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "<mouse-3>") 'mouse-major-mode-menu)
 (global-set-key (kbd "<C-mouse-3>") 'mouse-popup-menubar)
+
+
+;;;; Extra Functions
+;; Toggle Letter Case
+
+(defun xah-toggle-letter-case ()
+  "Toggle the letter case of current word or text selection.
+always cycle in this order: Init Caps, ALL CAPS, all lower.
+
+URL `http://xahlee.info/emacs/emacs/modernization_upcase-word.html'
+Version 2020-06-26"
+  (interactive)
+  (let (
+        (deactivate-mark nil)
+        $p1 $p2)
+    (if (use-region-p)
+        (setq $p1 (region-beginning) $p2 (region-end))
+      (save-excursion
+        (skip-chars-backward "[:alpha:]")
+        (setq $p1 (point))
+        (skip-chars-forward "[:alpha:]")
+        (setq $p2 (point))))
+    (when (not (eq last-command this-command))
+      (put this-command 'state 0))
+    (cond
+     ((equal 0 (get this-command 'state))
+      (upcase-initials-region $p1 $p2)
+      (put this-command 'state 1))
+     ((equal 1 (get this-command 'state))
+      (upcase-region $p1 $p2)
+      (put this-command 'state 2))
+     ((equal 2 (get this-command 'state))
+      (downcase-region $p1 $p2)
+      (put this-command 'state 0)))))
+
+(global-set-key (kbd "M-c") 'xah-toggle-letter-case)
+
+
+;; Increment Number
+; https://www.emacswiki.org/emacs/IncrementNumber
+
+(defun ewhd-increment-number-decimal (&optional arg)
+  "Increment the number forward from point by 'arg'."
+  (interactive "p*")
+  (save-excursion
+    (save-match-data
+      (let (inc-by field-width answer)
+        (setq inc-by (if arg arg 1))
+        (skip-chars-backward "0123456789")
+        (when (re-search-forward "[0-9]+" nil t)
+          (setq field-width (- (match-end 0) (match-beginning 0)))
+          (setq answer (+ (string-to-number (match-string 0) 10) inc-by))
+          (when (< answer 0)
+            (setq answer (+ (expt 10 field-width) answer)))
+          (replace-match (format (concat "%0" (int-to-string field-width) "d")
+                                 answer)))))))
+
+(defun ewhd-decrement-number-decimal (&optional arg)
+  (interactive "p*")
+  (ewhd-increment-number-decimal (if arg (- arg) -1)))
+
+(global-set-key (kbd "C-c C-=") 'ewhd-increment-number-decimal)
+(global-set-key (kbd "C-c C--") 'ewhd-decrement-number-decimal)
+
+(defun ewhd-increment-string (string)
+  (interactive "*")
+  (setq start (string-match "\\([0-9]+\\)" string))
+  (setq end (match-end 0))
+  (setq number (string-to-number (substring string start end)))
+  (setq new-num-string (number-to-string (+ 1 number)))
+  (concat (substring string 0 start) new-num-string (substring string end)))
+
+(defun ewhd-yank-increment ()
+  "Yank text, incrementing the first integer found in it."
+  (interactive "*")
+  (setq new-text (ewhd-increment-string (current-kill 0)))
+  (insert-for-yank new-text)
+  (kill-new new-text t))
+
+;; (global-set-key (kbd "C-c C-y") 'ewhd-yank-increment)
+
