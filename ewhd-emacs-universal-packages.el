@@ -13,6 +13,28 @@
   :ensure t
   :bind (("C-x g" . magit)))
 
+;; Function to remove local branches already merged into another branch
+;; https://emacs.stackexchange.com/questions/60200/magit-remove-local-branches-that-were-merged-into-another-branch/81021#81021
+(defun ewhd-delete-merged-branches ()
+  (interactive)
+  (magit-fetch-all-prune)
+  (let* ((default-branch
+           (read-string "Default branch: " (magit-get-current-branch)))
+         (merged-branches
+          (magit-git-lines "branch"
+                           "--format" "%(refname:short)"
+                           "--merged"
+                           default-branch))
+         (branches-to-delete
+          (remove default-branch merged-branches)))
+    (if branches-to-delete
+        (if (yes-or-no-p (concat "Delete branches? ["
+                                 (mapconcat 'identity branches-to-delete ", ") "]"))
+            (magit-branch-delete branches-to-delete))
+      (message "Nothing to delete"))))
+
+(transient-append-suffix 'magit-branch "C"
+    '("K" "delete all merged" ewhd-delete-merged-branches))
 
 
 
