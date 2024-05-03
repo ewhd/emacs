@@ -88,13 +88,13 @@
  '((sequence
     "TODO(t)"
     "NEXT(n)"
-    "STARTED(s!)"
+    "STARTED(s)"
     "WAITING(w@/!)"
-    "REVIEW(r)"
+    "REVIEW(r!)"
     "HOLD(h@/!)"
     "|"
-    "CANCELED(x!)"
-    "DONE(d!)"
+    "CANCELED(x)"
+    "DONE(d)"
     )
    (sequence
     "OPEN(o)"
@@ -102,10 +102,10 @@
     "|"
     "COMPLETE(c)")
    (sequence
-    "PROJECT - OPEN(p!)"
-    "PROJECT - ON-HOLD(@/!)"
+    "PROJECT - OPEN(p)"
+    "PROJECT - ON-HOLD(@/)"
     "|"
-    "FINISHED(f!)"
+    "FINISHED(f)"
     )
    )
  )
