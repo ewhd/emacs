@@ -51,5 +51,8 @@
 (setq use-package-always-ensure t)
 
 
+;; Custom elpaca keys
+(global-set-key (kbd "C-c em") 'elpaca-manager)
+
 
 ;;End
