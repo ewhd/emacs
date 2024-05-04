@@ -13,6 +13,7 @@
   :config
   (setq
    org-startup-indented t
+   org-startup-folded t
    org-fold-catch-invisible-edits 'show-and-error
    org-special-ctrl-a/e t
    org-insert-heading-respect-content t
