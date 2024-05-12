@@ -18,6 +18,7 @@
 	 ("C-c d d" . denote)
 	 )
   :config
+  (setq denote-known-keywords '())
   :hook ((dired-mode . denote-dired-mode))
   )
 
