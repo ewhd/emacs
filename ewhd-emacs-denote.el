@@ -11,14 +11,16 @@
   (denote-prompts '(title keywords subdirectory))
   (denote-directory (expand-file-name "~/Documents/notes/"))
   (denote-file-type 'org)
+  (denote-known-keywords '())
   :bind (("C-c d d" . denote)
 	 ("C-c d l" . denote-link)
 	 ("C-c d f" . list-denotes)
-	 ("C-c d d" . denote)
+	 ("C-c d t" . denote-template)
 	 ("C-c d d" . denote)
 	 )
   :config
-  (setq denote-known-keywords '())
+  (setq denote-templates `( ;;(test . "test")
+	))
   :hook ((dired-mode . denote-dired-mode))
   )
 
