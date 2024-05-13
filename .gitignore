@@ -56,3 +56,12 @@ flycheck_*.el
 
 # Undo-tree save-files
 *.~undo-tree
+
+# Session-files
+/session*
+
+# Added from magit
+/spell-fu/
+/transient/
+/tree-sitter/
+/history
