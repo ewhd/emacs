@@ -12,6 +12,7 @@
 	org-delete-char
 	org-end-of-line
 	org-metaright
+	org-open-line
 	org-self-insert-command
 	text-scale-increase
 	zap-up-to-char
