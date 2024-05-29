@@ -29,6 +29,7 @@
    org-startup-with-inline-images t   ; only displays in the format [[file:path-to-file]], nothing else.
    org-image-actual-width '(300)
    org-duration-format 'h:mm
+   org-clock-report-include-clocking-task t
    )
 )
 
