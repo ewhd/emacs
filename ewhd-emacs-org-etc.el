@@ -168,39 +168,50 @@
       org-agenda-include-diary t
       org-agenda-block-separator 9472
       org-agenda-compact-blocks nil
-      org-agenda-start-with-log-mode nil)
+      org-agenda-start-with-log-mode nil
+      )
 
 ;; Formatting (truncating) fields in agenda-view:
-(defvar ewhd-org-agenda-list-category t)
-(defun ewhd-org-agenda-toggle-list-category ()
+(defvar ewhd-org-agenda-extended-prefix t)
+(defun ewhd-org-agenda-toggle-extended-prefix ()
   "Toggles whether category/file name appears or not at the left
   of entries in agenda listings. Useful to unclutter listings."
   (interactive)
-  (if ewhd-org-agenda-list-category
+  (if ewhd-org-agenda-extended-prefix
       (progn 
-        (setq ewhd-org-agenda-list-category nil)
+        (setq ewhd-org-agenda-extended-prefix nil)
         (setq org-agenda-prefix-format
-              '((agenda  . "  %-12:c%?-12t% s")
+              '((agenda  . "  %?-12t% s")
                 (timeline  . "  % s")
-                (todo  . "  %-12:c")
-                (tags  . "  %-12:c")
-                (search . "  %-12:c")))
+                (todo  . "  ")
+                (tags  . "  ")
+                (search . "  ")))
         )
-    (setq ewhd-org-agenda-list-category t)
+    (setq ewhd-org-agenda-extended-prefix t)
     (setq org-agenda-prefix-format
-          '((agenda  . "  %?-12t% s")
+          '((agenda  . "  %-12:c%?-12t% s")
             (timeline  . "  % s")
-            (todo  . "  ")
-            (tags  . "  ")
-            (search . "  ")))
+            (todo  . "  %-12:c")
+            (tags  . "  %-12:c")
+            (search . "  %-12:c")))
+    
     )
   (org-agenda-redo))
+
+;; hide extended prefix info by default
+(setq ewhd-org-agenda-extended-prefix nil)
+(setq org-agenda-prefix-format
+      '((agenda  . "  %?-12t% s")
+        (timeline  . "  % s")
+        (todo  . "  ")
+        (tags  . "  ")
+        (search . "  ")))
 
 (add-hook 
  'org-mode-hook
  (lambda ()
-   (define-key org-agenda-keymap   "L" 'ewhd-org-agenda-toggle-list-category)
-   (define-key org-agenda-mode-map "L" 'ewhd-org-agenda-toggle-list-category)
+   (define-key org-agenda-keymap   "L" 'ewhd-org-agenda-toggle-extended-prefix)
+   (define-key org-agenda-mode-map "L" 'ewhd-org-agenda-toggle-extended-prefix)
    ))
 
 
