@@ -17,7 +17,7 @@
    org-fold-catch-invisible-edits 'show-and-error
    org-special-ctrl-a/e t
    org-insert-heading-respect-content t
-   ;;org-hide-emphasis-markers t
+   org-hide-emphasis-markers t
    org-pretty-entities t
    org-ellipsis "…"
    org-src-fontify-natively t
