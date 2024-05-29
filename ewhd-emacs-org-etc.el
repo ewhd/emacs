@@ -153,6 +153,10 @@
             (visual-line-mode -1)
             (toggle-truncate-lines 1)))
 
+;; set the depth of headers referenced by org-agenda-clockreport-mode
+;; see https://stackoverflow.com/a/56012531
+(setq org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5))
+
 ;; org-agenda-view
 (setq org-agenda-time-grid '(
 			     (daily today require-timed)
