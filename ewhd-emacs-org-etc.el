@@ -62,6 +62,7 @@
 
 
 ;;;; ORG-MODE GENERAL BEHAVIOR
+;; I think this is all included in the use-package block above, and should probably be removed
 (setq
    ;; Edit settings
    org-fold-catch-invisible-edits 'show-and-error
@@ -147,6 +148,7 @@
       org-agenda-restore-windows-after-quit t  ; restore window configuration on exit
       org-agenda-start-with-follow-mode nil
       org-columns-default-format-for-agenda "%25ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %20ALLTAGS"
+      org-agenda-start-with-log-mode t
       )
 (add-hook 'org-agenda-mode-hook
 	  ;; Disables word-wrap and enables truncate-line in agenda buffers
@@ -170,6 +172,8 @@
       org-agenda-block-separator 9472
       org-agenda-compact-blocks nil
       org-agenda-start-with-log-mode nil
+      org-agenda-hide-tags-regexp (regexp-opt '("cf" "gtd"))  ;; hides specific tags
+      ;; org-agenda-remove-tags t  ;; hides all tags
       )
 
 ;; Formatting (truncating) fields in agenda-view:
