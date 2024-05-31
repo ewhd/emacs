@@ -225,62 +225,112 @@
     (org-super-agenda-mode)
     (setq org-agenda-custom-commands
           '(("z" "Super view"
-             ((agenda "" ((org-agenda-span 'day)
+             (
+	      (agenda "" ((org-agenda-span 'day)
                           (org-super-agenda-groups
-                           '((:name "Today"
+                           '(
+			     (:name "Today"
                                     :time-grid t
                                     :date today
-                                    :todo "TODAY"
                                     :scheduled today
-                                    :order 1)))))
+				    :deadline today
+                                    :order 1)
+			     (:discard (:anything t))
+			     ))))
+	      ;; (agenda "" ((org-agenda-start-on-weekend nil)
+	      ;; 		  (org-agenda-span 7)
+	      ;; 		  (org-agenda-start-day "+1d")
+              ;;             (org-super-agenda-groups
+              ;;              '(
+	      ;; 		     (:name "This Week"
+	      ;; 			    :time-grid nil
+              ;;                       :scheduled future :not (:scheduled today)
+	      ;; 			    :deadline future :not (:deadline today)
+              ;;                       :order 2)
+	      ;; 		     (:discard (:anything t))
+	      ;; 		     ))))
               (alltodo "" ((org-agenda-overriding-header "")
+			   (org-agenda-span 7)
                            (org-super-agenda-groups
                             '(
-                              (:name "On Hold"
-                                      :tag "HOLD"
-                                      :order 30)
-			      (:name "Review"
-				     :tag "REVIEW"
-				     :order 8)
+                              (:name "Due Within 7 Days"
+                                     :deadline future
+				     :scheduled future
+                                     :order 100)
                               (:name "Overdue"
                                      :deadline past
-                                     :order 1)
+                                     :order 10)
 			      (:name "Behind Schedule"
 				     :scheduled past
-				     :order 2)
-                              (:name "Today"
-                                     :deadline today
-				     :scheduled today
-                                     :order 3)
-			      (:name "Next"
-                                     :todo "NEXT"
-                                     :order 6)
-			      (:name "Started"
-				     :todo "STARTED"
-			             :order 7)
-                              ;; (:name "Important"
-                              ;;        :tag "Important"
-                              ;;        :priority "A"
-                              ;;        :order 7)
-                              (:name "Other Items"
-                                     :todo "TODO"
-                                     :priority nil
-                                     :order 8)
-                              (:name "Waiting"
-                                     :tag "WAITING"
-                                     :order 9)
-                              (:name "Due Soon"
-                                     :deadline future
-                                     :order 10)
+				     :order 20)
+			      (:todo "NEXT" :priority>= "B" :order 60)
+			      (:todo "STARTED" :order 70)
                               (:name "Someday"
-                                     :priority "C"
-                                     :order 20)
-                              (:name "Projects"
-                                     :todo "PROJECT - OPEN"
-                                     :order 25)
+                                     :priority<= "C"
+                                     :order 200)
+			      (:todo "TODO" :order 80)
+                              (:name "Misc."
+				     :todo ("REVIEW" "WAITING" "HOLD" )
+                                     :order 90)
+                              (:todo "OPEN" :order 150)
 			      ;(:discard (:tag "PROJECT"))
-                              ))))))
-           )
+                              ))))
+	      ))
+	    ("wd" "Work Day"
+             (
+	      (agenda "" ((org-agenda-span 'day)
+                          (org-super-agenda-groups
+                           '(
+			     (:name "Today"
+                                    :time-grid t
+                                    :date today
+                                    :scheduled today
+				    :deadline today
+                                    :order 1)
+			     (:discard (:anything t))
+			     ))))
+              (tags-todo "cf" ((org-agenda-overriding-header "")
+			   (org-agenda-span 7)
+                           (org-super-agenda-groups
+                            '(
+                              (:name "Due Within 7 Days"
+                                     :deadline future
+				     :scheduled future
+                                     :order 100)
+                              (:name "Overdue"
+                                     :deadline past
+                                     :order 10)
+			      (:name "Behind Schedule"
+				     :scheduled past
+				     :order 20)
+			      (:todo "NEXT" :priority>= "B" :order 60)
+			      (:todo "STARTED" :order 70)
+                              (:name "Someday"
+                                     :priority<= "C"
+                                     :order 200)
+			      (:todo "TODO" :order 80)
+                              (:name "Misc."
+				     :todo ("REVIEW" "WAITING" "HOLD" )
+                                     :order 90)
+                              (:todo "OPEN" :order 150)
+			      ;(:discard (:tag "PROJECT"))
+                              ))))
+	      ))
+	    ("ww" "Work Week"
+             (
+	      (agenda "" ((org-agenda-start-on-weekend nil)
+	      		  ;; (org-agenda-span 7)
+	      		  ;; (org-agenda-start-day "+1d")
+                          (org-super-agenda-groups
+                           '(
+	      		     (:name "This Week"
+	      			    :time-grid t
+                                    :scheduled future
+	      			    :deadline future)
+	      		     (:discard (:anything t))
+	      		     ))))
+	      ))
+	    )
     )
 )
 
