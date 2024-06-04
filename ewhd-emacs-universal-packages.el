@@ -38,6 +38,31 @@
   )
 
 
+;;;; Navigation
+;; Dired+
+(use-package dired+
+  :ensure t
+  :after dired
+  :elpaca (:host github :repo "emacsmirror/dired-plus")
+  :bind
+  ()
+  :config
+  ;; Additional dired+ specific configurations here
+  ;; Hide details by default
+  (setq diredp-hide-details-initially-flag t)
+  
+  ;; (diredp-toggle-find-file-reuse-dir 1)  ;; start with diredp set to "reuse" buffer
+  
+  ;; (define-key dired-mode-map (kbd "S-") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+  
+  ;; Enable image previews
+  (setq diredp-image-preview-in-tooltip 128)
+  
+  ;; Define custom keybindings
+  (define-key dired-mode-map (kbd "C-c C-e") 'diredp-do-emacs-command)
+
+  )
+
 
 ;;;; Modeline:
 ;; Delight enables you to easily customise how major and minor modes appear in the ModeLine.
