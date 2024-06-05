@@ -92,6 +92,40 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 
+;;;; Window movement/shifting settings
+
+;; previous window
+(defun other-window-backward ()
+  "Select the previous window."
+  (interactive)
+  (other-window -1))
+
+(global-set-key (kbd "C-x O") 'other-window-backward)
+
+;; winner-mode
+(winner-mode 1)
+
+(global-set-key (kbd "C-c S-<end>") 'winner-redo)
+(global-set-key (kbd "C-c S-<home>") 'winner-undo)
+
+;; windmove
+;; https://www.emacswiki.org/emacs/WindMove
+(windmove-mode 1)
+
+(defun ignore-error-wrapper (fn)
+  "Return a new function that ignores errors.
+The function wraps a function with the `ignore-errors` macro."
+  (lambda ()
+    (interactive)
+    (ignore-errors
+      (funcall fn))))
+
+
+(global-set-key (kbd "C-c S-<left>")  (ignore-error-wrapper 'windmove-left))
+(global-set-key (kbd "C-c S-<right>") (ignore-error-wrapper 'windmove-right))
+(global-set-key (kbd "C-c S-<up>")    (ignore-error-wrapper 'windmove-up))
+(global-set-key (kbd "C-c S-<down>")  (ignore-error-wrapper 'windmove-down))
+
 
 ;;;; Extra Functions
 ;; Toggle Letter Case
