@@ -6,6 +6,7 @@
 	beginning-of-visual-line
 	comment-line
 	end-of-visual-line
+	eval-last-sexp
 	indent-for-tab-command
 	org-beginning-of-line
 	org-ctrl-c-ctrl-c
