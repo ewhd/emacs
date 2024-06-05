@@ -13,7 +13,6 @@
       mouse-wheel-scroll-amount '(1)
       sentence-end-double-space nil
       column-number-mode t
-      dired-kill-when-opening-new-dired-buffer t   ; prevent dired from creating new buffers for every dir visited
       desktop-dirname "/tmp/"
       )
 
@@ -91,6 +90,56 @@
 (global-set-key (kbd "<C-mouse-3>") 'mouse-popup-menubar)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C-x C-d") 'dired) ;; replace keybinding for list-directory with dired
+(global-set-key (kbd "C-x K") 'kill-this-buffer)
+(global-set-key (kbd "C-x C-b") 'consult-buffer) ;; replace keybinding for list-buffers with consult-buffer
+
+
+;;;; dired config
+;; check out http://xahlee.info/emacs/emacs/emacs_dired_tips.html
+
+;; prevent dired from creating new buffers for every dir visited
+(setq dired-kill-when-opening-new-dired-buffer nil
+      dired-listing-switches "-alh"
+      dired-recursive-deletes 'always  ;; 'always means no asking
+      dired-recursive-copies 'top  ;; 'top means ask every time
+      dired-dwim-target t  ;; automatically suggest the target dir on the split pane when you copy (C) or move (R) a file
+      )
+
+;; ;; Make dired open in the same window when using RET or ^
+;; ;; http://xahlee.info/emacs/emacs/emacs_dired_tips.html
+;; (put 'dired-find-alternate-file 'disabled nil) ; disables warning
+;; (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
+;; (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+
+
+;; load dired-x
+(with-eval-after-load 'dired
+  (require 'dired-x)
+  (put 'dired-find-alternate-file 'disabled nil) ;; enable dired-find-alternate-file (set to a)
+  ;; start in dired-omit-mode
+  (add-hook 'dired-mode-hook 'dired-omit-mode)
+  (define-key dired-mode-map (kbd "h") 'dired-omit-mode)
+  ;; (add-hook 'dired-mode-hook 'dired-hide-details-mode) ;; this might be needed to start in dired-hide-details-mode? Or dired+ might take care of that
+  (define-key dired-mode-map (kbd "I") 'dired-hide-details-mode)
+  (define-key dired-mode-map (kbd ",") #'dired-prev-dirline)
+  (define-key dired-mode-map (kbd ".") #'dired-next-dirline)
+  (define-key dired-mode-map (kbd "<") #'dired-prev-subdir)
+  (define-key dired-mode-map (kbd ">") #'dired-next-subdir)
+  (define-key dired-mode-map (kbd "Z") 'dired-do-compress-to)
+  (define-key dired-mode-map (kbd "c") 'diredp-hide-subdir-nomove)
+  (define-key dired-mode-map (kbd "TAB") 'diredp-hide-subdir-nomove)
+  )
+
+
+;; set files to be hidden in dired-omit-mode:
+(setq dired-omit-files
+    (rx (or (seq bol (? ".") "#")     ;; emacs autosave files
+        (seq bol "." (not (any "."))) ;; dot-files
+        (seq "~" eol)                 ;; backup-files
+        (seq bol "CVS" eol)           ;; CVS dirs
+        )))
+
 
 ;;;; Window movement/shifting settings
 

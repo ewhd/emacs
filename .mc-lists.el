@@ -12,9 +12,12 @@
 	org-ctrl-c-ctrl-c
 	org-delete-char
 	org-end-of-line
+	org-metaleft
 	org-metaright
 	org-open-line
 	org-self-insert-command
+	org-shiftleft
+	org-shiftright
 	text-scale-increase
 	zap-up-to-char
 	))
