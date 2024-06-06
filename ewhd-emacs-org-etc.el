@@ -148,20 +148,8 @@
       org-agenda-restore-windows-after-quit t  ; restore window configuration on exit
       org-agenda-start-with-follow-mode nil
       org-columns-default-format-for-agenda "%25ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %20ALLTAGS"
-      org-agenda-start-with-log-mode t
-      )
-(add-hook 'org-agenda-mode-hook
-	  ;; Disables word-wrap and enables truncate-line in agenda buffers
-          (lambda ()
-            (visual-line-mode -1)
-            (toggle-truncate-lines 1)))
-
-;; set the depth of headers referenced by org-agenda-clockreport-mode
-;; see https://stackoverflow.com/a/56012531
-(setq org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5))
-
-;; org-agenda-view
-(setq org-agenda-time-grid '(
+      org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5) ; set the depth of headers referenced by org-agenda-clockreport-mode
+      org-agenda-time-grid '(
 			     (daily today require-timed)
 			     (600 900 1200 1500 1800 2100)
 			     "......" "----------------------" nil)
@@ -171,10 +159,15 @@
       org-agenda-include-diary t
       org-agenda-block-separator 9472
       org-agenda-compact-blocks nil
-      org-agenda-start-with-log-mode nil
+      org-agenda-start-with-log-mode t
       org-agenda-hide-tags-regexp (regexp-opt '("cf" "gtd"))  ;; hides specific tags
-      ;; org-agenda-remove-tags t  ;; hides all tags
+      org-agenda-remove-tags t  ;; hides all tags
       )
+(add-hook 'org-agenda-mode-hook
+	  ;; Disables word-wrap and enables truncate-line in agenda buffers
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
 
 ;; Formatting (truncating) fields in agenda-view:
 (defvar ewhd-org-agenda-extended-prefix t)
