@@ -23,7 +23,7 @@
 (menu-bar-mode -1)
 (tooltip-mode -1)
 (delete-selection-mode 1)     ; Replace region when inserting text
-(desktop-save-mode -1)
+(desktop-save-mode 1)
 
 ;; Revert Buffer Behavior:
 ;; - Automatically revert files which have been changed on disk, unless the buffer contains unsaved changes
@@ -88,6 +88,8 @@
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "<mouse-3>") 'mouse-major-mode-menu)
 (global-set-key (kbd "<C-mouse-3>") 'mouse-popup-menubar)
+(global-unset-key (kbd "C-_"))
+(global-set-key (kbd "C-_") 'text-scale-decrease)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C-x C-d") 'dired) ;; replace keybinding for list-directory with dired
@@ -152,10 +154,14 @@
 (global-set-key (kbd "C-x O") 'other-window-backward)
 
 ;; winner-mode
+(setq winner-dont-bind-my-keys t)
 (winner-mode 1)
 
-(global-set-key (kbd "C-c S-<end>") 'winner-redo)
-(global-set-key (kbd "C-c S-<home>") 'winner-undo)
+;; (global-unset-key (kbd "C-c <left>"))
+;; (global-unset-key (kbd "C-c <right>"))
+
+(global-set-key (kbd "C-c <end>") 'winner-redo)
+(global-set-key (kbd "C-c <home>") 'winner-undo)
 
 ;; windmove
 ;; https://www.emacswiki.org/emacs/WindMove
@@ -169,11 +175,24 @@ The function wraps a function with the `ignore-errors` macro."
     (ignore-errors
       (funcall fn))))
 
+;; change windows
+(global-set-key (kbd "C-c <left>")  (ignore-error-wrapper 'windmove-left))
+(global-set-key (kbd "C-c <right>") (ignore-error-wrapper 'windmove-right))
+(global-set-key (kbd "C-c <up>")    (ignore-error-wrapper 'windmove-up))
+(global-set-key (kbd "C-c <down>")  (ignore-error-wrapper 'windmove-down))
 
-(global-set-key (kbd "C-c S-<left>")  (ignore-error-wrapper 'windmove-left))
-(global-set-key (kbd "C-c S-<right>") (ignore-error-wrapper 'windmove-right))
-(global-set-key (kbd "C-c S-<up>")    (ignore-error-wrapper 'windmove-up))
-(global-set-key (kbd "C-c S-<down>")  (ignore-error-wrapper 'windmove-down))
+;; override org-mode keybings
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c <left>")  (ignore-error-wrapper 'windmove-left))
+  (define-key org-mode-map (kbd "C-c <right>") (ignore-error-wrapper 'windmove-right))
+  (define-key org-mode-map (kbd "C-c <up>")    (ignore-error-wrapper 'windmove-up))
+  (define-key org-mode-map (kbd "C-c <down>")  (ignore-error-wrapper 'windmove-down)))
+
+;; swap window positions
+(global-set-key (kbd "C-c S-<left>")  (ignore-error-wrapper 'windmove-swap-states-left))
+(global-set-key (kbd "C-c S-<right>") (ignore-error-wrapper 'windmove-swap-states-right))
+(global-set-key (kbd "C-c S-<up>")    (ignore-error-wrapper 'windmove-swap-states-up))
+(global-set-key (kbd "C-c S-<down>")  (ignore-error-wrapper 'windmove-swap-states-down))
 
 
 ;;;; Extra Functions
