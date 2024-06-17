@@ -60,8 +60,18 @@
   
   ;; Define custom keybindings
   (define-key dired-mode-map (kbd "C-c C-e") 'diredp-do-emacs-command)
-
   )
+
+;; transpose-frame
+;; https://www2.lib.uchicago.edu/keith/emacs/minimacs.html
+(use-package transpose-frame :defer t
+  :commands
+  (transpose-frame
+   flip-frame
+   flop-frame
+   rotate-frame
+   rotate-frame-clockwise
+   rotate-frame-anticlockwise))
 
 
 ;;;; Modeline:
