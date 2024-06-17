@@ -157,9 +157,6 @@
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
 
-;; (global-unset-key (kbd "C-c <left>"))
-;; (global-unset-key (kbd "C-c <right>"))
-
 (global-set-key (kbd "C-c <end>") 'winner-redo)
 (global-set-key (kbd "C-c <home>") 'winner-undo)
 
