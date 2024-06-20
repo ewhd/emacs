@@ -10,6 +10,7 @@
 	indent-for-tab-command
 	org-beginning-of-line
 	org-ctrl-c-ctrl-c
+	org-cycle
 	org-delete-char
 	org-end-of-line
 	org-metaleft
@@ -18,6 +19,7 @@
 	org-self-insert-command
 	org-shiftleft
 	org-shiftright
+	tab-next
 	text-scale-increase
 	zap-up-to-char
 	))
