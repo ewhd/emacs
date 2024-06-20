@@ -8,6 +8,7 @@
 	end-of-visual-line
 	eval-last-sexp
 	indent-for-tab-command
+	multiple-cursors-mode
 	org-beginning-of-line
 	org-ctrl-c-ctrl-c
 	org-delete-char
