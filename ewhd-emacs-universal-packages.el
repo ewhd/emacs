@@ -40,10 +40,11 @@
 
 ;;;; Navigation
 ;; Dired+
+;; I've been a little unsure of the proper syntax with elpaca, whether it should be :elpaca or :ensure, but based on this link I'm going with :ensure
+;; https://github.com/weirdNox/dotfiles/blob/d9b1da6d60bde008d1b8f95a411b2e3e399dc30c/config/.config/emacs/config.org#diredfl-and-dired
 (use-package dired+
-  :ensure t
+  :ensure (dired+ :host github :repo "emacsmirror/dired-plus")
   :after dired
-  :elpaca (:host github :repo "emacsmirror/dired-plus")
   :bind
   ()
   :config
@@ -60,8 +61,19 @@
   
   ;; Define custom keybindings
   (define-key dired-mode-map (kbd "C-c C-e") 'diredp-do-emacs-command)
-
   )
+
+
+;; transpose-frame
+;; https://www2.lib.uchicago.edu/keith/emacs/minimacs.html
+(use-package transpose-frame :defer t
+  :commands
+  (transpose-frame
+   flip-frame
+   flop-frame
+   rotate-frame
+   rotate-frame-clockwise
+   rotate-frame-anticlockwise))
 
 
 ;;;; Modeline:
