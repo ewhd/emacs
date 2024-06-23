@@ -14,6 +14,7 @@
       sentence-end-double-space nil
       column-number-mode t
       desktop-dirname "/tmp/"
+      pop-up-frames nil
       )
 
 (global-visual-line-mode 1)
