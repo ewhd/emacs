@@ -95,6 +95,11 @@
    ("C-x C-a g" . activities-revert)
    ("C-x C-a l" . activities-list)))
 
+;; Olivetti
+(use-package olivetti)
+(add-hook 'olivetti-mode-on-hook (lambda () (olivetti-set-width 80)))
+(add-hook 'text-mode-hook 'olivetti-mode)
+
 
 ;;;; Modeline:
 ;; Delight enables you to easily customise how major and minor modes appear in the ModeLine.
