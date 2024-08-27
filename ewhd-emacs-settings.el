@@ -14,6 +14,7 @@
       sentence-end-double-space nil
       column-number-mode t
       desktop-dirname "/tmp/"
+      pop-up-frames nil
       )
 
 (global-visual-line-mode 1)
@@ -271,3 +272,11 @@ Version 2020-06-26"
 
 ;; (global-set-key (kbd "C-c C-y") 'ewhd-yank-increment)
 
+;; Server shutdown
+;; I use this to safely shutdown the server, mostly when I want to restart it after making config changes -- probably unnecessary if I use systemd to start my daemon, but currently I don't
+;; https://emacs.stackexchange.com/a/55799
+(defun ewhd-server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs))
