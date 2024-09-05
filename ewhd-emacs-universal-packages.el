@@ -434,4 +434,50 @@
   (embark-collect-mode . consult-preview-at-point-mode))
 
 
+;;;; Citations
+;; https://kristofferbalintona.me/posts/202206141852/#advising-citar-org-update-pre-suffix
+;; https://amerygration.com/Blog/citation_handling_in_emacs.html
+;; https://www.miskatonic.org/2024/01/08/org-citations-basic/
+;; https://lucidmanager.org/productivity/bibliographic-notes-in-emacs-with-citar-denote/
+;; https://www.bibtex.org/Format/
+;; https://www.bibtex.com/e/entry-types/
+
+(use-package citar
+  :after org
+  :ensure t
+  :custom
+  (org-cite-global-bibliography '("~/Documents/notes/bib/references.bib"))
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar)
+  (citar-bibliography org-cite-global-bibliography)
+  ;; optional: org-cite-insert is also bound to C-c C-x C-@
+  :bind
+  (:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
+
+(use-package citar-embark
+  :after citar embark
+  :ensure t
+  :custom
+  (citar-at-point-function 'embark-act)
+  :config
+  (citar-embark-mode))
+
+(use-package citar-denote
+  :after citar denote
+  :custom
+  (citar-open-always-create-notes t)
+  :init
+  (citar-denote-mode)
+  :bind
+  (("C-c w b c" . citar-create-note)
+   ("C-c w b n" . citar-denote-open-note)
+   ("C-c w b x" . citar-denote-nocite)
+   :map org-mode-map
+   ("C-c w b k" . citar-denote-add-citekey)
+   ("C-c w b K" . citar-denote-remove-citekey)
+   ("C-c w b d" . citar-denote-dwim)
+   ("C-c w b e" . citar-denote-open-reference-entry)))
+
+
 ;;End
