@@ -81,11 +81,6 @@
    org-image-actual-width '(300)
    )
 
-;; Set list of legitimate refile targets
-(setq org-refile-targets
-      (mapcar (lambda (file) (cons file '(:maxlevel . 2)))
-              (append org-agenda-files
-                      '("~/Documents/notes/20240504T125856--backburner.org"))))
 
 ;; Allow refiling to the top (file) level, rather than just to headings (which is the default)
 (setq org-refile-use-outline-path 'file)
@@ -148,6 +143,11 @@
        'file-exists-p
        (directory-files-recursively "~/Documents" "^[^\.#].*_gtd.*\\.org$")))
 
+;; Set list of legitimate refile targets
+(setq org-refile-targets
+      (mapcar (lambda (file) (cons file '(:maxlevel . 2)))
+              (append org-agenda-files
+                      '("~/Documents/notes/20240504T125856--backburner.org"))))
 
 
 
