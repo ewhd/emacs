@@ -24,7 +24,7 @@
 (menu-bar-mode -1)
 (tooltip-mode -1)
 (delete-selection-mode 1)     ; Replace region when inserting text
-;; (desktop-save-mode 1)
+(desktop-save-mode 1)
 
 ;; Revert Buffer Behavior:
 ;; - Automatically revert files which have been changed on disk, unless the buffer contains unsaved changes
