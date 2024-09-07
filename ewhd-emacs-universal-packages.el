@@ -480,4 +480,72 @@
    ("C-c w b e" . citar-denote-open-reference-entry)))
 
 
+;;;; Financial
+;; beancount-mode
+(use-package beancount-mode
+  :ensure (:host github :repo "beancount/beancount-mode" :main "beancount.el")
+  ;; :init
+  ;; (add-to-list 'load-path "~/.config/emacs/elpaca/repos/beancount-mode/")
+  ;; (require 'beancount)
+  :config
+  ;; Automatically enable beancount-mode in .beancount files
+  (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+
+  ;; Automatically enable outline-mode.
+  (add-hook 'beancount-mode-hook #'outline-minor-mode)
+
+  ;; Make sure we don't accidentally pick up ;;; as headers. Use org section headers only.
+  (setq beancount-outline-regexp "\\(\\*+\\)")
+
+  ;; Enables on-the-fly checks on your ledger file using bean-check via flymake
+  (add-hook 'beancount-mode-hook #'flymake-bean-check-enable)
+
+  ;; Support parsing Python logging errors, with a suitable logging.basicConfig()
+  ;; format.
+  (unless (assq 'python-logging compilation-error-regexp-alist-alist)
+  
+    (add-to-list
+     'compilation-error-regexp-alist-alist
+     '(python-logging "\\(ERROR\\|WARNING\\):\\s-*\\([^:]+\\):\\([0-9]+\\)\\s-*:" 2 3))
+  
+    (add-to-list
+     'compilation-error-regexp-alist 'python-logging)
+    )
+
+  )
+
+;; Add movement between sections (replaces default outline-minor-mode
+;; keybindings with org-style keybindings)
+(define-key beancount-mode-map (kbd "C-c C-n") #'outline-next-visible-heading)
+(define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
+(define-key beancount-mode-map (kbd "C-c C-u") #'outline-up-heading)
+
+;; Experimental: Bind a key to reformat the entire file using bean-format.
+(defun beancount-format-file--experimental ()
+  (interactive)
+  (let ((line-no (line-number-at-pos)))
+      (call-process-region (point-min) (point-max) "bean-format" t (current-buffer))
+      (goto-line line-no)
+      (recenter)
+      ))
+(define-key beancount-mode-map (kbd "C-c F") 'beancount-format-file--experimental)
+
+(defvar beancount-balance-command
+  (concat
+   "select account, sum(position) "
+   "where account ~ '%s' "
+   "group by 1 "
+   "order by 1"))
+  
+(defun beancount-query-balance-at-point ()
+  "Run a balance command for the account at point."
+  (interactive)
+  (let ((account (thing-at-point 'beancount-account)))
+    (beancount--run beancount-query-program
+                    (file-relative-name buffer-file-name)
+                    (format beancount-balance-command account))))
+  
+(define-key beancount-mode-map (kbd "C-c J") #'beancount-query-balance-at-point)
+
+
 ;;End
