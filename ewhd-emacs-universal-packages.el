@@ -461,7 +461,8 @@
   :custom
   (citar-at-point-function 'embark-act)
   :config
-  (citar-embark-mode))
+  ;; (citar-embark-mode) ;; Causes "eldoc error: (void-function org-element--property)" when enabled
+  )
 
 (use-package citar-denote
   :after citar denote
