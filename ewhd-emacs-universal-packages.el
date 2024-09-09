@@ -491,7 +491,7 @@
   :config
   ;; Automatically enable beancount-mode in .beancount files
   (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
-
+  
   ;; Automatically enable outline-mode.
   (add-hook 'beancount-mode-hook #'outline-minor-mode)
 
@@ -514,6 +514,10 @@
     )
 
   )
+
+;; Initialize beancount-mode-map
+(unless (boundp 'beancount-mode-map)
+  (setq beancount-mode-map (make-sparse-keymap)))
 
 ;; Add movement between sections (replaces default outline-minor-mode
 ;; keybindings with org-style keybindings)
