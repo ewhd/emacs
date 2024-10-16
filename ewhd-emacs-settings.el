@@ -176,7 +176,18 @@
                 (seq bol "CVS" eol)           ;; CVS dirs
                 ))))
 
-
+(use-package wdired
+  :ensure nil
+  :after dired
+  :commands (wdired-change-to-wdired-mode) ; lazy-load
+  :config
+  (setq wdired-allow-to-change-permissions t) ; edit the permission bits directly
+  (setq wdired-create-parent-directories t)
+  (setq wdired-allow-to-redirect-links t) ; default=t change the symlinks in Editable mode
+  (setq wdired-use-interactive-rename t) ; prompt for every filename change you have made you when you commit the changes with C-c C-c
+  (setq wdired-confirm-overwrite t) ; asks if you want to overwrite files if your altered filenames conflict with existing files
+  ;; (define-key wdired-mode-map (kbd "C-c C-c") 'wdired-abort) ;; Example keybinding
+)
 
 
 ;;;; Window movement/shifting settings
