@@ -63,6 +63,17 @@
   (define-key dired-mode-map (kbd "C-c C-e") 'diredp-do-emacs-command)
   )
 
+(use-package dired-subtree
+  :ensure t
+  :after dired
+  :bind
+  ( :map dired-mode-map
+    ("<tab>" . dired-subtree-toggle)
+    ("TAB" . dired-subtree-toggle)
+    ("<backtab>" . dired-subtree-remove)
+    ("S-TAB" . dired-subtree-remove))
+  :config
+  (setq dired-subtree-use-backgrounds nil))
 
 ;;;; Layout
 ;; transpose-frame
