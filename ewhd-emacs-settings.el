@@ -98,6 +98,33 @@
 (global-set-key (kbd "C-x C-b") 'consult-buffer) ;; replace keybinding for list-buffers with consult-buffer
 
 
+;;;; Tab Management
+;; Unbind the default transpose-characters command
+(global-unset-key (kbd "C-t"))
+
+;; Define C-t as a prefix key
+(define-prefix-command 'ctl-t-map)
+(global-set-key (kbd "C-t") 'ctl-t-map)
+
+;; dired has some C-t- prefixed commands for images/thumbnails, but I want these
+;; tab controls to override them, which is done in the dired config below
+
+;; new tab control keybindings
+(define-key ctl-t-map (kbd "n") 'tab-next)
+(define-key ctl-t-map (kbd "p") 'tab-previous)
+(define-key ctl-t-map (kbd "u") 'tab-undo)
+(define-key ctl-t-map (kbd "N") 'tab-new)
+(define-key ctl-t-map (kbd "x") 'tab-close)
+(define-key ctl-t-map (kbd "r") 'tab-reopen)
+(define-key ctl-t-map (kbd "m") 'tab-move)
+(define-key ctl-t-map (kbd "d") 'tab-duplicate)
+(define-key ctl-t-map (kbd "<right>") 'tab-bar-switch-to-next-tab)
+(define-key ctl-t-map (kbd "<left>") 'tab-bar-switch-to-prev-tab)
+(define-key ctl-t-map (kbd "RET") 'tab-bar-select-tab-by-name)
+(define-key ctl-t-map (kbd "b") 'tab-bar-history-back)
+(define-key ctl-t-map (kbd "f") 'tab-bar-history-forward)
+
+
 ;;;; dired config
 ;; check out http://xahlee.info/emacs/emacs/emacs_dired_tips.html
 
@@ -142,6 +169,7 @@
         (seq "~" eol)                 ;; backup-files
         (seq bol "CVS" eol)           ;; CVS dirs
         )))
+
 
 
 ;;;; Window movement/shifting settings

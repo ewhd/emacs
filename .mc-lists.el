@@ -16,6 +16,7 @@
 	org-delete-char
 	org-end-of-line
 	org-kill-line
+	org-meta-return
 	org-metaleft
 	org-metaright
 	org-open-line
@@ -32,5 +33,8 @@
 (setq mc/cmds-to-run-once
       '(
 	end-of-buffer
+	ignore
+	org-return-and-maybe-indent
+	org-time-stamp-inactive
 	text-scale-decrease
 	))
