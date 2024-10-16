@@ -130,13 +130,25 @@
 
 (use-package dired
   :ensure nil  ;; dired is built-in, no need to install
+  :commands (dired)
   :config
-  ;; Prevent Dired from creating new buffers for every dir visited
+  ;; Unbind the default C-t binding in Dired
+  (define-key dired-mode-map (kbd "C-t") nil)
+  
+  ;; Assign C-t as a prefix in Dired mode
+  (define-key dired-mode-map (kbd "C-t") 'ctl-t-map)
+  
+  ;; General Dired settings
   (setq dired-kill-when-opening-new-dired-buffer nil
-        dired-listing-switches "-alh"
-        dired-recursive-deletes 'always  ;; 'always means no asking
-        dired-recursive-copies 'top      ;; 'top means ask every time
-        dired-dwim-target t)              ;; automatically suggest the target dir on the split pane
+        dired-recursive-deletes 'always      ;; 'always means no asking
+        dired-recursive-copies 'top          ;; 'top means ask every time
+        delete-by-moving-to-trash t          ;; move to trash instead of deleting
+        dired-listing-switches
+        "-AGFhlv --group-directories-first --time-style=long-iso" ;; list dirs first
+        dired-dwim-target t                   ;; suggest target dir on split pane
+        dired-free-space nil                  ;; Emacs 29.1
+        dired-mouse-drag-files t              ;; Emacs 29.1
+        )
 
   ;; Load dired-x and configure it
   (require 'dired-x)
@@ -144,8 +156,8 @@
 
   ;; Start in dired-omit-mode
   (add-hook 'dired-mode-hook 'dired-omit-mode)
-  
-  ;; Keybindings
+
+  ;; Keybindings for Dired mode
   (define-key dired-mode-map (kbd "h") 'dired-omit-mode)
   (define-key dired-mode-map (kbd "I") 'dired-hide-details-mode)
   (define-key dired-mode-map (kbd ",") #'dired-prev-dirline)
@@ -163,6 +175,7 @@
                 (seq "~" eol)                 ;; backup-files
                 (seq bol "CVS" eol)           ;; CVS dirs
                 ))))
+
 
 
 
