@@ -14,6 +14,8 @@
       sentence-end-double-space nil
       column-number-mode t
       pop-up-frames nil
+      mouse-drag-and-drop-region-cross-program t
+      mouse-1-click-follows-link 'double
       )
 
 (global-visual-line-mode 1)
