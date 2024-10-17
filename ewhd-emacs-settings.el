@@ -13,7 +13,6 @@
       mouse-wheel-scroll-amount '(1)
       sentence-end-double-space nil
       column-number-mode t
-      desktop-dirname "/tmp/"
       pop-up-frames nil
       )
 
@@ -24,7 +23,19 @@
 (menu-bar-mode -1)
 (tooltip-mode -1)
 (delete-selection-mode 1)     ; Replace region when inserting text
-;; (desktop-save-mode 1)
+
+
+(setq desktop-dirname "~/.cache" ; set the directory /before/ enabling desktop mode
+      ;; desktop-dirname "/var/tmp/"
+      desktop-buffers-not-to-save
+      '("*Messages*" "*scratch*" "*Help*" "*info*" "*compilation*")
+      desktop-path (list desktop-dirname) ; ensures Emacs uses this path for desktop files -- emacs won't seem to look in desktop-dirname without this line
+      desktop-auto-save-timeout 10
+      desktop-save t ; always save
+      )
+(desktop-save-mode 1)
+
+
 
 ;; Revert Buffer Behavior:
 ;; - Automatically revert files which have been changed on disk, unless the buffer contains unsaved changes
