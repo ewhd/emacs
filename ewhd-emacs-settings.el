@@ -144,7 +144,7 @@
         dired-recursive-copies 'top          ;; 'top means ask every time
         delete-by-moving-to-trash t          ;; move to trash instead of deleting
         dired-listing-switches
-        "-AGFhlv --group-directories-first --time-style=long-iso" ;; list dirs first
+        "-aGFhlv --group-directories-first --time-style=long-iso" ;; list dirs first
         dired-dwim-target t                   ;; suggest target dir on split pane
         dired-free-space nil                  ;; Emacs 29.1
         dired-mouse-drag-files t              ;; Emacs 29.1
