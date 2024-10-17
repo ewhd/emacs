@@ -156,7 +156,7 @@
 
   ;; Start in dired-omit-mode
   (add-hook 'dired-mode-hook 'dired-omit-mode)
-
+  
   ;; Keybindings for Dired mode
   (define-key dired-mode-map (kbd "h") 'dired-omit-mode)
   (define-key dired-mode-map (kbd "I") 'dired-hide-details-mode)
@@ -166,7 +166,8 @@
   (define-key dired-mode-map (kbd ">") #'dired-next-subdir)
   (define-key dired-mode-map (kbd "Z") 'dired-do-compress-to)
   (define-key dired-mode-map (kbd "c") 'diredp-hide-subdir-nomove)
-  (define-key dired-mode-map (kbd "TAB") 'diredp-hide-subdir-nomove)
+  ;; (define-key dired-mode-map (kbd "TAB") 'diredp-hide-subdir-nomove)
+
 
   ;; Set files to be hidden in dired-omit-mode
   (setq dired-omit-files
@@ -174,6 +175,8 @@
                 (seq bol "." (not (any "."))) ;; dot-files
                 (seq "~" eol)                 ;; backup-files
                 (seq bol "CVS" eol)           ;; CVS dirs
+		(seq bol (or "." "..") eol)   ;; Include . and ..
+		
                 ))))
 
 (use-package wdired

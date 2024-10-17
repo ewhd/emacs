@@ -66,14 +66,64 @@
 (use-package dired-subtree
   :ensure t
   :after dired
+  :config
+  (setq dired-subtree-use-backgrounds nil)
+
+  (defun ewhd-dired-subtree-toggle ()
+    "Toggle the subtree and reflect the dired-omit-mode from the parent Dired buffer."
+    (interactive)
+    (dired-subtree-toggle)
+    ;; Check if dired-omit-mode is enabled in the parent buffer
+    (if (and (derived-mode-p 'dired-mode)
+             dired-omit-mode)
+        (dired-omit-mode 1)  ; Enable dired-omit-mode in the subtree if it's on in the parent
+      (dired-omit-mode -1))) ; Disable dired-omit-mode in the subtree if it's off in the parent
+
   :bind
   ( :map dired-mode-map
-    ("<tab>" . dired-subtree-toggle)
-    ("TAB" . dired-subtree-toggle)
+    ("<tab>" . ewhd-dired-subtree-toggle)
+    ("TAB" . ewhd-dired-subtree-toggle)
     ("<backtab>" . dired-subtree-remove)
     ("S-TAB" . dired-subtree-remove))
+)
+
+
+
+(use-package dired-preview
+  :after dired
+  :ensure t
+  ;; :defer 1
+  ;; :hook (after-init . dired-preview-global-mode)
+  :bind
+  ( :map dired-mode-map
+    ("P" . dired-preview-mode)
+    ("S-<up>" . dired-preview-page-up)
+    ("S-<down>" . dired-preview-page-down))
   :config
-  (setq dired-subtree-use-backgrounds nil))
+  (setq dired-preview-max-size (* (expt 2 20) 10))
+  (setq dired-preview-delay 0.5)
+  (setq dired-preview-ignored-extensions-regexp
+        (concat "\\."
+                "\\(gz\\|"
+                "zst\\|"
+                "tar\\|"
+                "xz\\|"
+                "rar\\|"
+                "zip\\|"
+                "iso\\|"
+                "epub"
+                "\\)"))
+
+  (setq dired-preview-display-action-alist
+        '((display-buffer-in-side-window)
+          ;; (side . bottom)
+          ;; (window-height . 0.4)
+          (side . right)
+          (window-width . 0.5)
+          (preserve-size . (t . t))
+          (window-parameters . ((mode-line-format . none)
+                                (header-line-format . none))))))
+
 
 ;;;; Layout
 ;; transpose-frame
