@@ -11,6 +11,8 @@
 	 ("C-S-l" . org-toggle-link-display)
          )
   :config
+  (define-key org-mode-map (kbd "C-'") nil)  ;; Unbind C-' in org-mode
+      ;; so that it doesn't conflict with expand-region
   (setq
    org-startup-indented t
    org-startup-folded t

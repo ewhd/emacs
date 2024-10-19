@@ -5,6 +5,16 @@
   :ensure t)
 
 
+;; Expand-Region
+(use-package expand-region
+  :ensure t
+  :config
+  (global-unset-key (kbd "C-\\"))
+  :bind (("C-\\" . er/expand-region)
+	 ("C-'" . er/mark-outside-quotes)
+	 )
+  )
+
 ;;;; Pretty icons
 ;; must run M-x all-the-icons-install-fonts to install fonts per machine
 (use-package all-the-icons
