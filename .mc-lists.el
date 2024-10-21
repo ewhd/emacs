@@ -22,6 +22,7 @@
 	org-shiftright
 	tab-next
 	text-scale-increase
+	xah-toggle-letter-case
 	zap-up-to-char
 	))
 
