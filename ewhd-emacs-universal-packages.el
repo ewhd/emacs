@@ -199,6 +199,7 @@
    ("M-e" . dirvish-emerge-menu)
    ("M-j" . dirvish-fd-jump)
    ("M-h" . dired-omit-mode)
+   ("M"   . dirvish-move)
   ))
 
 ;;;; Layout
