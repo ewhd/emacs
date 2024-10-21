@@ -149,7 +149,7 @@
 (setq org-refile-targets
       (mapcar (lambda (file) (cons file '(:maxlevel . 2)))
               (append org-agenda-files
-                      '("~/Documents/notes/20240504T125856--backburner.org"))))
+                      '("~/Documents/notes/20240504T125856--backburner.org" "~/Documents/notes/20240504T125919--someday-maybe.org"))))
 
 
 
