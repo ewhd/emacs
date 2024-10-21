@@ -1,10 +1,26 @@
 ;; ewhd emacs universal packages -*- lexical-binding: t; -*-
 
-
-
 ;; Ensure Transient is the most recent version (needed for magit):
 (use-package transient
   :ensure t)
+
+
+;; Expand-Region
+(use-package expand-region
+  :ensure t
+  :config
+  (global-unset-key (kbd "C-\\"))
+  :bind (("C-\\" . er/expand-region)
+	 ("C-'" . er/mark-outside-quotes)
+	 )
+  )
+
+;;;; Pretty icons
+;; must run M-x all-the-icons-install-fonts to install fonts per machine
+(use-package all-the-icons
+  :ensure t
+  :if (display-graphic-p))
+
 
 ;;;; Source Control:
 ;; Magit:
@@ -42,27 +58,149 @@
 ;; Dired+
 ;; I've been a little unsure of the proper syntax with elpaca, whether it should be :elpaca or :ensure, but based on this link I'm going with :ensure
 ;; https://github.com/weirdNox/dotfiles/blob/d9b1da6d60bde008d1b8f95a411b2e3e399dc30c/config/.config/emacs/config.org#diredfl-and-dired
-(use-package dired+
-  :ensure (dired+ :host github :repo "emacsmirror/dired-plus")
-  :after dired
-  :bind
-  ()
-  :config
+;; (use-package dired+
+;;   :ensure (dired+ :host github :repo "emacsmirror/dired-plus")
+;;   :after dired
+;;   :bind
+;;   ()
+;;   :config
   ;; Additional dired+ specific configurations here
   ;; Hide details by default
-  (setq diredp-hide-details-initially-flag t)
+  ;; (setq diredp-hide-details-initially-flag t)
   
   ;; (diredp-toggle-find-file-reuse-dir 1)  ;; start with diredp set to "reuse" buffer
   
   ;; (define-key dired-mode-map (kbd "S-") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
   
   ;; Enable image previews
-  (setq diredp-image-preview-in-tooltip 128)
-  
-  ;; Define custom keybindings
-  (define-key dired-mode-map (kbd "C-c C-e") 'diredp-do-emacs-command)
-  )
+  ;; (setq diredp-image-preview-in-tooltip 128)
+  ;; )
 
+;; (use-package dired-subtree
+;;   :ensure t
+;;   :after dired
+;;   :config
+;;   (setq dired-subtree-use-backgrounds nil)
+
+;;   (defun ewhd-dired-subtree-toggle ()
+;;     "Toggle the subtree and reflect the dired-omit-mode from the parent Dired buffer."
+;;     (interactive)
+;;     (dired-subtree-toggle)
+;;     ;; Check if dired-omit-mode is enabled in the parent buffer
+;;     (if (and (derived-mode-p 'dired-mode)
+;;              dired-omit-mode)
+;;         (dired-omit-mode 1)  ; Enable dired-omit-mode in the subtree if it's on in the parent
+;;       (dired-omit-mode -1))) ; Disable dired-omit-mode in the subtree if it's off in the parent
+
+;;   :bind
+;;   ( :map dired-mode-map
+;;     ("<tab>" . ewhd-dired-subtree-toggle)
+;;     ("TAB" . ewhd-dired-subtree-toggle)
+;;     ("<backtab>" . dired-subtree-remove)
+;;     ("S-TAB" . dired-subtree-remove))
+;; )
+
+;; (use-package dired-preview
+;;   :after dired
+;;   :ensure t
+;;   ;; :defer 1
+;;   ;; :hook (after-init . dired-preview-global-mode)
+;;   :bind
+;;   ( :map dired-mode-map
+;;     ("P" . dired-preview-mode)
+;;     ("S-<up>" . dired-preview-page-up)
+;;     ("S-<down>" . dired-preview-page-down))
+;;   :config
+;;   (setq dired-preview-max-size (* (expt 2 20) 10))
+;;   (setq dired-preview-delay 0.5)
+;;   (setq dired-preview-ignored-extensions-regexp
+;;         (concat "\\."
+;;                 "\\(gz\\|"
+;;                 "zst\\|"
+;;                 "tar\\|"
+;;                 "xz\\|"
+;;                 "rar\\|"
+;;                 "zip\\|"
+;;                 "iso\\|"
+;;                 "epub"
+;;                 "\\)"))
+;;   (setq dired-preview-display-action-alist
+;;         '((display-buffer-in-side-window)
+;;           ;; (side . bottom)
+;;           ;; (window-height . 0.4)
+;;           (side . right)
+;;           (window-width . 0.5)
+;;           (preserve-size . (t . t))
+;;           (window-parameters . ((mode-line-format . none)
+;;                                 (header-line-format . none))))))
+
+
+;; Dirvish
+(use-package dirvish
+  :init
+  (dirvish-override-dired-mode)
+  :custom
+  (dirvish-quick-access-entries ; It's a custom option, `setq' won't work
+   '(("n" "~/Documents/notes/"          "Notes")
+     ("e" "~/.config/emacs/"            "Emacs")
+     ("d" "~/Documents/"                "Documents")
+     ("D" "~/Downloads/"                "Downloads")
+     ("m" "/mnt/"                       "Drives")
+     ("t" "~/.local/share/Trash/files/" "TrashCan")
+     ("h" "~/"                          "Home")))
+  :config
+  ;; (dirvish-peek-mode) ; Preview files in minibuffer
+  ;; (dirvish-side-follow-mode) ; similar to `treemacs-follow-mode'
+  (setq dirvish-mode-line-format
+        '(:left (sort symlink) :right (omit yank index)))
+  (setq dirvish-attributes
+        '(all-the-icons file-time file-size collapse subtree-state vc-state git-msg))
+  (setq delete-by-moving-to-trash t)
+  (setq dired-listing-switches
+        "-l --almost-all --human-readable --group-directories-first --no-group --time-style=long-iso --color=always"
+        ;; "-aGFhl --sort-version --group-directories-first --time-style=long-iso" 
+	)
+  (setq dirvish-default-layout '(0 0 0.5)) ; default (1 0.11 0.55)
+  (setq dirvish-layout-recipes '((0 0 0.5) (0 0 0.7) (1 0.11 0.55)))
+     ; default ((0 0 0.4) (0 0 0.8) (1 0.08 0.8) (1 0.11 0.55))
+
+  (add-hook 'dirvish-find-entry-hook
+          (lambda (&rest _) (setq-local truncate-lines t)))
+  (setq dirvish-reuse-session 'resume) ; retain dirvish session and resume it unless called with a directory path
+
+  ;; Unbind default C-x d to use as prefix
+  (global-unset-key (kbd "C-x d"))
+  (define-prefix-command 'ctl-x-d-map)
+  (global-set-key (kbd "C-x d") 'ctl-x-d-map)
+  
+  :bind ; Bind `dirvish|dirvish-side|dirvish-dwim' as you see fit
+  (("C-c f" . dirvish-fd)
+   ("C-x d d" . dirvish)
+   ("C-x d f" . dired)
+   ("C-x d s" . dirvish-side)
+   :map dirvish-mode-map ; Dirvish inherits `dired-mode-map'
+   ("a"   . dirvish-quick-access)
+   ("f"   . dirvish-file-info-menu)
+   ("y"   . dirvish-yank-menu)
+   ("N"   . dirvish-narrow)
+   ("-"   . dirvish-history-last)
+   ("DEL" . dired-up-directory)
+   ("h"   . dirvish-history-jump) ; remapped `describe-mode'
+   ("s"   . dirvish-quicksort)    ; remapped `dired-sort-toggle-or-edit'
+   ("v"   . dirvish-vc-menu)      ; remapped `dired-view-file'
+   ("TAB" . dirvish-subtree-toggle)
+   ("M-f" . dirvish-history-go-forward)
+   ("M-b" . dirvish-history-go-backward)
+   ("M-l" . dirvish-ls-switches-menu)
+   ("M-m" . dirvish-mark-menu)
+   ("M-t" . dirvish-layout-toggle)
+   ()
+   ("M-s" . dirvish-setup-menu)
+   ("M-e" . dirvish-emerge-menu)
+   ("M-j" . dirvish-fd-jump)
+   ("M-h" . dired-omit-mode)
+   ("M"   . dirvish-move)
+  ))
 
 ;;;; Layout
 ;; transpose-frame
@@ -432,6 +570,125 @@
   :ensure t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
+
+
+;;;; Citations
+;; https://kristofferbalintona.me/posts/202206141852/#advising-citar-org-update-pre-suffix
+;; https://amerygration.com/Blog/citation_handling_in_emacs.html
+;; https://www.miskatonic.org/2024/01/08/org-citations-basic/
+;; https://lucidmanager.org/productivity/bibliographic-notes-in-emacs-with-citar-denote/
+;; https://www.bibtex.org/Format/
+;; https://www.bibtex.com/e/entry-types/
+
+(use-package citar
+  :after org
+  :ensure t
+  :custom
+  (org-cite-global-bibliography '("~/Documents/notes/bib/references.bib"))
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar)
+  (citar-bibliography org-cite-global-bibliography)
+  ;; optional: org-cite-insert is also bound to C-c C-x C-@
+  :bind
+  (:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
+
+(use-package citar-embark
+  :after citar embark
+  :ensure t
+  :custom
+  (citar-at-point-function 'embark-act)
+  :config
+  ;; (citar-embark-mode) ;; Causes "eldoc error: (void-function org-element--property)" when enabled
+  )
+
+(use-package citar-denote
+  :after citar denote
+  :custom
+  (citar-open-always-create-notes t)
+  :init
+  (citar-denote-mode)
+  :bind
+  (("C-c w b c" . citar-create-note)
+   ("C-c w b n" . citar-denote-open-note)
+   ("C-c w b x" . citar-denote-nocite)
+   :map org-mode-map
+   ("C-c w b k" . citar-denote-add-citekey)
+   ("C-c w b K" . citar-denote-remove-citekey)
+   ("C-c w b d" . citar-denote-dwim)
+   ("C-c w b e" . citar-denote-open-reference-entry)))
+
+
+;;;; Financial
+;; beancount-mode
+(use-package beancount-mode
+  :ensure (:host github :repo "beancount/beancount-mode" :main "beancount.el")
+  ;; :init
+  ;; (add-to-list 'load-path "~/.config/emacs/elpaca/repos/beancount-mode/")
+  ;; (require 'beancount)
+  :config
+  ;; Automatically enable beancount-mode in .beancount files
+  (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+  
+  ;; Automatically enable outline-mode.
+  (add-hook 'beancount-mode-hook #'outline-minor-mode)
+
+  ;; Make sure we don't accidentally pick up ;;; as headers. Use org section headers only.
+  (setq beancount-outline-regexp "\\(\\*+\\)")
+
+  ;; Enables on-the-fly checks on your ledger file using bean-check via flymake
+  (add-hook 'beancount-mode-hook #'flymake-bean-check-enable)
+
+  ;; Support parsing Python logging errors, with a suitable logging.basicConfig()
+  ;; format.
+  (unless (assq 'python-logging compilation-error-regexp-alist-alist)
+  
+    (add-to-list
+     'compilation-error-regexp-alist-alist
+     '(python-logging "\\(ERROR\\|WARNING\\):\\s-*\\([^:]+\\):\\([0-9]+\\)\\s-*:" 2 3))
+  
+    (add-to-list
+     'compilation-error-regexp-alist 'python-logging)
+    )
+
+  )
+
+;; Initialize beancount-mode-map
+(unless (boundp 'beancount-mode-map)
+  (setq beancount-mode-map (make-sparse-keymap)))
+
+;; Add movement between sections (replaces default outline-minor-mode
+;; keybindings with org-style keybindings)
+(define-key beancount-mode-map (kbd "C-c C-n") #'outline-next-visible-heading)
+(define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
+(define-key beancount-mode-map (kbd "C-c C-u") #'outline-up-heading)
+
+;; Experimental: Bind a key to reformat the entire file using bean-format.
+(defun beancount-format-file--experimental ()
+  (interactive)
+  (let ((line-no (line-number-at-pos)))
+      (call-process-region (point-min) (point-max) "bean-format" t (current-buffer))
+      (goto-line line-no)
+      (recenter)
+      ))
+(define-key beancount-mode-map (kbd "C-c F") 'beancount-format-file--experimental)
+
+(defvar beancount-balance-command
+  (concat
+   "select account, sum(position) "
+   "where account ~ '%s' "
+   "group by 1 "
+   "order by 1"))
+  
+(defun beancount-query-balance-at-point ()
+  "Run a balance command for the account at point."
+  (interactive)
+  (let ((account (thing-at-point 'beancount-account)))
+    (beancount--run beancount-query-program
+                    (file-relative-name buffer-file-name)
+                    (format beancount-balance-command account))))
+  
+(define-key beancount-mode-map (kbd "C-c J") #'beancount-query-balance-at-point)
 
 
 ;;End

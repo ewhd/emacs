@@ -11,6 +11,8 @@
 	 ("C-S-l" . org-toggle-link-display)
          )
   :config
+  (define-key org-mode-map (kbd "C-'") nil)  ;; Unbind C-' in org-mode
+      ;; so that it doesn't conflict with expand-region
   (setq
    org-startup-indented t
    org-startup-folded t
@@ -82,6 +84,9 @@
    )
 
 
+;; Allow refiling to the top (file) level, rather than just to headings (which is the default)
+(setq org-refile-use-outline-path 'file)
+
 ;;;; ORG TODO
 ;; global effort estimates:
 (customize-set-variable 'org-global-properties
@@ -140,6 +145,11 @@
        'file-exists-p
        (directory-files-recursively "~/Documents" "^[^\.#].*_gtd.*\\.org$")))
 
+;; Set list of legitimate refile targets
+(setq org-refile-targets
+      (mapcar (lambda (file) (cons file '(:maxlevel . 2)))
+              (append org-agenda-files
+                      '("~/Documents/notes/20240504T125856--backburner.org"))))
 
 
 
@@ -147,7 +157,7 @@
 (setq org-agenda-window-setup 'current-window  ; agenda takes current window
       org-agenda-restore-windows-after-quit t  ; restore window configuration on exit
       org-agenda-start-with-follow-mode nil
-      org-columns-default-format-for-agenda "%25ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %20ALLTAGS"
+      org-columns-default-format-for-agenda "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %20ALLTAGS"
       org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5) ; set the depth of headers referenced by org-agenda-clockreport-mode
       org-agenda-time-grid '(
 			     (daily today require-timed)

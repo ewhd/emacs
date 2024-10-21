@@ -13,8 +13,9 @@
       mouse-wheel-scroll-amount '(1)
       sentence-end-double-space nil
       column-number-mode t
-      desktop-dirname "/tmp/"
       pop-up-frames nil
+      mouse-drag-and-drop-region-cross-program t
+      mouse-1-click-follows-link 'double
       )
 
 (global-visual-line-mode 1)
@@ -24,7 +25,19 @@
 (menu-bar-mode -1)
 (tooltip-mode -1)
 (delete-selection-mode 1)     ; Replace region when inserting text
-;; (desktop-save-mode 1)
+
+
+(setq desktop-dirname "~/.cache" ; set the directory /before/ enabling desktop mode
+      ;; desktop-dirname "/var/tmp/"
+      desktop-buffers-not-to-save
+      '("*Messages*" "*scratch*" "*Help*" "*info*" "*compilation*")
+      desktop-path (list desktop-dirname) ; ensures Emacs uses this path for desktop files -- emacs won't seem to look in desktop-dirname without this line
+      desktop-auto-save-timeout 10
+      desktop-save t ; always save
+      )
+(desktop-save-mode 1)
+
+
 
 ;; Revert Buffer Behavior:
 ;; - Automatically revert files which have been changed on disk, unless the buffer contains unsaved changes
@@ -98,32 +111,67 @@
 (global-set-key (kbd "C-x C-b") 'consult-buffer) ;; replace keybinding for list-buffers with consult-buffer
 
 
+;;;; Tab Management
+;; Unbind the default transpose-characters command
+(global-unset-key (kbd "C-t"))
+
+;; Define C-t as a prefix key
+(define-prefix-command 'ctl-t-map)
+(global-set-key (kbd "C-t") 'ctl-t-map)
+
+;; dired has some C-t- prefixed commands for images/thumbnails, but I want these
+;; tab controls to override them, which is done in the dired config below
+
+;; new tab control keybindings
+(define-key ctl-t-map (kbd "n") 'tab-next)
+(define-key ctl-t-map (kbd "p") 'tab-previous)
+(define-key ctl-t-map (kbd "u") 'tab-undo)
+(define-key ctl-t-map (kbd "N") 'tab-new)
+(define-key ctl-t-map (kbd "x") 'tab-close)
+(define-key ctl-t-map (kbd "r") 'tab-reopen)
+(define-key ctl-t-map (kbd "m") 'tab-move)
+(define-key ctl-t-map (kbd "d") 'tab-duplicate)
+(define-key ctl-t-map (kbd "<right>") 'tab-bar-switch-to-next-tab)
+(define-key ctl-t-map (kbd "<left>") 'tab-bar-switch-to-prev-tab)
+(define-key ctl-t-map (kbd "RET") 'tab-bar-select-tab-by-name)
+(define-key ctl-t-map (kbd "b") 'tab-bar-history-back)
+(define-key ctl-t-map (kbd "f") 'tab-bar-history-forward)
+
+
 ;;;; dired config
 ;; check out http://xahlee.info/emacs/emacs/emacs_dired_tips.html
 
-;; prevent dired from creating new buffers for every dir visited
-(setq dired-kill-when-opening-new-dired-buffer nil
-      dired-listing-switches "-alh"
-      dired-recursive-deletes 'always  ;; 'always means no asking
-      dired-recursive-copies 'top  ;; 'top means ask every time
-      dired-dwim-target t  ;; automatically suggest the target dir on the split pane when you copy (C) or move (R) a file
-      )
+(use-package dired
+  :ensure nil  ;; dired is built-in, no need to install
+  :commands (dired)
+  :config
+  ;; Unbind the default C-t binding in Dired
+  (define-key dired-mode-map (kbd "C-t") nil)
+  
+  ;; Assign C-t as a prefix in Dired mode
+  (define-key dired-mode-map (kbd "C-t") 'ctl-t-map)
+  
+  ;; General Dired settings
+  (setq dired-kill-when-opening-new-dired-buffer nil
+        dired-recursive-deletes 'always      ;; 'always means no asking
+        dired-recursive-copies 'top          ;; 'top means ask every time
+        delete-by-moving-to-trash t          ;; move to trash instead of deleting
+        dired-listing-switches
+        "-aGFhlv --group-directories-first --time-style=long-iso" ;; list dirs first
+        dired-dwim-target t                   ;; suggest target dir on split pane
+        dired-free-space nil                  ;; Emacs 29.1
+        dired-mouse-drag-files t              ;; Emacs 29.1
+        )
 
-;; ;; Make dired open in the same window when using RET or ^
-;; ;; http://xahlee.info/emacs/emacs/emacs_dired_tips.html
-;; (put 'dired-find-alternate-file 'disabled nil) ; disables warning
-;; (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
-;; (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
-
-
-;; load dired-x
-(with-eval-after-load 'dired
+  ;; Load dired-x and configure it
   (require 'dired-x)
   (put 'dired-find-alternate-file 'disabled nil) ;; enable dired-find-alternate-file (set to a)
-  ;; start in dired-omit-mode
+
+  ;; Start in dired-omit-mode
   (add-hook 'dired-mode-hook 'dired-omit-mode)
+  
+  ;; Keybindings for Dired mode
   (define-key dired-mode-map (kbd "h") 'dired-omit-mode)
-  ;; (add-hook 'dired-mode-hook 'dired-hide-details-mode) ;; this might be needed to start in dired-hide-details-mode? Or dired+ might take care of that
   (define-key dired-mode-map (kbd "I") 'dired-hide-details-mode)
   (define-key dired-mode-map (kbd ",") #'dired-prev-dirline)
   (define-key dired-mode-map (kbd ".") #'dired-next-dirline)
@@ -131,17 +179,31 @@
   (define-key dired-mode-map (kbd ">") #'dired-next-subdir)
   (define-key dired-mode-map (kbd "Z") 'dired-do-compress-to)
   (define-key dired-mode-map (kbd "c") 'diredp-hide-subdir-nomove)
-  (define-key dired-mode-map (kbd "TAB") 'diredp-hide-subdir-nomove)
-  )
+  ;; (define-key dired-mode-map (kbd "TAB") 'diredp-hide-subdir-nomove)
 
 
-;; set files to be hidden in dired-omit-mode:
-(setq dired-omit-files
-    (rx (or (seq bol (? ".") "#")     ;; emacs autosave files
-        (seq bol "." (not (any "."))) ;; dot-files
-        (seq "~" eol)                 ;; backup-files
-        (seq bol "CVS" eol)           ;; CVS dirs
-        )))
+  ;; Set files to be hidden in dired-omit-mode
+  (setq dired-omit-files
+        (rx (or (seq bol (? ".") "#")     ;; emacs autosave files
+                (seq bol "." (not (any "."))) ;; dot-files
+                (seq "~" eol)                 ;; backup-files
+                (seq bol "CVS" eol)           ;; CVS dirs
+		(seq bol (or "." "..") eol)   ;; Include . and ..
+		
+                ))))
+
+(use-package wdired
+  :ensure nil
+  :after dired
+  :commands (wdired-change-to-wdired-mode) ; lazy-load
+  :config
+  (setq wdired-allow-to-change-permissions t) ; edit the permission bits directly
+  (setq wdired-create-parent-directories t)
+  (setq wdired-allow-to-redirect-links t) ; default=t change the symlinks in Editable mode
+  (setq wdired-use-interactive-rename t) ; prompt for every filename change you have made you when you commit the changes with C-c C-c
+  (setq wdired-confirm-overwrite t) ; asks if you want to overwrite files if your altered filenames conflict with existing files
+  ;; (define-key wdired-mode-map (kbd "C-c C-c") 'wdired-abort) ;; Example keybinding
+)
 
 
 ;;;; Window movement/shifting settings
