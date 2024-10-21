@@ -157,7 +157,7 @@
 (setq org-agenda-window-setup 'current-window  ; agenda takes current window
       org-agenda-restore-windows-after-quit t  ; restore window configuration on exit
       org-agenda-start-with-follow-mode nil
-      org-columns-default-format-for-agenda "%25ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %20ALLTAGS"
+      org-columns-default-format-for-agenda "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %20ALLTAGS"
       org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5) ; set the depth of headers referenced by org-agenda-clockreport-mode
       org-agenda-time-grid '(
 			     (daily today require-timed)
