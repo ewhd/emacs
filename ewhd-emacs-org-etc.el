@@ -138,12 +138,20 @@
 ;;;; ORG-AGENDA
 (global-set-key "\C-ca" 'org-agenda)
 
-;; this snippet recursively searches note and  adds any org file which contains gtd as a keyword to org-agenda-files
+;; this function recursively searches ~/Documents and  adds any org file which contains gtd as a keyword to org-agenda-files
 ;; the regex here should exclude anything starting with a '.', ending with a '~' or a '#'
-(setq org-agenda-files
-      (seq-filter
-       'file-exists-p
-       (directory-files-recursively "~/Documents" "^[^\.#].*_gtd.*\\.org$")))
+
+(defun ewhd-refresh-org-agenda-files ()
+  "Refresh the list of `org-agenda-files` dynamically."
+  (setq org-agenda-files
+        (seq-filter
+         'file-exists-p
+         (directory-files-recursively "~/Documents" "^[^\.#].*_gtd.*\\.org$"))))
+
+(add-hook 'org-agenda-mode-hook 'ewhd-refresh-org-agenda-files) ;; run ewhd-refresh-org-agenda-files whenever agenda-mode is called
+(ewhd-refresh-org-agenda-files)
+
+
 
 ;; Set list of legitimate refile targets
 (setq org-refile-targets
