@@ -135,6 +135,30 @@
     ("FINISHED" . (:foreground "green" :weight bold))))
 
 
+;; Set list of legitimate refile targets
+;; (setq org-refile-targets
+;;       (mapcar (lambda (file) (cons file '(:maxlevel . 2)))
+;;               (append org-agenda-files
+;;                       '("~/Documents/notes/20240504T125856--backburner.org"
+;;                         "~/Documents/notes/20240504T125919--someday-maybe.org"))))
+
+;; Use all org files as targets for refile, and refresh the list of refile targets each time org-refile is run
+(defun ewhd-org-refile-targets (&rest _)
+  "Return a list of all .org files in the notes directory and subdirectories."
+  (seq-filter
+   (lambda (file)
+     (not (string-match-p "/\\.#" file)))  ; Ignore files starting with .#
+   (directory-files-recursively "~/Documents/notes" "\\.org$")))
+
+(defun ewhd-refresh-refile-targets (&rest _)
+  "Refresh org-refile-targets before running org-refile."
+  (setq org-refile-targets
+        `((,(ewhd-org-refile-targets) . (:maxlevel . 3)))))
+
+(advice-add 'org-refile :before #'ewhd-refresh-refile-targets)
+
+
+
 ;;;; ORG-AGENDA
 (global-set-key "\C-ca" 'org-agenda)
 
@@ -150,15 +174,6 @@
 
 (add-hook 'org-agenda-mode-hook 'ewhd-refresh-org-agenda-files) ;; run ewhd-refresh-org-agenda-files whenever agenda-mode is called
 (ewhd-refresh-org-agenda-files)
-
-
-
-;; Set list of legitimate refile targets
-(setq org-refile-targets
-      (mapcar (lambda (file) (cons file '(:maxlevel . 2)))
-              (append org-agenda-files
-                      '("~/Documents/notes/20240504T125856--backburner.org" "~/Documents/notes/20240504T125919--someday-maybe.org"))))
-
 
 
 ;; org-agenda-mode behavior
