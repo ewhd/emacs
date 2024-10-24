@@ -215,6 +215,19 @@
 			   (?D . "white")
 			   ))
 
+;; So far my attempts to change the priority colors in column view has failed
+;; ;; Custom function for priority colors in column view
+;; (defun ewhd-org-add-priority-colors-in-column-view ()
+;;   (font-lock-add-keywords nil
+;;     '(("\\[#[A]\\]" 1 '(:foreground "red" :weight bold) t)
+;;       ("\\[#[B]\\]" 1 '(:foreground "tomato" :weight bold) t)
+;;       ("\\[#[C]\\]" 1 '(:foreground "orange" :weight bold) t)
+;;       ("\\[#[D]\\]" 1 '(:foreground "white" :weight bold) t))
+;;     t))
+
+;; ;; Add to org-mode hook
+;; (add-hook 'org-mode-hook #'ewhd-org-add-priority-colors-in-column-view)
+
 
 ;;;; ORG-AGENDA
 (global-set-key "\C-ca" 'org-agenda)
