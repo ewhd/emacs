@@ -84,8 +84,37 @@
    )
 
 
+;;;; ORG REFILE
+;; Set list of legitimate refile targets
+;; (setq org-refile-targets
+;;       (mapcar (lambda (file) (cons file '(:maxlevel . 2)))
+;;               (append org-agenda-files
+;;                       '("~/Documents/notes/20240504T125856--backburner.org"
+;;                         "~/Documents/notes/20240504T125919--someday-maybe.org"))))
+
+;; Use all org files as targets for refile, and refresh the list of refile targets each time org-refile is run
+(defun ewhd-org-refile-targets (&rest _)
+  "Return a list of all .org files in the notes directory and subdirectories."
+  (seq-filter
+   (lambda (file)
+     (not (string-match-p "/\\.#" file)))  ; Ignore files starting with .#
+   (directory-files-recursively "~/Documents/notes" "\\.org$")))
+
+(defun ewhd-refresh-refile-targets (&rest _)
+  "Refresh org-refile-targets before running org-refile."
+  (setq org-refile-targets
+        `((,(ewhd-org-refile-targets) . (:maxlevel . 3)))))
+
+(advice-add 'org-refile :before #'ewhd-refresh-refile-targets)
+
 ;; Allow refiling to the top (file) level, rather than just to headings (which is the default)
 (setq org-refile-use-outline-path 'file)
+
+;; setting org-refile-use-outline-path to 'file causes problems with auto-complete
+;; that prevents designating headings within the file. This fixes that.
+(setq org-outline-path-complete-in-steps nil)
+
+
 
 ;;;; ORG TODO
 ;; global effort estimates:
@@ -134,28 +163,6 @@
     ("PROJECT - ON-HOLD" . (:foreground "cyan" :weight bold))
     ("FINISHED" . (:foreground "green" :weight bold))))
 
-
-;; Set list of legitimate refile targets
-;; (setq org-refile-targets
-;;       (mapcar (lambda (file) (cons file '(:maxlevel . 2)))
-;;               (append org-agenda-files
-;;                       '("~/Documents/notes/20240504T125856--backburner.org"
-;;                         "~/Documents/notes/20240504T125919--someday-maybe.org"))))
-
-;; Use all org files as targets for refile, and refresh the list of refile targets each time org-refile is run
-(defun ewhd-org-refile-targets (&rest _)
-  "Return a list of all .org files in the notes directory and subdirectories."
-  (seq-filter
-   (lambda (file)
-     (not (string-match-p "/\\.#" file)))  ; Ignore files starting with .#
-   (directory-files-recursively "~/Documents/notes" "\\.org$")))
-
-(defun ewhd-refresh-refile-targets (&rest _)
-  "Refresh org-refile-targets before running org-refile."
-  (setq org-refile-targets
-        `((,(ewhd-org-refile-targets) . (:maxlevel . 3)))))
-
-(advice-add 'org-refile :before #'ewhd-refresh-refile-targets)
 
 
 
