@@ -147,6 +147,8 @@
     )
    )
  )
+
+;; available named colors: https://www.raebear.net/computers/emacs-colors/
 (setq org-todo-keyword-faces
   '(("TODO". "purple")
     ("NEXT" . "magenta")
@@ -164,6 +166,33 @@
     ("FINISHED" . (:foreground "green" :weight bold))))
 
 
+;;;; ORG TAGS
+;; available named colors: https://www.raebear.net/computers/emacs-colors/
+(setq org-tag-faces
+      '(("Urg"   . "dark orange")
+        ("Imp"   . "orange red")
+	("Prcs"  . "turquoise")
+	("Imrsv" . "dodger blue")
+	("Fnsh"  . "lawn green")
+	("Cmplx" . "dark violet")
+	("Dstr"  . "yellow2")
+	("Dlybl" . "wheat")
+	))
+
+
+;;;; ORG PRIORITY
+;; Define priorities
+(setq org-highest-priority ?A
+      org-default-priority ?D
+      org-lowest-priority ?D)
+
+;; Set colors
+;; available named colors: https://www.raebear.net/computers/emacs-colors/
+(setq org-priority-faces '((?A . "red")
+                           (?B . "tomato")
+                           (?C . "orange")
+			   (?D . "white")
+			   ))
 
 
 ;;;; ORG-AGENDA
