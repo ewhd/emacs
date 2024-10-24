@@ -182,6 +182,25 @@
 	))
 
 
+
+;; set colors in column view
+(defun ewhd-org-add-tag-color-in-column-view ()
+  (font-lock-add-keywords nil
+    ;; '(("\\(:TagA:\\)" 1 '(:foreground "red" :weight bold) t)
+      ;; ("\\(:TagB:\\)" 1 '(:foreground "blue" :weight bold) t))
+    '(("\\(:Urg:\\)"   1 '(:foreground "dark orange" :weight bold) t)
+      ("\\(:Imp:\\)"   1 '(:foreground "orange red" :weight bold) t)
+      ("\\(:Prcs:\\)"  1 '(:foreground "turquoise" :weight bold) t)
+      ("\\(:Imrsv:\\)" 1 '(:foreground "dodger blue" :weight bold) t)
+      ("\\(:Fnsh:\\)"  1 '(:foreground "lawn green" :weight bold) t)
+      ("\\(:Cmplx:\\)" 1 '(:foreground "dark violet" :weight bold) t)
+      ("\\(:Dstr:\\)"  1 '(:foreground "yellow2" :weight bold) t)
+      ("\\(:Dlybl:\\)" 1 '(:foreground "wheat" :weight bold) t))
+    t))
+
+(add-hook 'org-mode-hook #'ewhd-org-add-tag-color-in-column-view)
+
+  
 ;;;; ORG PRIORITY
 ;; Define priorities
 (setq org-highest-priority ?A
