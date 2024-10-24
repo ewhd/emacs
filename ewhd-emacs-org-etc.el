@@ -266,6 +266,13 @@
       org-agenda-hide-tags-regexp (regexp-opt '("cf" "gtd"))  ;; hides specific tags
       org-agenda-remove-tags t  ;; hides all tags
       )
+
+;; give more room for tags on my desktop
+(when (string= system-name "ewhd-t730-debian")
+  (setq org-columns-default-format-for-agenda
+          "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"))
+
+
 (add-hook 'org-agenda-mode-hook
 	  ;; Disables word-wrap and enables truncate-line in agenda buffers
           (lambda ()
