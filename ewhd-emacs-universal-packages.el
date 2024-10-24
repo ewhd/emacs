@@ -238,6 +238,18 @@
 (add-hook 'olivetti-mode-on-hook (lambda () (olivetti-set-width 80)))
 (add-hook 'text-mode-hook 'olivetti-mode)
 
+(defun ewhd-disable-olivetti-if-gtd-tag ()
+  "Check for 'gtd' tag and disable Olivetti mode if necessary when visiting an Org file."
+  (when (derived-mode-p 'org-mode)
+    (save-excursion
+      (goto-char (point-min))
+      (org-refresh-category-properties) ;; Ensure tags are refreshed
+      (when (member "gtd" (org-get-tags))
+        (olivetti-mode -1)))))
+
+(add-hook 'org-mode-hook #'ewhd-disable-olivetti-if-gtd-tag) ;; disable olivetti in gtd files
+
+
 
 ;;;; Modeline:
 ;; Delight enables you to easily customise how major and minor modes appear in the ModeLine.
