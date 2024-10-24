@@ -167,6 +167,8 @@
 
 
 ;;;; ORG TAGS
+(setq org-complete-tags-always-offer-all-agenda-tags t) ;; suggest tags from all agenda files
+
 ;; available named colors: https://www.raebear.net/computers/emacs-colors/
 (setq org-tag-faces
       '(("Urg"   . "dark orange")
