@@ -195,7 +195,7 @@
       ("\\(:Fnsh:\\)"  1 '(:foreground "lawn green" :weight bold) t)
       ("\\(:Cmplx:\\)" 1 '(:foreground "dark violet" :weight bold) t)
       ("\\(:Dstr:\\)"  1 '(:foreground "yellow2" :weight bold) t)
-      ("\\(:Dlybl:\\)" 1 '(:foreground "wheat" :weight bold) t))
+      ("\\(:Dlybl:\\)" 1 '(:foreground "wheat" :weight bold) t)) ;; change this--it's a little too close to the default off-white
     t))
 
 (add-hook 'org-mode-hook #'ewhd-org-add-tag-color-in-column-view)
@@ -214,19 +214,6 @@
                            (?C . "orange")
 			   (?D . "white")
 			   ))
-
-;; So far my attempts to change the priority colors in column view has failed
-;; ;; Custom function for priority colors in column view
-;; (defun ewhd-org-add-priority-colors-in-column-view ()
-;;   (font-lock-add-keywords nil
-;;     '(("\\[#[A]\\]" 1 '(:foreground "red" :weight bold) t)
-;;       ("\\[#[B]\\]" 1 '(:foreground "tomato" :weight bold) t)
-;;       ("\\[#[C]\\]" 1 '(:foreground "orange" :weight bold) t)
-;;       ("\\[#[D]\\]" 1 '(:foreground "white" :weight bold) t))
-;;     t))
-
-;; ;; Add to org-mode hook
-;; (add-hook 'org-mode-hook #'ewhd-org-add-priority-colors-in-column-view)
 
 
 ;;;; ORG-AGENDA
@@ -270,7 +257,10 @@
 ;; give more room for tags on my desktop
 (when (string= system-name "ewhd-t730-debian")
   (setq org-columns-default-format-for-agenda
-          "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"))
+        "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
+	org-agenda-tags-column 80
+	org-agenda-remove-tags nil
+	org-agenda-show-inherited-tags nil))
 
 
 (add-hook 'org-agenda-mode-hook
