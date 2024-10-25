@@ -36,6 +36,7 @@
 )
 
 
+;;;; OTHER ORG-MODE PACKAGES
 (use-package org-modern
     :ensure t
     ;; :custom
@@ -62,6 +63,28 @@
 (setq org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
 
 
+(use-package org-super-agenda
+    :ensure t
+    :after org
+    :init
+    (org-super-agenda-mode 1))
+
+(use-package org-ql
+  :ensure t
+  :after org)
+
+;; Show hidden emphasis markers
+(use-package org-appear
+  :ensure t
+  :hook
+  (org-mode . org-appear-mode)
+  :config
+  (setq
+   org-appear-autolinks nil
+   org-appear-autosubmarkers t
+   ;org-appear-delay .7
+   )
+  )
 
 ;;;; ORG-MODE GENERAL BEHAVIOR
 ;; I think this is all included in the use-package block above, and should probably be removed
@@ -221,7 +244,6 @@
 
 ;; this function recursively searches ~/Documents and  adds any org file which contains gtd as a keyword to org-agenda-files
 ;; the regex here should exclude anything starting with a '.', ending with a '~' or a '#'
-
 (defun ewhd-refresh-org-agenda-files ()
   "Refresh the list of `org-agenda-files` dynamically."
   (setq org-agenda-files
@@ -254,20 +276,12 @@
       org-agenda-remove-tags t  ;; hides all tags
       )
 
-;; give more room for tags on my desktop
-(when (string= system-name "ewhd-t730-debian")
-  (setq org-columns-default-format-for-agenda
-        "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
-	org-agenda-tags-column 80
-	org-agenda-remove-tags nil
-	org-agenda-show-inherited-tags nil))
-
-
 (add-hook 'org-agenda-mode-hook
 	  ;; Disables word-wrap and enables truncate-line in agenda buffers
           (lambda ()
             (visual-line-mode -1)
             (toggle-truncate-lines 1)))
+
 
 ;; Formatting (truncating) fields in agenda-view:
 (defvar ewhd-org-agenda-extended-prefix t)
@@ -313,14 +327,10 @@
    ))
 
 
-;;;;;; OTHER ORG-MODE PACKAGES
-;;;; organize org agenda better
-(use-package org-super-agenda
-    :ensure t
-    :after org
-    :config
-    (org-super-agenda-mode)
-    (setq org-agenda-custom-commands
+
+
+
+(setq org-agenda-custom-commands
           '(("z" "Super view"
              (
 	      (agenda "" ((org-agenda-span 'day)
@@ -334,18 +344,6 @@
                                     :order 1)
 			     (:discard (:anything t))
 			     ))))
-	      ;; (agenda "" ((org-agenda-start-on-weekend nil)
-	      ;; 		  (org-agenda-span 7)
-	      ;; 		  (org-agenda-start-day "+1d")
-              ;;             (org-super-agenda-groups
-              ;;              '(
-	      ;; 		     (:name "This Week"
-	      ;; 			    :time-grid nil
-              ;;                       :scheduled future :not (:scheduled today)
-	      ;; 			    :deadline future :not (:deadline today)
-              ;;                       :order 2)
-	      ;; 		     (:discard (:anything t))
-	      ;; 		     ))))
               (alltodo "" ((org-agenda-overriding-header "")
 			   (org-agenda-span 7)
                            (org-super-agenda-groups
@@ -427,20 +425,31 @@
 	      		     (:discard (:anything t))
 	      		     ))))
 	      ))
+	    ("wr" "Rolling Week"
+	     ((agenda "" ((org-agenda-start-on-weekend nil)
+			  (org-agenda-span 7)
+			  (org-agenda-start-day "+1d")
+                          (org-super-agenda-groups
+                           '(
+			     (:name "This Week"
+				    :time-grid nil
+                                    :scheduled future :not (:scheduled today)
+				    :deadline future :not (:deadline today)
+                                    :order 2)
+			     (:discard (:anything t))
+			     ))))
+	      ))
 	    )
     )
-)
 
-;;;; Show hidden emphasis markers
-(use-package org-appear
-  :ensure t
-  :hook
-  (org-mode . org-appear-mode)
-  :config
-  (setq
-   org-appear-autolinks nil
-   org-appear-autosubmarkers t
-   ;org-appear-delay .7
-   )
-  )
 
+
+
+
+;; stuff I'm playing around with just on my desktop for now
+(when (string= system-name "ewhd-t730-debian")
+  (setq org-columns-default-format-for-agenda
+        "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
+	org-agenda-tags-column 80
+	org-agenda-remove-tags nil
+	org-agenda-show-inherited-tags nil))
