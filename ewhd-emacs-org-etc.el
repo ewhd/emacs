@@ -274,6 +274,8 @@
       org-agenda-start-with-log-mode t
       org-agenda-hide-tags-regexp (regexp-opt '("cf" "gtd"))  ;; hides specific tags
       org-agenda-remove-tags t  ;; hides all tags
+      org-agenda-show-inherited-tags t
+      org-tags-exclude-from-inheritance '("gtd" "Proj" "Cmplx" "Fnsh" "Dstr" "Dlybl" "Prcs" "Imrsv")
       )
 
 (add-hook 'org-agenda-mode-hook
@@ -496,4 +498,4 @@
         "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
 	org-agenda-tags-column 80
 	org-agenda-remove-tags nil
-	org-agenda-show-inherited-tags nil))
+	))
