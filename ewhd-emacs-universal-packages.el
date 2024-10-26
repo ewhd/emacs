@@ -234,20 +234,13 @@
    ("C-x C-a l" . activities-list)))
 
 ;; Olivetti
-(use-package olivetti)
-(add-hook 'olivetti-mode-on-hook (lambda () (olivetti-set-width 80)))
-(add-hook 'text-mode-hook 'olivetti-mode)
-
-(defun ewhd-disable-olivetti-if-gtd-tag ()
-  "Check for 'gtd' tag and disable Olivetti mode if necessary when visiting an Org file."
-  (when (derived-mode-p 'org-mode)
-    (save-excursion
-      (goto-char (point-min))
-      (org-refresh-category-properties) ;; Ensure tags are refreshed
-      (when (member "gtd" (org-get-tags))
-        (olivetti-mode -1)))))
-
-(add-hook 'org-mode-hook #'ewhd-disable-olivetti-if-gtd-tag) ;; disable olivetti in gtd files
+(use-package olivetti
+  :hook ((text-mode . (lambda ()
+                        (unless (and buffer-file-name
+                                     (string-match-p "gtd" (file-name-nondirectory buffer-file-name)))
+                          (olivetti-mode 1)))))
+  :config
+  (add-hook 'olivetti-mode-on-hook (lambda () (olivetti-set-width 80))))
 
 
 
