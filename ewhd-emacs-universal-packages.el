@@ -205,14 +205,17 @@
 ;;;; Layout
 ;; transpose-frame
 ;; https://www2.lib.uchicago.edu/keith/emacs/minimacs.html
-(use-package transpose-frame :defer t
+(use-package transpose-frame
+  :defer t
   :commands
   (transpose-frame
    flip-frame
    flop-frame
    rotate-frame
    rotate-frame-clockwise
-   rotate-frame-anticlockwise))
+   rotate-frame-anticlockwise)
+  :bind (("C-x 6" . transpose-frame)))
+
 
 ;; activities
 (use-package activities
