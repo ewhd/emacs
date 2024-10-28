@@ -290,47 +290,84 @@
 
 
 ;; Formatting (truncating) fields in agenda-view:
-(defvar ewhd-org-agenda-extended-prefix t)
-(defun ewhd-org-agenda-toggle-extended-prefix ()
-  "Toggles whether category/file name appears or not at the left
-  of entries in agenda listings. Useful to unclutter listings."
-  (interactive)
-  (if ewhd-org-agenda-extended-prefix
-      (progn 
-        (setq ewhd-org-agenda-extended-prefix nil)
-        (setq org-agenda-prefix-format
-              '((agenda  . "  %?-12t% s")
-                (timeline  . "  % s")
-                (todo  . "  ")
-                (tags  . "  ")
-                (search . "  ")))
-        )
-    (setq ewhd-org-agenda-extended-prefix t)
-    (setq org-agenda-prefix-format
-          '((agenda  . "  %-12:c%?-12t% s")
-            (timeline  . "  % s")
-            (todo  . "  %-12:c")
-            (tags  . "  %-12:c")
-            (search . "  %-12:c")))
+;; (defvar ewhd-org-agenda-extended-prefix t)
+;; (defun ewhd-org-agenda-toggle-extended-prefix ()
+;;   "Toggles whether category/file name appears or not at the left
+;;   of entries in agenda listings. Useful to unclutter listings."
+;;   (interactive)
+;;   (if ewhd-org-agenda-extended-prefix
+;;       (progn 
+;;         (setq ewhd-org-agenda-extended-prefix nil)
+;;         (setq org-agenda-prefix-format
+;;               '((agenda  . "  %?-12t% s")
+;;                 (timeline  . "  % s")
+;;                 (todo  . "  ")
+;;                 (tags  . "  ")
+;;                 (search . "  ")))
+;;         )
+;;     (setq ewhd-org-agenda-extended-prefix t)
+;;     (setq org-agenda-prefix-format
+;;           '((agenda  . "  %-12:c%?-12t% s")
+;;             (timeline  . "  % s")
+;;             (todo  . "  %-12:c")
+;;             (tags  . "  %-12:c")
+;;             (search . "  %-12:c")))
     
-    )
-  (org-agenda-redo))
+;;     )
+;;   (org-agenda-redo))
 
-;; hide extended prefix info by default
-(setq ewhd-org-agenda-extended-prefix nil)
-(setq org-agenda-prefix-format
-      '((agenda  . "  %?-12t% s")
-        (timeline  . "  % s")
-        (todo  . "  ")
-        (tags  . "  ")
-        (search . "  ")))
+;; ;; hide extended prefix info by default
+;; (setq ewhd-org-agenda-extended-prefix nil)
+;; (setq org-agenda-prefix-format
+;;       '((agenda  . "  %?-12t% s")
+;;         (timeline  . "  % s")
+;;         (todo  . "  ")
+;;         (tags  . "  ")
+;;         (search . "  ")))
 
-(add-hook 
- 'org-mode-hook
- (lambda ()
-   (define-key org-agenda-keymap   "L" 'ewhd-org-agenda-toggle-extended-prefix)
-   (define-key org-agenda-mode-map "L" 'ewhd-org-agenda-toggle-extended-prefix)
-   ))
+;; (add-hook 
+;;  'org-mode-hook
+;;  (lambda ()
+;;    (define-key org-agenda-keymap   "L" 'ewhd-org-agenda-toggle-extended-prefix)
+;;    (define-key org-agenda-mode-map "L" 'ewhd-org-agenda-toggle-extended-prefix)
+;;    ))
+
+(setq ewhd-org-agenda-prefix-formats
+      '(((agenda   . " %?s%-12t")   ; Format 1
+         (timeline . " %s")
+         (todo     . " ")
+         (tags     . " ")
+         (search   . " "))
+        ((agenda   . " %-12:c%-s%-12t")   ; Format 2
+         (timeline . " %s")
+         (todo     . " %-12:c")
+         (tags     . " %-12:c")
+         (search   . " %-12:c"))
+        ((agenda   . " %?s%-12t")   ; Format 3
+         (timeline . " %s")
+         (todo     . " %-5e")
+         (tags     . " %i [TAG] %s")
+         (search   . " "))
+      ))
+
+(defun set-org-agenda-prefix-format (n)
+  "Set `org-agenda-prefix-format` to the Nth format in `my-org-agenda-prefix-formats`."
+  (interactive "nChoose prefix format (1, 2, or 3): ")
+  (let ((format (nth (1- n) ewhd-org-agenda-prefix-formats)))
+    (if format
+        (progn
+          (setq org-agenda-prefix-format format)
+          (message "Using org-agenda-prefix-format %d" n)
+          (org-agenda-redo))
+      (message "Invalid format number"))))
+;; (global-unset-key (kbd "L"))
+(define-prefix-command 'org-agenda-prefix-format-map)
+(define-key org-agenda-mode-map (kbd "L") 'org-agenda-prefix-format-map)
+(define-key org-agenda-prefix-format-map (kbd "1") (lambda () (interactive) (set-org-agenda-prefix-format 1)))
+(define-key org-agenda-prefix-format-map (kbd "2") (lambda () (interactive) (set-org-agenda-prefix-format 2)))
+(define-key org-agenda-prefix-format-map (kbd "3") (lambda () (interactive) (set-org-agenda-prefix-format 3)))
+(set-org-agenda-prefix-format 1)
+
 
 
 ;;https://github.com/alphapapa/org-ql/blob/master/examples.org
@@ -355,12 +392,13 @@
 (setq org-agenda-custom-commands
       '(("z" "Super view"
          ((agenda "" ((org-agenda-span 8)
-                      (org-super-agenda-groups
-                       '(
-                         (:name "Today"
-                                :time-grid t
-                                :order 1)
-                         ))))
+		      (org-agenda-use-time-grid t)
+                      ;; (org-super-agenda-groups
+                      ;;  '((:name "Today"
+                      ;;           :time-grid t
+                      ;;           :order 1)
+                      ;;    ))
+		      ))
           (alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
                        ;; (org-agenda-span 7)
                        (org-super-agenda-groups
