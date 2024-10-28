@@ -499,3 +499,12 @@
 	org-agenda-tags-column 80
 	org-agenda-remove-tags nil
 	))
+
+(when (string= system-name "ewhd-book")
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (setq org-columns-default-format-for-agenda
+        "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
+	org-agenda-tags-column 'auto
+	org-agenda-remove-tags nil
+	org-tags-column -50
+	))
