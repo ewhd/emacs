@@ -241,6 +241,7 @@
 
 ;;;; ORG-AGENDA
 (global-set-key "\C-ca" 'org-agenda)
+(define-key org-agenda-mode-map (kbd "C-z") 'org-agenda-undo)
 
 ;; this function recursively searches ~/Documents and  adds any org file which contains gtd as a keyword to org-agenda-files
 ;; the regex here should exclude anything starting with a '.', ending with a '~' or a '#'
@@ -276,6 +277,9 @@
       org-agenda-remove-tags t  ;; hides all tags
       org-agenda-show-inherited-tags t
       org-tags-exclude-from-inheritance '("gtd" "Proj" "Cmplx" "Fnsh" "Dstr" "Dlybl" "Prcs" "Imrsv")
+      ;; org-agenda-compact-blocks t
+      org-agenda-timegrid-use-ampm t
+      org-agenda-confirm-kill t
       )
 
 (add-hook 'org-agenda-mode-hook
