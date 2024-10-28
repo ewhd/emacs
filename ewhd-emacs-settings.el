@@ -343,3 +343,12 @@ Version 2020-06-26"
   (interactive)
   (save-some-buffers)
   (kill-emacs))
+
+
+;; swap to last buffer
+(defun switch-to-last-buffer ()
+  (interactive)
+  (switch-to-buffer nil))
+
+(global-set-key (kbd "C-0") 'switch-to-last-buffer)
+
