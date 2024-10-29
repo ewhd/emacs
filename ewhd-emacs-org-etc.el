@@ -240,8 +240,10 @@
 
 
 ;;;; ORG-AGENDA
+(require 'org-agenda)
 (global-set-key "\C-ca" 'org-agenda)
 (define-key org-agenda-mode-map (kbd "C-z") 'org-agenda-undo)
+(define-key org-agenda-mode-map (kbd "M-e") 'org-agenda-set-effort)
 
 ;; this function recursively searches ~/Documents and  adds any org file which contains gtd as a keyword to org-agenda-files
 ;; the regex here should exclude anything starting with a '.', ending with a '~' or a '#'
@@ -351,14 +353,15 @@
       ))
 
 (defun set-org-agenda-prefix-format (n)
-  "Set `org-agenda-prefix-format` to the Nth format in `my-org-agenda-prefix-formats`."
+  "Set `org-agenda-prefix-format` to the Nth format in `ewhd-org-agenda-prefix-formats`."
   (interactive "nChoose prefix format (1, 2, or 3): ")
   (let ((format (nth (1- n) ewhd-org-agenda-prefix-formats)))
     (if format
         (progn
           (setq org-agenda-prefix-format format)
           (message "Using org-agenda-prefix-format %d" n)
-          (org-agenda-redo))
+          (when (get-buffer "*Org Agenda*")
+            (org-agenda-redo)))
       (message "Invalid format number"))))
 ;; (global-unset-key (kbd "L"))
 (define-prefix-command 'org-agenda-prefix-format-map)
