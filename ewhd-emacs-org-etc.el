@@ -4,6 +4,8 @@
 ;;;;;; ORG-MODE
 (use-package org
   :ensure nil
+  :init
+  (require 'org-agenda)
   :bind (("C-c l" . org-store-link)
          ("C-S-v" . scroll-other-window)
          ("M-V" . scroll-other-window-down)
@@ -12,7 +14,7 @@
          )
   :config
   (define-key org-mode-map (kbd "C-'") nil)  ;; Unbind C-' in org-mode
-      ;; so that it doesn't conflict with expand-region
+  ;; so that it doesn't conflict with expand-region
   (setq
    org-startup-indented t
    org-startup-folded t
@@ -33,7 +35,7 @@
    org-duration-format 'h:mm
    org-clock-report-include-clocking-task t
    )
-)
+  )
 
 
 ;;;; OTHER ORG-MODE PACKAGES
@@ -209,17 +211,15 @@
 ;; set colors in column view
 (defun ewhd-org-add-tag-color-in-column-view ()
   (font-lock-add-keywords nil
-    ;; '(("\\(:TagA:\\)" 1 '(:foreground "red" :weight bold) t)
-      ;; ("\\(:TagB:\\)" 1 '(:foreground "blue" :weight bold) t))
-    '(("\\(:Urg:\\)"   1 '(:foreground "dark orange" :weight bold) t)
-      ("\\(:Imp:\\)"   1 '(:foreground "orange red" :weight bold) t)
-      ("\\(:Prcs:\\)"  1 '(:foreground "turquoise" :weight bold) t)
-      ("\\(:Imrsv:\\)" 1 '(:foreground "dodger blue" :weight bold) t)
-      ("\\(:Fnsh:\\)"  1 '(:foreground "lawn green" :weight bold) t)
-      ("\\(:Cmplx:\\)" 1 '(:foreground "dark violet" :weight bold) t)
-      ("\\(:Dstr:\\)"  1 '(:foreground "yellow2" :weight bold) t)
-      ("\\(:Dlybl:\\)" 1 '(:foreground "wheat" :weight bold) t)) ;; change this--it's a little too close to the default off-white
-    t))
+			  '(("\\(:Urg:\\)"   1 '(:foreground "dark orange" :weight bold) t)
+			    ("\\(:Imp:\\)"   1 '(:foreground "orange red" :weight bold) t)
+			    ("\\(:Prcs:\\)"  1 '(:foreground "turquoise" :weight bold) t)
+			    ("\\(:Imrsv:\\)" 1 '(:foreground "dodger blue" :weight bold) t)
+			    ("\\(:Fnsh:\\)"  1 '(:foreground "lawn green" :weight bold) t)
+			    ("\\(:Cmplx:\\)" 1 '(:foreground "dark violet" :weight bold) t)
+			    ("\\(:Dstr:\\)"  1 '(:foreground "yellow2" :weight bold) t)
+			    ("\\(:Dlybl:\\)" 1 '(:foreground "wheat" :weight bold) t)) ;; change this--it's a little too close to the default off-white
+			  t))
 
 (add-hook 'org-mode-hook #'ewhd-org-add-tag-color-in-column-view)
 
@@ -240,7 +240,7 @@
 
 
 ;;;; ORG-AGENDA
-(require 'org-agenda)
+
 (global-set-key "\C-ca" 'org-agenda)
 (define-key org-agenda-mode-map (kbd "C-z") 'org-agenda-undo)
 (define-key org-agenda-mode-map (kbd "M-e") 'org-agenda-set-effort)
@@ -345,12 +345,12 @@
          (todo     . " %-12:c")
          (tags     . " %-12:c")
          (search   . " %-12:c"))
-        ((agenda   . " %?s%-12t")   ; Format 3
-         (timeline . " %s")
-         (todo     . " %-5e")
-         (tags     . " %i [TAG] %s")
-         (search   . " "))
-      ))
+        ;; ((agenda   . " %?s%-12t")   ; Format 3
+        ;;  (timeline . " %s")
+        ;;  (todo     . " %-5e")
+        ;;  (tags     . " %i [TAG] %s")
+        ;;  (search   . " "))
+	))
 
 (defun set-org-agenda-prefix-format (n)
   "Set `org-agenda-prefix-format` to the Nth format in `ewhd-org-agenda-prefix-formats`."
@@ -547,9 +547,9 @@
 
 (when (string= system-name "ewhd-book")
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
-  (setq org-columns-default-format-for-agenda
-        "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
+  (setq org-columns-default-format-for-agenda "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
 	org-agenda-tags-column 'auto
 	org-agenda-remove-tags nil
 	org-tags-column -50
-	))
+	)
+  )
