@@ -149,24 +149,24 @@
  '((sequence
     "TODO(t)"
     "NEXT(n)"
-    "STARTED(s)"
-    "WAITING(w@/!)"
-    "REVIEW(r!)"
+    "STRT(s)"
+    "WAIT(w@/!)"
+    "REVW(r!)"
     "HOLD(h@/!)"
     "|"
-    "CANCELED(x)"
+    "CANC(x)"
     "DONE(d)"
     )
    (sequence
     "OPEN(o)"
-    "EVENT(e)"
+    "EVNT(e)"
     "|"
-    "COMPLETE(c)")
+    "COMP(c)")
    (sequence
-    "PROJECT - OPEN(p)"
-    "PROJECT - ON-HOLD(@/)"
+    "PROJ(p)"
+    ;; "PROJECT - ON-HOLD(@/)"
     "|"
-    "FINISHED(f)"
+    "FNSH(f)"
     )
    )
  )
@@ -175,18 +175,18 @@
 (setq org-todo-keyword-faces
   '(("TODO". "purple")
     ("NEXT" . "magenta")
-    ("STARTED" . "pink")
-    ("WAITING" . "blue")
-    ("REVIEW" . "orange")
+    ("STRT" . "pink")
+    ("WAIT" . "sky blue")
+    ("REVW" . "orange")
     ("HOLD" . "cyan")
-    ("CANCELED" . "green")
+    ("CANC" . "green")
     ("DONE" . "green")
     ("OPEN" . (:foreground "white" :background "purple"))
-    ("EVENT" . (:foreground "white" :background "blue"))
-    ("COMPLETE" . (:foreground "white" :background "dark green"))
-    ("PROJECT - OPEN" . (:foreground "red" :weight bold))
-    ("PROJECT - ON-HOLD" . (:foreground "cyan" :weight bold))
-    ("FINISHED" . (:foreground "green" :weight bold))))
+    ("EVNT" . (:foreground "white" :background "blue"))
+    ("COMP" . (:foreground "white" :background "dark green"))
+    ("PROJ" . (:foreground "red" :weight bold))
+    ;; ("PROJECT - ON-HOLD" . (:foreground "cyan" :weight bold))
+    ("FNSH" . (:foreground "green" :weight bold))))
 
 
 ;;;; ORG TAGS
@@ -260,7 +260,7 @@
 (setq org-agenda-window-setup 'current-window  ; agenda takes current window
       org-agenda-restore-windows-after-quit t  ; restore window configuration on exit
       org-agenda-start-with-follow-mode nil
-      org-columns-default-format-for-agenda "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %20ALLTAGS"
+      org-columns-default-format-for-agenda "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %20ALLTAGS"
       org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5) ; set the depth of headers referenced by org-agenda-clockreport-mode
       org-agenda-time-grid '(
 			     (daily today require-timed)
@@ -416,17 +416,17 @@
 			  (:name "Prioritize:" :priority "A" :order 50)
 			  (:name "Distractions:" :tag "Dstr" :order 65)
                           (:name "Then:" :and (:todo "NEXT" :priority>= "C") :order 60)
-                          (:name "Continue:" :todo "STARTED" :order 70)
+                          (:name "Continue:" :todo "STRT" :order 70)
                           (:name "Someday:"
                                  :priority<= "D"
 				 :todo "HOLD"
                                  :order 120)
                           (:name "Other Todo:" :todo "TODO" :order 80)
                           (:name "Misc."
-                                 :todo ("REVIEW" "WAITING")
+                                 :todo ("REVW" "WAIT")
                                  :order 90)
                           (:todo "OPEN" :order 150)
-                          (:discard (:todo ("PROJECT - OPEN" "PROJECT - ON-HOLD")))
+                          (:discard (:todo ("PROJ")))
                           ))))))
 	("x" "Super view - no agenda"
          ((alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
@@ -537,7 +537,7 @@
 ;; stuff I'm playing around with just on my desktop for now
 (when (string= system-name "ewhd-t730-debian")
   (setq org-columns-default-format-for-agenda
-        "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
+        "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
 	org-agenda-tags-column 80
 	org-agenda-remove-tags nil
 	))
@@ -545,7 +545,7 @@
 (when (string= system-name "ewhd-book")
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
   (setq org-columns-default-format-for-agenda
-        "%45ITEM %7TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
+        "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
 	org-agenda-tags-column 'auto
 	org-agenda-remove-tags nil
 	org-tags-column -50
