@@ -5,6 +5,7 @@
       '(
 	beginning-of-visual-line
 	comment-line
+	electric-pair-delete-pair
 	end-of-visual-line
 	eval-last-sexp
 	indent-for-tab-command
@@ -35,6 +36,7 @@
       '(
 	end-of-buffer
 	ignore
+	org-mouse-down-mouse
 	org-return-and-maybe-indent
 	org-time-stamp-inactive
 	text-scale-decrease
