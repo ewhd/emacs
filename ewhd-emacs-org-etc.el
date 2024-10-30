@@ -402,147 +402,125 @@
 
 
 
+
+(setq ewhd-super-agenda-groups
+      '((:name "Upcoming"
+	       :deadline future
+	       :scheduled future
+	       :order 40)
+	(:name "Check Scheduling:"
+	       :and (:todo "SCHD" :not (:scheduled t))
+	       :order 45)
+	(:name "Overdue"
+	       :deadline past
+	       :order 10)
+	(:name "Behind Schedule"
+	       :scheduled past
+	       :order 20)
+	(:name "Check on these:"
+	       :todo ("SCHD" "DPND" "WAIT" "REVW")
+	       :order 64)
+	(:name "Prioritize:" :priority "A" :order 50)
+	(:name "Distractions:" :tag "Dstr" :order 63)
+	(:name "Take Action:"
+	       :and (:todo ("NEXT" "STRT") :priority>= "C")
+	       :order 60)
+	(:name "Prepare:"
+	       :and (:todo ("TODO" "PREP") :priority>= "C")
+	       :order 61)
+	(:name "Define:"
+	       :and (:todo ("IDEA" "TASK") :priority>= "C")
+	       :order 62)
+	(:name "Someday:"
+	       :priority<= "D"
+	       :order 120)
+	(:name "Other Todo:" :todo "TODO" :order 80)
+	(:todo "OPEN" :order 150)
+	(:discard (:todo ("PROJ")))))
+
 (setq org-agenda-custom-commands
       '(("z" "Super view"
          ((agenda "" ((org-agenda-span 8)
-		      (org-agenda-use-time-grid t)
-                      ;; (org-super-agenda-groups
-                      ;;  '((:name "Today"
-                      ;;           :time-grid t
-                      ;;           :order 1)
-                      ;;    ))
-		      ))
+		      (org-agenda-use-time-grid t)))
           (alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
-                       ;; (org-agenda-span 7)
-                       (org-super-agenda-groups
-                        '(
-                          (:name "Upcoming"
-                                 :deadline future
-                                 :scheduled future
-                                 :order 40)
-                          (:name "Overdue"
-                                 :deadline past
-                                 :order 10)
-                          (:name "Behind Schedule"
-                                 :scheduled past
-                                 :order 20)
-			  (:name "Prioritize:" :priority "A" :order 50)
-			  (:name "Distractions:" :tag "Dstr" :order 65)
-                          (:name "Then:" :and (:todo "NEXT" :priority>= "C") :order 60)
-                          (:name "Continue:" :todo "STRT" :order 70)
-                          (:name "Someday:"
-                                 :priority<= "D"
-				 :todo "HOLD"
-                                 :order 120)
-                          (:name "Other Todo:" :todo "TODO" :order 80)
-                          (:name "Misc."
-                                 :todo ("REVW" "WAIT")
-                                 :order 90)
-                          (:todo "OPEN" :order 150)
-                          (:discard (:todo ("PROJ")))
-                          ))))))
+                       (org-super-agenda-groups ewhd-super-agenda-groups)))))
 	("x" "Super view - no agenda"
          ((alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
-                       ;; (org-agenda-span 7)
-                       (org-super-agenda-groups
-                        '(
-                          (:name "Upcoming"
-                                 :deadline future
-                                 :scheduled future
-                                 :order 40)
-                          (:name "Overdue"
-                                 :deadline past
-                                 :order 10)
-                          (:name "Behind Schedule"
-                                 :scheduled past
-                                 :order 20)
-			  (:name "Prioritize:" :priority "A" :order 50)
-			  (:name "Distractions:" :tag "Dstr" :order 65)
-                          (:name "Then:" :and (:todo "NEXT" :priority>= "C") :order 60)
-                          (:name "Continue:" :todo "STARTED" :order 70)
-                          (:name "Someday:"
-                                 :priority<= "D"
-				 :todo "HOLD"
-                                 :order 120)
-                          (:name "Other Todo:" :todo "TODO" :order 80)
-                          (:name "Misc."
-                                 :todo ("REVIEW" "WAITING")
-                                 :order 90)
-                          (:todo "OPEN" :order 150)
-                          (:discard (:todo ("PROJECT - OPEN" "PROJECT - ON-HOLD")))
-                          ))))))
-))
-	
-        ;; ("wd" "Work Day"
-        ;;  (
-        ;;   (agenda "" ((org-agenda-span 'day)
-        ;;               (org-super-agenda-groups
-        ;;            '(
-        ;;                  (:name "Today"
-        ;;                         :time-grid t
-        ;;                         :date today
-        ;;                         :scheduled today
-        ;;                         :deadline today
-        ;;                         :order 1)
-        ;;                  (:discard (:anything t))
-        ;;                  ))))
-        ;;   (tags-todo "cf" ((org-agenda-overriding-header "")
-        ;;                (org-agenda-span 7)
-        ;;                (org-super-agenda-groups
-        ;;                 '(
-        ;;                   (:name "Due Within 7 Days"
-        ;;                          :deadline future
-        ;;                          :scheduled future
-        ;;                          :order 100)
-        ;;                   (:name "Overdue"
-        ;;                          :deadline past
-        ;;                          :order 10)
-        ;;                   (:name "Behind Schedule"
-        ;;                          :scheduled past
-        ;;                          :order 20)
-        ;;                   (:todo "NEXT" :priority>= "B" :order 60)
-        ;;                   (:todo "STARTED" :order 70)
-        ;;                   (:name "Someday"
-        ;;                          :priority<= "C"
-        ;;                          :order 200)
-        ;;                   (:todo "TODO" :order 80)
-        ;;                   (:name "Misc."
-        ;;                          :todo ("REVIEW" "WAITING" "HOLD" )
-        ;;                          :order 90)
-        ;;                   (:todo "OPEN" :order 150)
-        ;;                   ;(:discard (:tag "PROJECT"))
-        ;;                   ))))
-        ;;   ))
-        ;; ("ww" "Work Week"
-        ;;  (
-        ;;   (agenda "" ((org-agenda-start-on-weekend nil)
-        ;;               ;; (org-agenda-span 7)
-        ;;               ;; (org-agenda-start-day "+1d")
-        ;;               (org-super-agenda-groups
-        ;;                '(
-        ;;                  (:name "This Week"
-        ;;                         :time-grid t
-        ;;                         :scheduled future
-        ;;                         :deadline future)
-        ;;                  (:discard (:anything t))
-        ;;                  ))))
-        ;;   ))
-        ;; ("wr" "Rolling Week"
-        ;;  ((agenda "" ((org-agenda-start-on-weekend nil)
-        ;;               (org-agenda-span 7)
-        ;;               (org-agenda-start-day "+1d")
-        ;;               (org-super-agenda-groups
-        ;;                '(
-        ;;                  (:name "This Week"
-        ;;                         :time-grid nil
-        ;;                         :scheduled future :not (:scheduled today)
-        ;;                         :deadline future :not (:deadline today)
-        ;;                         :order 2)
-        ;;                  (:discard (:anything t))
-        ;;                  ))))
-        ;;   ))
-        ;; )
-    ;; )
+                       (org-super-agenda-groups ewhd-super-agenda-groups)))))))
+
+
+
+
+;; ("wd" "Work Day"
+;;  (
+;;   (agenda "" ((org-agenda-span 'day)
+;;               (org-super-agenda-groups
+;;            '(
+;;                  (:name "Today"
+;;                         :time-grid t
+;;                         :date today
+;;                         :scheduled today
+;;                         :deadline today
+;;                         :order 1)
+;;                  (:discard (:anything t))
+;;                  ))))
+;;   (tags-todo "cf" ((org-agenda-overriding-header "")
+;;                (org-agenda-span 7)
+;;                (org-super-agenda-groups
+;;                 '(
+;;                   (:name "Due Within 7 Days"
+;;                          :deadline future
+;;                          :scheduled future
+;;                          :order 100)
+;;                   (:name "Overdue"
+;;                          :deadline past
+;;                          :order 10)
+;;                   (:name "Behind Schedule"
+;;                          :scheduled past
+;;                          :order 20)
+;;                   (:todo "NEXT" :priority>= "B" :order 60)
+;;                   (:todo "STARTED" :order 70)
+;;                   (:name "Someday"
+;;                          :priority<= "C"
+;;                          :order 200)
+;;                   (:todo "TODO" :order 80)
+;;                   (:name "Misc."
+;;                          :todo ("REVIEW" "WAITING" "HOLD" )
+;;                          :order 90)
+;;                   (:todo "OPEN" :order 150)
+;;                   ;(:discard (:tag "PROJECT"))
+;;                   ))))
+;;   ))
+;; ("ww" "Work Week"
+;;  (
+;;   (agenda "" ((org-agenda-start-on-weekend nil)
+;;               ;; (org-agenda-span 7)
+;;               ;; (org-agenda-start-day "+1d")
+;;               (org-super-agenda-groups
+;;                '(
+;;                  (:name "This Week"
+;;                         :time-grid t
+;;                         :scheduled future
+;;                         :deadline future)
+;;                  (:discard (:anything t))
+;;                  ))))
+;;   ))
+;; ("wr" "Rolling Week"
+;;  ((agenda "" ((org-agenda-start-on-weekend nil)
+;;               (org-agenda-span 7)
+;;               (org-agenda-start-day "+1d")
+;;               (org-super-agenda-groups
+;;                '(
+;;                  (:name "This Week"
+;;                         :time-grid nil
+;;                         :scheduled future :not (:scheduled today)
+;;                         :deadline future :not (:deadline today)
+;;                         :order 2)
+;;                  (:discard (:anything t))
+;;                  ))))
+;;   ))
+;; )
+;; )
 
 
 
