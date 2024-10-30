@@ -148,47 +148,57 @@
 
 ;; org TODO keywords:
 (setq org-todo-keywords
- '((sequence
-    "TODO(t)"
-    "NEXT(n)"
-    "STRT(s)"
-    "WAIT(w@/!)"
-    "REVW(r!)"
-    "HOLD(h@/!)"
-    "|"
-    "CANC(x)"
-    "DONE(d)"
-    )
-   (sequence
-    "OPEN(o)"
-    "EVNT(e)"
-    "|"
-    "COMP(c)")
-   (sequence
-    "PROJ(p)"
-    ;; "PROJECT - ON-HOLD(@/)"
-    "|"
-    "FNSH(f)"
-    )
-   )
- )
+      '((sequence
+	 "IDEA(i)"    ;; Just an idea, which could become anything!
+	 "TASK(a)"    ;; A task without defined dependencies or prep/steps yet
+         "TODO(t)"    ;; Task components like dependencies and prep/steps have been defined
+         "PREP(p)"    ;; Prep steps started but unfinished
+         "NEXT(n)"    ;; All prep done and dependencies resolved: ready for action steps
+         "STRT(s)"    ;; Action steps started but unfinished
+	 "SCHD(S)"    ;; No further action can be taken until some time
+         "WAIT(W@/!)" ;; Waiting on some external factor
+         "DPND(D@)"   ;; task is blocked by another, separate task which must be complete
+         "REVW(r!)"
+         ;; "HOLD(h@/!)"
+         "|"
+         "CANC(x)"
+         "DONE(d)"
+	 )
+	(sequence
+         "OPEN(o)"
+         "EVNT(e)"
+         "|"
+         "COMP(c)")
+        (sequence
+         "PROJ(P)"
+         ;; "PROJECT - ON-HOLD(@/)"
+         "|"
+         "FNSH(f)"
+	 )
+	)
+      )
 
 ;; available named colors: https://www.raebear.net/computers/emacs-colors/
 (setq org-todo-keyword-faces
-  '(("TODO". "purple")
-    ("NEXT" . "magenta")
-    ("STRT" . "pink")
-    ("WAIT" . "sky blue")
-    ("REVW" . "orange")
-    ("HOLD" . "cyan")
-    ("CANC" . "green")
-    ("DONE" . "green")
-    ("OPEN" . (:foreground "white" :background "purple"))
-    ("EVNT" . (:foreground "white" :background "blue"))
-    ("COMP" . (:foreground "white" :background "dark green"))
-    ("PROJ" . (:foreground "red" :weight bold))
-    ;; ("PROJECT - ON-HOLD" . (:foreground "cyan" :weight bold))
-    ("FNSH" . (:foreground "green" :weight bold))))
+      '(("IDEA" . "sienna1")
+	("TASK" . "plum1")
+	("TODO" . "purple")
+	("PREP" . "orchid")
+	("NEXT" . "magenta")
+	("STRT" . "hot pink")
+	("WAIT" . "sky blue")
+	("SCHD" . "DeepSkyBlue2")
+	("DPND" . "cyan")
+	("REVW" . "orange")
+	;; ("HOLD" . "cyan")
+	("CANC" . "green")
+	("DONE" . "green")
+	("OPEN" . (:foreground "white" :background "purple"))
+	("EVNT" . (:foreground "white" :background "blue"))
+	("COMP" . (:foreground "white" :background "dark green"))
+	("PROJ" . (:foreground "red" :weight bold))
+	;; ("PROJECT - ON-HOLD" . (:foreground "cyan" :weight bold))
+	("FNSH" . (:foreground "green" :weight bold))))
 
 
 ;;;; ORG TAGS
@@ -345,11 +355,11 @@
          (todo     . " %-12:c")
          (tags     . " %-12:c")
          (search   . " %-12:c"))
-        ;; ((agenda   . " %?s%-12t")   ; Format 3
-        ;;  (timeline . " %s")
-        ;;  (todo     . " %-5e")
-        ;;  (tags     . " %i [TAG] %s")
-        ;;  (search   . " "))
+        ((agenda   . " %?s%-12t")   ; Format 3
+         (timeline . " %s")
+         (todo     . " %-5e")
+         (tags     . " %i [TAG] %s")
+         (search   . " "))
 	))
 
 (defun set-org-agenda-prefix-format (n)
