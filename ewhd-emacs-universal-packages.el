@@ -15,6 +15,13 @@
 	 )
   )
 
+;; aggressive-indent-mode
+(use-package aggressive-indent
+  :hook ((clojure-mode . aggressive-indent-mode)
+	 (emacs-lisp-mode . aggressive-indent-mode)
+	 (css-mode . aggressive-indent-mode))
+  )
+
 ;;;; Pretty icons
 ;; must run M-x all-the-icons-install-fonts to install fonts per machine
 (use-package all-the-icons
