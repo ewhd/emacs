@@ -401,13 +401,19 @@
 ;;           (alltodo "")))))
 
 
+(setq org-agenda-custom-commands
+      '(("d" "Todo and Due" ((org-ql-block '(or (and (todo) (scheduled :to 0))
+						(and (todo) (priority "A")))
+					   ((org-ql-block-header "Todo and Due")))
+			     (agenda)))))
 
 
 (setq ewhd-super-agenda-groups
-      '((:name "Upcoming"
-	       :deadline future
-	       :scheduled future
-	       :order 40)
+      '(
+	;; (:name "Upcoming"
+	;;        :deadline future
+	;;        :scheduled future
+	;;        :order 40)
 	(:name "Check Scheduling:"
 	       :and (:todo "SCHD" :not (:scheduled t))
 	       :order 45)
@@ -442,10 +448,20 @@
       '(("z" "Super view"
          ((agenda "" ((org-agenda-span 8)
 		      (org-agenda-use-time-grid t)))
+	  (org-ql-block '(and (or (scheduled :to 15)
+				  (deadline :to 15))
+			      (not (todo "DONE" "CANC" "COMP" "FNSH"))
+			      )
+			((org-ql-block-header "Upcoming (next 15 days):\n")))
           (alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
                        (org-super-agenda-groups ewhd-super-agenda-groups)))))
 	("x" "Super view - no agenda"
-         ((alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
+         ((org-ql-block '(and (or (scheduled :to 15)
+				  (deadline :to 15))
+			      (not (todo "DONE" "CANC" "COMP" "FNSH"))
+			      )
+			((org-ql-block-header "Upcoming (next 15 days):\n")))
+	  (alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
                        (org-super-agenda-groups ewhd-super-agenda-groups)))))))
 
 

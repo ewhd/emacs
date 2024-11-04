@@ -1,0 +1,17 @@
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("desktop:~/"
+ (filename . "/ssh:desktop:~/")
+ (front-context-string . "CF\n  drwxr-xr-x ")
+ (rear-context-string . "024-06-11 17:23 ")
+ (position . 70)
+ (last-modified 26407 46510 703843 419000))
+("org-refile-last-stored"
+ (filename . "~/Documents/notes/20240512T174455--todo-general__gtd.org")
+ (front-context-string . "* TODO [#D] Fix ")
+ (rear-context-string . "nsh:Prcs:\nPrep:\n")
+ (position . 18295)
+ (last-modified 26402 34359 801094 152000))
+)
