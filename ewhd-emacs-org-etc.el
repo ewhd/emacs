@@ -409,12 +409,7 @@
 
 
 (setq ewhd-super-agenda-groups
-      '(
-	;; (:name "Upcoming"
-	;;        :deadline future
-	;;        :scheduled future
-	;;        :order 40)
-	(:name "Check Scheduling:"
+      '((:name "Check Scheduling:"
 	       :and (:todo "SCHD" :not (:scheduled t))
 	       :order 45)
 	(:name "Overdue"
@@ -434,6 +429,9 @@
 	(:name "Prepare:"
 	       :and (:todo ("TODO" "PREP") :priority>= "C")
 	       :order 61)
+	(:name "Inbox"
+	       :tag "inbox"
+	       :order 200)
 	(:name "Define:"
 	       :and (:todo ("IDEA" "TASK") :priority>= "C")
 	       :order 62)
