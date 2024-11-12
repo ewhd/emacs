@@ -13,8 +13,9 @@
 	 ("C-S-l" . org-toggle-link-display)
          )
   :config
-  (define-key org-mode-map (kbd "C-'") nil)  ;; Unbind C-' in org-mode
-  ;; so that it doesn't conflict with expand-region
+  (define-key org-mode-map (kbd "C-'") nil)
+					; Unbind C-' in org-mode so that it
+					; doesn't conflict with expand-region
   (setq
    org-startup-indented t
    org-startup-folded t
@@ -25,12 +26,13 @@
    org-pretty-entities t
    org-ellipsis "…"
    org-src-fontify-natively t
-   org-src-window-setup 'current-window ;; edit in current window
+   org-src-window-setup 'current-window ; edit in current window
    org-src-strip-leading-and-trailing-blank-lines t
-   org-src-preserve-indentation t ;; do not put two spaces on the left
+   org-src-preserve-indentation t       ; do not put two spaces on the left
    org-src-tab-acts-natively t
    org-log-into-drawer t
-   org-startup-with-inline-images t   ; only displays in the format [[file:path-to-file]], nothing else.
+   org-startup-with-inline-images t     ; only displays in the format
+					; [[file:path-to-file]], nothing else.
    org-image-actual-width '(300)
    org-duration-format 'h:mm
    org-clock-report-include-clocking-task t
@@ -40,36 +42,37 @@
 
 ;;;; OTHER ORG-MODE PACKAGES
 (use-package org-modern
-    :ensure t
-    ;; :custom
-    ;; (org-modern-hide-stars t)		; adds extra indentation
-    ;; (org-modern-table t)
-    ;; (org-modern-list 
-    ;;  '(;; (?- . "-")
-    ;;    (?* . "•")
-    ;;    (?+ . "‣")))
-    ;; ;(org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
-    ;; :hook
-    ;; (org-mode . org-modern-mode)
-    ;; (org-agenda-finalize . org-modern-agenda)
-    :config
-    (setq global-org-modern-mode t)
-    )
+  :ensure t
+  ;; :custom
+  ;; (org-modern-hide-stars t)		; adds extra indentation
+  ;; (org-modern-table t)
+  ;; (org-modern-list 
+  ;;  '(;; (?- . "-")
+  ;;    (?* . "•")
+  ;;    (?+ . "‣")))
+  ;; ;(org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
+  ;; :hook
+  ;; (org-mode . org-modern-mode)
+  ;; (org-agenda-finalize . org-modern-agenda)
+  :config
+  (setq global-org-modern-mode t)
+  )
 
 (setq org-modern-hide-stars t)                ; adds extra indentation
 (setq org-modern-table t)
 (setq org-modern-list
- '(;; (?- . "-")
-   (?* . "•")
-   (?+ . "‣")))
-(setq org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
+      '(;; (?- . "-")
+	(?* . "•")
+	(?+ . "‣")))
+(setq org-modern-block-name '("" . "")) ; or other chars; so top bracket is
+					; drawn promptly
 
 
 (use-package org-super-agenda
-    :ensure t
-    :after org
-    :init
-    (org-super-agenda-mode 1))
+  :ensure t
+  :after org
+  :init
+  (org-super-agenda-mode 1))
 
 (use-package org-ql
   :ensure t
@@ -84,29 +87,31 @@
   (setq
    org-appear-autolinks nil
    org-appear-autosubmarkers t
-   ;org-appear-delay .7
+   ;; org-appear-delay .7
    )
   )
 
 ;;;; ORG-MODE GENERAL BEHAVIOR
-;; I think this is all included in the use-package block above, and should probably be removed
+;; I think this is all included in the use-package block above, and should
+;; probably be removed
 (setq
-   ;; Edit settings
-   org-fold-catch-invisible-edits 'show-and-error
-   org-special-ctrl-a/e t
-   org-insert-heading-respect-content t
-   ;;org-hide-emphasis-markers t
-   org-pretty-entities t
-   org-ellipsis "…"
-   org-src-fontify-natively t
-   org-src-window-setup 'current-window ;; edit in current window
-   org-src-strip-leading-and-trailing-blank-lines t
-   org-src-preserve-indentation t ;; do not put two spaces on the left
-   org-src-tab-acts-natively t
-   org-log-into-drawer t
-   org-startup-with-inline-images t   ; only displays in the format [[file:path-to-file]], nothing else.
-   org-image-actual-width '(300)
-   )
+ ;; Edit settings
+ org-fold-catch-invisible-edits 'show-and-error
+ org-special-ctrl-a/e t
+ org-insert-heading-respect-content t
+ ;;org-hide-emphasis-markers t
+ org-pretty-entities t
+ org-ellipsis "…"
+ org-src-fontify-natively t
+ org-src-window-setup 'current-window   ; edit in current window
+ org-src-strip-leading-and-trailing-blank-lines t
+ org-src-preserve-indentation t         ; do not put two spaces on the left
+ org-src-tab-acts-natively t
+ org-log-into-drawer t
+ org-startup-with-inline-images t       ; only displays in the format
+					; [[file:path-to-file]], nothing else.
+ org-image-actual-width '(300)
+ )
 
 
 ;;;; ORG REFILE
@@ -117,7 +122,8 @@
 ;;                       '("~/Documents/notes/20240504T125856--backburner.org"
 ;;                         "~/Documents/notes/20240504T125919--someday-maybe.org"))))
 
-;; Use all org files as targets for refile, and refresh the list of refile targets each time org-refile is run
+;; Use all org files as targets for refile, and refresh the list of refile
+;; targets each time org-refile is run
 (defun ewhd-org-refile-targets (&rest _)
   "Return a list of all .org files in the notes directory and subdirectories."
   (seq-filter
@@ -132,11 +138,13 @@
 
 (advice-add 'org-refile :before #'ewhd-refresh-refile-targets)
 
-;; Allow refiling to the top (file) level, rather than just to headings (which is the default)
+;; Allow refiling to the top (file) level, rather than just to headings (which
+;; is the default)
 (setq org-refile-use-outline-path 'file)
 
-;; setting org-refile-use-outline-path to 'file causes problems with auto-complete
-;; that prevents designating headings within the file. This fixes that.
+;; setting org-refile-use-outline-path to 'file causes problems with
+;; auto-complete that prevents designating headings within the file. This fixes
+;; that.
 (setq org-outline-path-complete-in-steps nil)
 
 
@@ -149,15 +157,18 @@
 ;; org TODO keywords:
 (setq org-todo-keywords
       '((sequence
-	 "IDEA(i)"    ;; Just an idea, which could become anything!
-	 "TASK(a)"    ;; A task without defined dependencies or prep/steps yet
-         "TODO(t)"    ;; Task components like dependencies and prep/steps have been defined
-         "PREP(p)"    ;; Prep steps started but unfinished
-         "NEXT(n)"    ;; All prep done and dependencies resolved: ready for action steps
-         "STRT(s)"    ;; Action steps started but unfinished
-	 "SCHD(S)"    ;; No further action can be taken until some time
-         "WAIT(W@/!)" ;; Waiting on some external factor
-         "DPND(D@)"   ;; task is blocked by another, separate task which must be complete
+	 "IDEA(i)"    ; Just an idea, which could become anything!
+	 "TASK(a)"    ; A task without defined dependencies or prep/steps yet
+         "TODO(t)"    ; Task components like dependencies and prep/steps have
+					; been defined
+         "PREP(p)"    ; Prep steps started but unfinished
+         "NEXT(n)"    ; All prep done and dependencies resolved: ready for
+					; action steps
+         "STRT(s)"    ; Action steps started but unfinished
+	 "SCHD(S)"    ; No further action can be taken until some time
+         "WAIT(W@/!)" ; Waiting on some external factor
+         "DPND(D@)"   ; task is blocked by another, separate task which must be
+					; complete
          "REVW(r!)"
          ;; "HOLD(h@/!)"
          "|"
@@ -202,7 +213,8 @@
 
 
 ;;;; ORG TAGS
-(setq org-complete-tags-always-offer-all-agenda-tags t) ;; suggest tags from all agenda files
+;; suggest tags from all agenda files:
+(setq org-complete-tags-always-offer-all-agenda-tags t)
 
 ;; available named colors: https://www.raebear.net/computers/emacs-colors/
 (setq org-tag-faces
@@ -220,20 +232,23 @@
 
 ;; set colors in column view
 (defun ewhd-org-add-tag-color-in-column-view ()
-  (font-lock-add-keywords nil
-			  '(("\\(:Urg:\\)"   1 '(:foreground "dark orange" :weight bold) t)
-			    ("\\(:Imp:\\)"   1 '(:foreground "orange red" :weight bold) t)
-			    ("\\(:Prcs:\\)"  1 '(:foreground "turquoise" :weight bold) t)
-			    ("\\(:Imrsv:\\)" 1 '(:foreground "dodger blue" :weight bold) t)
-			    ("\\(:Fnsh:\\)"  1 '(:foreground "lawn green" :weight bold) t)
-			    ("\\(:Cmplx:\\)" 1 '(:foreground "dark violet" :weight bold) t)
-			    ("\\(:Dstr:\\)"  1 '(:foreground "yellow2" :weight bold) t)
-			    ("\\(:Dlybl:\\)" 1 '(:foreground "wheat" :weight bold) t)) ;; change this--it's a little too close to the default off-white
-			  t))
+  (font-lock-add-keywords
+   nil
+   '(("\\(:Urg:\\)"   1 '(:foreground "dark orange" :weight bold) t)
+     ("\\(:Imp:\\)"   1 '(:foreground "orange red" :weight bold) t)
+     ("\\(:Prcs:\\)"  1 '(:foreground "turquoise" :weight bold) t)
+     ("\\(:Imrsv:\\)" 1 '(:foreground "dodger blue" :weight bold) t)
+     ("\\(:Fnsh:\\)"  1 '(:foreground "lawn green" :weight bold) t)
+     ("\\(:Cmplx:\\)" 1 '(:foreground "dark violet" :weight bold) t)
+     ("\\(:Dstr:\\)"  1 '(:foreground "yellow2" :weight bold) t)
+     ("\\(:Dlybl:\\)" 1 '(:foreground "wheat" :weight bold) t))
+					; change Dlybl -- it's a little too
+					; close to the default off-white
+   t))
 
 (add-hook 'org-mode-hook #'ewhd-org-add-tag-color-in-column-view)
 
-  
+
 ;;;; ORG PRIORITY
 ;; Define priorities
 (setq org-highest-priority ?A
@@ -255,8 +270,9 @@
 (define-key org-agenda-mode-map (kbd "C-z") 'org-agenda-undo)
 (define-key org-agenda-mode-map (kbd "M-e") 'org-agenda-set-effort)
 
-;; this function recursively searches ~/Documents and  adds any org file which contains gtd as a keyword to org-agenda-files
-;; the regex here should exclude anything starting with a '.', ending with a '~' or a '#'
+;; this function recursively searches ~/Documents and adds any org file which
+;; contains gtd as a keyword to org-agenda-files the regex here should exclude
+;; anything starting with a '.', ending with a '~' or a '#'
 (defun ewhd-refresh-org-agenda-files ()
   "Refresh the list of `org-agenda-files` dynamically."
   (setq org-agenda-files
@@ -264,16 +280,20 @@
          'file-exists-p
          (directory-files-recursively "~/Documents" "^[^\.#].*_gtd.*\\.org$"))))
 
-(add-hook 'org-agenda-mode-hook 'ewhd-refresh-org-agenda-files) ;; run ewhd-refresh-org-agenda-files whenever agenda-mode is called
+;; run ewhd-refresh-org-agenda-files whenever agenda-mode is called:
+(add-hook 'org-agenda-mode-hook 'ewhd-refresh-org-agenda-files)
 (ewhd-refresh-org-agenda-files)
 
 
 ;; org-agenda-mode behavior
 (setq org-agenda-window-setup 'current-window  ; agenda takes current window
-      org-agenda-restore-windows-after-quit t  ; restore window configuration on exit
+      org-agenda-restore-windows-after-quit t
+					; restore window configuration on exit
       org-agenda-start-with-follow-mode nil
-      org-columns-default-format-for-agenda "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %20ALLTAGS"
-      org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5) ; set the depth of headers referenced by org-agenda-clockreport-mode
+      org-columns-default-format-for-agenda "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
+      org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5)
+					; set the depth of headers referenced by
+					; org-agenda-clockreport-mode
       org-agenda-time-grid '(
 			     (daily today require-timed)
 			     (600 900 1200 1500 1800 2100)
@@ -285,8 +305,9 @@
       org-agenda-block-separator 9472
       org-agenda-compact-blocks nil
       org-agenda-start-with-log-mode t
-      org-agenda-hide-tags-regexp (regexp-opt '("cf" "gtd"))  ;; hides specific tags
-      org-agenda-remove-tags t  ;; hides all tags
+      org-agenda-hide-tags-regexp (regexp-opt '("cf" "gtd"))
+					; hides specific tags
+      org-agenda-remove-tags nil        ; t = hides all tags
       org-agenda-show-inherited-tags t
       org-tags-exclude-from-inheritance '("gtd" "Proj" "Cmplx" "Fnsh" "Dstr" "Dlybl" "Prcs" "Imrsv")
       ;; org-agenda-compact-blocks t
@@ -324,7 +345,7 @@
 ;;             (todo  . "  %-12:c")
 ;;             (tags  . "  %-12:c")
 ;;             (search . "  %-12:c")))
-    
+
 ;;     )
 ;;   (org-agenda-redo))
 
@@ -345,17 +366,17 @@
 ;;    ))
 
 (setq ewhd-org-agenda-prefix-formats
-      '(((agenda   . " %?s%-12t")   ; Format 1
+      '(((agenda   . " %?s%-12t")       ; Format 1
          (timeline . " %s")
          (todo     . " ")
          (tags     . " ")
          (search   . " "))
-        ((agenda   . " %-12:c%-s%-12t")   ; Format 2
+        ((agenda   . " %-12:c%-s%-12t") ; Format 2
          (timeline . " %s")
          (todo     . " %-12:c")
          (tags     . " %-12:c")
          (search   . " %-12:c"))
-        ((agenda   . " %?s%-12t")   ; Format 3
+        ((agenda   . " %?s%-12t")       ; Format 3
          (timeline . " %s")
          (todo     . " %-5e")
          (tags     . " %i [TAG] %s")
@@ -541,17 +562,21 @@
 
 ;; stuff I'm playing around with just on my desktop for now
 (when (string= system-name "ewhd-t730-debian")
-  (setq org-columns-default-format-for-agenda
-        "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
-	org-agenda-tags-column 80
-	org-agenda-remove-tags nil
-	))
+  (setq
+   ;; org-columns-default-format-for-agenda "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
+   org-agenda-tags-column 80
+   ;; org-agenda-remove-tags nil
+   ))
 
 (when (string= system-name "ewhd-book")
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
-  (setq org-columns-default-format-for-agenda "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
-	org-agenda-tags-column 'auto
-	org-agenda-remove-tags nil
-	org-tags-column -50
-	)
+  (setq
+   ;; org-columns-default-format-for-agenda "%45ITEM %4TODO %1PRIORITY %4Effort(Estim){:}  %4CLOCKSUM(Clock) %38ALLTAGS"
+   org-agenda-tags-column 'auto
+   ;; org-agenda-remove-tags nil
+   org-tags-column -50
+   )
+  )
+
+(when (string= system-name "ewhd-t480-debian")
   )
