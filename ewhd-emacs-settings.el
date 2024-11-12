@@ -81,24 +81,44 @@
       show-paren-style 'mixed)
 
 ;; Parentheses Pairing Behavior:
-(electric-pair-mode t)
-(setq electric-pair-preserve-balance t
-      electric-pair-delete-adjacent-pairs t)
+
+(use-package electric
+  :ensure nil
+  :init
+  (defun my/setup-org-electric-pair ()
+    "Disable pairing for < and > only in Org mode."
+    (setq-local electric-pair-inhibit-predicate
+                (lambda (char)
+                  (if (eq major-mode 'org-mode)
+                      (or (char-equal char ?<) (char-equal char ?>))
+                    (electric-pair-default-inhibit char)))))
+
+  :config
+  (electric-pair-mode 1)                ; Enable electric-pair-mode globally
+  (setq electric-pair-preserve-balance t
+	electric-pair-delete-adjacent-pairs t)
+
+  ;; Apply the custom inhibit predicate only in Org mode
+  (add-hook 'org-mode-hook 'my/setup-org-electric-pair)
+  )
+
+
+
 
 ;; Window Splitting Behavior:
 (setq split-height-threshold 80
       split-width-threshold 80)
 
 (defun my-split-window-sensibly (&optional window)
-    "replacement `split-window-sensibly' function which prefers vertical splits"
-    (interactive)
-    (let ((window (or window (selected-window))))
-        (or (and (window-splittable-p window t)
-                 (with-selected-window window
-                     (split-window-right)))
-            (and (window-splittable-p window)
-                 (with-selected-window window
-                     (split-window-below))))))
+  "replacement `split-window-sensibly' function which prefers vertical splits"
+  (interactive)
+  (let ((window (or window (selected-window))))
+    (or (and (window-splittable-p window t)
+             (with-selected-window window
+               (split-window-right)))
+        (and (window-splittable-p window)
+             (with-selected-window window
+               (split-window-below))))))
 
 (setq split-window-preferred-function 'my-split-window-sensibly)
 
