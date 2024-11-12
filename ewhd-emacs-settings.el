@@ -5,55 +5,64 @@
 
 ;; General:
 (setq inhibit-startup-screen t
-      custom-file (make-temp-file "emacs-custom-") ; save all interactive customizations to a temp file (permanent customizations should be coded)
+      custom-file (make-temp-file "emacs-custom-")
+					; save all interactive customizations to
+					; a temp file (permanent customizations
+					; should be coded)
       visible-bell t
-      help-window-select t        ; Focus new help windows when opened
-      scroll-conservatively 101   ; Avoid recentering when scrolling far
-      scroll-margin 2             ; Add a margin when scrolling vertically
+      help-window-select t              ; Focus new help windows when opened
+      scroll-conservatively 101         ; Avoid recentering when scrolling far
+      scroll-margin 2                   ; Add a margin when scrolling vertically
       mouse-wheel-scroll-amount '(1)
       sentence-end-double-space nil
       column-number-mode t
       pop-up-frames nil
       mouse-drag-and-drop-region-cross-program t
       mouse-1-click-follows-link 'double
-      make-backup-files nil  ; Disable Emacs backups
+      make-backup-files nil             ; Disable Emacs backups
       fill-column 80
       )
 
 (global-visual-line-mode 1)
-(global-hl-line-mode 1)       ; highlight current line
+(global-hl-line-mode 1)                 ; highlight current line
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 (tooltip-mode -1)
-(delete-selection-mode 1)     ; Replace region when inserting text
+(delete-selection-mode 1)               ; Replace region when inserting text
 
 
-(setq desktop-dirname "~/.cache" ; set the directory /before/ enabling desktop mode
+(setq desktop-dirname "~/.cache"        ; set the directory /before/ enabling
+					; desktop mode
       ;; desktop-dirname "/var/tmp/"
       desktop-buffers-not-to-save
       '("*Messages*" "*scratch*" "*Help*" "*info*" "*compilation*")
-      desktop-path (list desktop-dirname) ; ensures Emacs uses this path for desktop files -- emacs won't seem to look in desktop-dirname without this line
+      desktop-path (list desktop-dirname) ; ensures Emacs uses this path for
+					; desktop files -- emacs won't seem to
+					; look in desktop-dirname without this
+					; line
       desktop-auto-save-timeout 10
-      desktop-save t ; always save
+      desktop-save t                    ; always save
       )
 (desktop-save-mode 1)
 
 
 
-;; Revert Buffer Behavior:
-;; - Automatically revert files which have been changed on disk, unless the buffer contains unsaved changes
+;;; Revert Buffer Behavior:
+;; - Automatically revert files which have been changed on disk, unless the
+;; - buffer contains unsaved changes
 (global-auto-revert-mode 1)
 (setq global-auto-revert-non-file-buffers t)
-;; Don't revert Buffer Menu (makes it unusable)
-;; https://github.com/syl20bnr/spacemacs/issues/7661#issuecomment-258481672
-;; https://www.reddit.com/r/emacs/comments/t01efg/comment/iat14ob/?utm_source=share&utm_medium=web2x&context=3
-;(require 'autorevert)
+					; Don't revert Buffer Menu (makes it
+					; unusable)
+					; https://github.com/syl20bnr/spacemacs/issues/7661#issuecomment-258481672
+					; https://www.reddit.com/r/emacs/comments/t01efg/comment/iat14ob/?utm_source=share&utm_medium=web2x&context=3
+;; (require 'autorevert)
 (add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode)
 
 ;; Line Numbers:
 (global-display-line-numbers-mode 1)
-(setq display-line-numbers-type 'relative) ;sets the default line number type
+(setq display-line-numbers-type 'relative) ; sets the default line number type
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
 		term-mode-hook
@@ -100,7 +109,7 @@
 (global-set-key (kbd "C-:") 'comment-region)
 (global-set-key (kbd "C-h n") nil)
 (global-set-key (kbd "C-h C-n") nil)
-;(global-set-key (kbd "C-x 4-s") 'window-swap-states) ; not working
+;; (global-set-key (kbd "C-x 4-s") 'window-swap-states) ; not working
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "<mouse-3>") 'mouse-major-mode-menu)
 (global-set-key (kbd "<C-mouse-3>") 'mouse-popup-menubar)
@@ -108,9 +117,12 @@
 (global-set-key (kbd "C-_") 'text-scale-decrease)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-+") 'text-scale-increase)
-(global-set-key (kbd "C-x C-d") 'dired) ;; replace keybinding for list-directory with dired
+(global-set-key (kbd "C-x C-d") 'dired) ; replace keybinding for list-directory
+					; with dired
 (global-set-key (kbd "C-x K") 'kill-this-buffer)
-(global-set-key (kbd "C-x C-b") 'consult-buffer) ;; replace keybinding for list-buffers with consult-buffer
+(global-set-key (kbd "C-x C-b") 'consult-buffer)
+					; replace keybinding for list-buffers
+					; with consult-buffer
 
 
 ;;;; Tab Management
@@ -125,26 +137,26 @@
 ;; tab controls to override them, which is done in the dired config below
 
 ;; new tab control keybindings
-(define-key ctl-t-map (kbd "n") 'tab-next)
-(define-key ctl-t-map (kbd "p") 'tab-previous)
-(define-key ctl-t-map (kbd "u") 'tab-undo)
-(define-key ctl-t-map (kbd "N") 'tab-new)
-(define-key ctl-t-map (kbd "x") 'tab-close)
-(define-key ctl-t-map (kbd "r") 'tab-reopen)
-(define-key ctl-t-map (kbd "m") 'tab-move)
-(define-key ctl-t-map (kbd "d") 'tab-duplicate)
+(define-key ctl-t-map (kbd "n")       'tab-next)
+(define-key ctl-t-map (kbd "p")       'tab-previous)
+(define-key ctl-t-map (kbd "u")       'tab-undo)
+(define-key ctl-t-map (kbd "N")       'tab-new)
+(define-key ctl-t-map (kbd "x")       'tab-close)
+(define-key ctl-t-map (kbd "r")       'tab-reopen)
+(define-key ctl-t-map (kbd "m")       'tab-move)
+(define-key ctl-t-map (kbd "d")       'tab-duplicate)
 (define-key ctl-t-map (kbd "<right>") 'tab-bar-switch-to-next-tab)
-(define-key ctl-t-map (kbd "<left>") 'tab-bar-switch-to-prev-tab)
-(define-key ctl-t-map (kbd "RET") 'tab-bar-select-tab-by-name)
-(define-key ctl-t-map (kbd "b") 'tab-bar-history-back)
-(define-key ctl-t-map (kbd "f") 'tab-bar-history-forward)
+(define-key ctl-t-map (kbd "<left>")  'tab-bar-switch-to-prev-tab)
+(define-key ctl-t-map (kbd "RET")     'tab-bar-select-tab-by-name)
+(define-key ctl-t-map (kbd "b")       'tab-bar-history-back)
+(define-key ctl-t-map (kbd "f")       'tab-bar-history-forward)
 
 
 ;;;; dired config
 ;; check out http://xahlee.info/emacs/emacs/emacs_dired_tips.html
 
 (use-package dired
-  :ensure nil  ;; dired is built-in, no need to install
+  :ensure nil                           ; dired is built-in, no need to install
   :commands (dired)
   :config
   ;; Unbind the default C-t binding in Dired
@@ -155,19 +167,22 @@
   
   ;; General Dired settings
   (setq dired-kill-when-opening-new-dired-buffer nil
-        dired-recursive-deletes 'always      ;; 'always means no asking
-        dired-recursive-copies 'top          ;; 'top means ask every time
-        delete-by-moving-to-trash t          ;; move to trash instead of deleting
+        dired-recursive-deletes 'always ; 'always means no asking
+        dired-recursive-copies 'top     ; 'top means ask every time
+        delete-by-moving-to-trash t     ; move to trash instead of deleting
         dired-listing-switches
-        "-aGFhlv --group-directories-first --time-style=long-iso" ;; list dirs first
-        dired-dwim-target t                   ;; suggest target dir on split pane
-        dired-free-space nil                  ;; Emacs 29.1
-        dired-mouse-drag-files t              ;; Emacs 29.1
+        "-aGFhlv --group-directories-first --time-style=long-iso"
+					; list dirs first
+        dired-dwim-target t             ; suggest target dir on split pane
+        dired-free-space nil            ; Emacs 29.1
+        dired-mouse-drag-files t        ; Emacs 29.1
         )
 
   ;; Load dired-x and configure it
   (require 'dired-x)
-  (put 'dired-find-alternate-file 'disabled nil) ;; enable dired-find-alternate-file (set to a)
+  (put 'dired-find-alternate-file 'disabled nil)
+					; enable dired-find-alternate-file (set
+					; to a)
 
   ;; Start in dired-omit-mode
   (add-hook 'dired-mode-hook 'dired-omit-mode)
@@ -186,12 +201,11 @@
 
   ;; Set files to be hidden in dired-omit-mode
   (setq dired-omit-files
-        (rx (or (seq bol (? ".") "#")     ;; emacs autosave files
-                (seq bol "." (not (any "."))) ;; dot-files
-                (seq "~" eol)                 ;; backup-files
-                (seq bol "CVS" eol)           ;; CVS dirs
-		(seq bol (or "." "..") eol)   ;; Include . and ..
-		
+        (rx (or (seq bol (? ".") "#")         ; emacs autosave files
+                (seq bol "." (not (any "."))) ; dot-files
+                (seq "~" eol)                 ; backup-files
+                (seq bol "CVS" eol)           ; CVS dirs
+		(seq bol (or "." "..") eol)   ; Include . and ..
                 ))))
 
 (use-package wdired
@@ -201,11 +215,16 @@
   :config
   (setq wdired-allow-to-change-permissions t) ; edit the permission bits directly
   (setq wdired-create-parent-directories t)
-  (setq wdired-allow-to-redirect-links t) ; default=t change the symlinks in Editable mode
-  (setq wdired-use-interactive-rename t) ; prompt for every filename change you have made you when you commit the changes with C-c C-c
-  (setq wdired-confirm-overwrite t) ; asks if you want to overwrite files if your altered filenames conflict with existing files
-  ;; (define-key wdired-mode-map (kbd "C-c C-c") 'wdired-abort) ;; Example keybinding
-)
+  (setq wdired-allow-to-redirect-links t) ; default=t change the symlinks in
+					; Editable mode
+  (setq wdired-use-interactive-rename t) ; prompt for every filename change you
+					; have made you when you commit the
+					; changes with C-c C-c
+  (setq wdired-confirm-overwrite t) ; asks if you want to overwrite files if
+					; your altered filenames conflict with
+					; existing files
+  ;; (define-key wdired-mode-map (kbd "C-c C-c") 'wdired-abort) ; Example keybinding
+  )
 
 
 ;;;; Window movement/shifting settings
@@ -336,9 +355,10 @@ Version 2020-06-26"
 
 ;; (global-set-key (kbd "C-c C-y") 'ewhd-yank-increment)
 
-;; Server shutdown
-;; I use this to safely shutdown the server, mostly when I want to restart it after making config changes -- probably unnecessary if I use systemd to start my daemon, but currently I don't
-;; https://emacs.stackexchange.com/a/55799
+;;; Server shutdown
+;; I use this to safely shutdown the server, mostly when I want to restart it
+;; after making config changes -- probably unnecessary if I use systemd to start
+;; my daemon, but currently I don't https://emacs.stackexchange.com/a/55799
 (defun ewhd-server-shutdown ()
   "Save buffers, Quit, and Shutdown (kill) server"
   (interactive)
