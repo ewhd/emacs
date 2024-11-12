@@ -8,7 +8,6 @@
   (require 'org-agenda)
   :bind (("C-c l" . org-store-link)
          ("C-S-v" . scroll-other-window)
-         ("M-V" . scroll-other-window-down)
 	 ("C-c ." . org-time-stamp)
 	 ("C-S-l" . org-toggle-link-display)
          )

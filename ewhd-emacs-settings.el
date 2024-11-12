@@ -123,6 +123,7 @@
 (global-set-key (kbd "C-x C-b") 'consult-buffer)
 					; replace keybinding for list-buffers
 					; with consult-buffer
+(global-set-key (kbd "M-V") 'scroll-other-window-down)
 
 
 ;;;; Tab Management
