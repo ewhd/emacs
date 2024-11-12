@@ -245,12 +245,13 @@
 
 ;; Olivetti
 (use-package olivetti
-  :hook ((text-mode . (lambda ()
-                        (unless (and buffer-file-name
-                                     (string-match-p "gtd" (file-name-nondirectory buffer-file-name)))
-                          (olivetti-mode 1)))))
+  ;; :hook
+  ;; ((text-mode . (lambda ()
+  ;;                 (unless (and buffer-file-name
+  ;;                              (string-match-p "gtd" (file-name-nondirectory buffer-file-name)))
+  ;;                   (olivetti-mode 1)))))
   :config
-  (add-hook 'olivetti-mode-on-hook (lambda () (olivetti-set-width 80))))
+  (add-hook 'olivetti-mode-on-hook (lambda () (olivetti-set-width 100))))
 
 
 
