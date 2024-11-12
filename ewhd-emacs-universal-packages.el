@@ -19,10 +19,8 @@
 ;; Expand-Region
 (use-package expand-region
   :ensure t
-  :config
-  (global-unset-key (kbd "C-\\"))
-  :bind (("C-\\" . er/expand-region)
-	 ("C-'" . er/mark-outside-quotes)
+  :bind (("C-'" . er/expand-region)
+	 ("C-\"" . er/mark-outside-quotes)
 	 )
   )
 
