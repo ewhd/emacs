@@ -411,6 +411,8 @@
   :ensure t
   :init
   (vertico-mode)
+  :config
+  (setq vertico-count 15)
   )
 
 ;; Persist history over Emacs restarts. Vertico sorts history by position.
@@ -667,9 +669,16 @@
   (vertico-posframe-mode 1)
   (setq vertico-posframe-parameters
 	'((left-fringe . 8)
-	  (right-fringe . 8)))
+          (right-fringe . 8))
+        vertico-posframe-border-width 3
+        vertico-posframe-min-height 3
+        vertico-posframe-max-width 100  ; Don't go too wide on ultrawide monitors
+	)
+  
   (set-face-background 'vertico-posframe nil)
   (set-face-background 'vertico-posframe-border "LightSlateGray")
+
+
   )
 
 (use-package transient-posframe
