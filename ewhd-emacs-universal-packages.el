@@ -4,6 +4,17 @@
 (use-package transient
   :ensure t)
 
+;; persistent-scratch
+(use-package persistent-scratch
+  :ensure t
+  ;; :after no-littering
+  ;; :custom
+  ;; (persistent-scratch-save-file (no-littering-expand-var-file-name "scratch"))
+  :config
+  (persistent-scratch-setup-default)    ; enable autosave and restore the last
+					; saved state
+  (setq persistent-scratch-autosave-interval '(idle . 30))
+  )
 
 ;; Expand-Region
 (use-package expand-region
