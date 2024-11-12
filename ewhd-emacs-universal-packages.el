@@ -4,6 +4,16 @@
 (use-package transient
   :ensure t)
 
+
+;; bufler
+;; (use-package bufler
+;;   :ensure (bufler :fetcher github :repo "alphapapa/bufler.el"
+;;                   :files (:defaults (:exclude "helm-bufler.el")))
+;;   :config
+;;   (setq bufler-column-Path-max-width 80)
+;;   )
+
+
 ;; persistent-scratch
 (use-package persistent-scratch
   :ensure t
@@ -678,7 +688,7 @@
 
 ;;;; Financial
 ;; beancount-mode
-(use-package beancount-mode
+(use-package beancount
   :ensure (:host github :repo "beancount/beancount-mode" :main "beancount.el")
   ;; :init
   ;; (add-to-list 'load-path "~/.config/emacs/elpaca/repos/beancount-mode/")
@@ -696,8 +706,9 @@
   ;; Enables on-the-fly checks on your ledger file using bean-check via flymake
   (add-hook 'beancount-mode-hook #'flymake-bean-check-enable)
 
-  ;; Support parsing Python logging errors, with a suitable logging.basicConfig()
-  ;; format.
+  ;; Support parsing Python logging errors, with a suitable
+  ;; logging.basicConfig() format.
+  (require 'compile)
   (unless (assq 'python-logging compilation-error-regexp-alist-alist)
     
     (add-to-list
@@ -707,7 +718,6 @@
     (add-to-list
      'compilation-error-regexp-alist 'python-logging)
     )
-
   )
 
 ;; Initialize beancount-mode-map
