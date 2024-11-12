@@ -39,6 +39,14 @@
    )
   )
 
+(use-package org-tempo
+  :ensure nil
+  :config
+  (with-eval-after-load 'org-tempo
+    (add-to-list 'org-structure-template-alist '("se" . "src elisp"))
+    (add-to-list 'org-structure-template-alist '("sb" . "src bash"))
+    (add-to-list 'org-structure-template-alist '("sp" . "src python"))
+    ))
 
 ;;;; OTHER ORG-MODE PACKAGES
 (use-package org-modern
