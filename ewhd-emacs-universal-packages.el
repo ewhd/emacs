@@ -167,12 +167,12 @@
         "-l --almost-all --human-readable --group-directories-first --no-group --time-style=long-iso --color=always"
         ;; "-aGFhl --sort-version --group-directories-first --time-style=long-iso" 
 	)
-  (setq dirvish-default-layout '(0 0 0.5)) ; default (1 0.11 0.55)
+  (setq dirvish-default-layout nil) ; default (1 0.11 0.55)
   (setq dirvish-layout-recipes '((0 0 0.5) (0 0 0.7) (1 0.11 0.55)))
-     ; default ((0 0 0.4) (0 0 0.8) (1 0.08 0.8) (1 0.11 0.55))
+					; default ((0 0 0.4) (0 0 0.8) (1 0.08 0.8) (1 0.11 0.55))
 
   (add-hook 'dirvish-find-entry-hook
-          (lambda (&rest _) (setq-local truncate-lines t)))
+            (lambda (&rest _) (setq-local truncate-lines t)))
   (setq dirvish-reuse-session 'resume) ; retain dirvish session and resume it unless called with a directory path
 
   ;; Unbind default C-x d to use as prefix
@@ -207,7 +207,7 @@
    ("M-j" . dirvish-fd-jump)
    ("M-h" . dired-omit-mode)
    ("M"   . dirvish-move)
-  ))
+   ))
 
 ;;;; Layout
 ;; transpose-frame
