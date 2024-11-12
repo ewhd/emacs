@@ -644,6 +644,38 @@
    ("C-c w b e" . citar-denote-open-reference-entry)))
 
 
+
+;;;; Posframe and related add-ons
+(use-package posframe
+  :ensure t
+  )
+
+(use-package vertico-posframe
+  :ensure t
+  :requires vertico posframe
+  :config
+  (vertico-posframe-mode 1)
+  (setq vertico-posframe-parameters
+	'((left-fringe . 8)
+	  (right-fringe . 8)))
+  (set-face-background 'vertico-posframe nil)
+  (set-face-background 'vertico-posframe-border "LightSlateGray")
+  )
+
+(use-package transient-posframe
+  :ensure (transient-posframe :host github :repo "yanghaoxie/transient-posframe")
+  ;; :load-path "path/to/transient-posframe.el"
+  :requires (transient posframe)
+  :config
+  (transient-posframe-mode))
+
+(use-package which-key-posframe
+  :ensure (which-key-posframe :host github :repo "yanghaoxie/which-key-posframe")
+  :requires (which-key posframe)
+  :config
+  (which-key-posframe-mode))
+
+
 ;;;; Financial
 ;; beancount-mode
 (use-package beancount-mode
@@ -667,11 +699,11 @@
   ;; Support parsing Python logging errors, with a suitable logging.basicConfig()
   ;; format.
   (unless (assq 'python-logging compilation-error-regexp-alist-alist)
-  
+    
     (add-to-list
      'compilation-error-regexp-alist-alist
      '(python-logging "\\(ERROR\\|WARNING\\):\\s-*\\([^:]+\\):\\([0-9]+\\)\\s-*:" 2 3))
-  
+    
     (add-to-list
      'compilation-error-regexp-alist 'python-logging)
     )
