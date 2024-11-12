@@ -10,6 +10,7 @@
          ("C-S-v" . scroll-other-window)
 	 ("C-c ." . org-time-stamp)
 	 ("C-S-l" . org-toggle-link-display)
+	 ("C-x S" . org-save-all-org-buffers)
          )
   :config
   (define-key org-mode-map (kbd "C-'") nil)
