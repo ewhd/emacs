@@ -465,7 +465,18 @@
 	(:discard (:todo ("PROJ")))))
 
 (setq ewhd-super-agenda-groups-system-only
-      '((:discard (:not (:category "system")))))
+      '((:discard (:not (:category "system")))
+	(:name "Bugs"
+	       :todo "BUG_")
+	(:name "Recently added / ready to add to Production"
+	       :todo ("PROD" "SHIP"))
+	(:name "Development and Testing"
+	       :todo ("DEV_" "TEST"))
+	(:name "Tasks"
+	       :todo "TASK")
+	(:name "Think about:"
+	       :todo ("IDEA" "STDY" "REVW"))
+	))
 
 
 (setq org-agenda-custom-commands
