@@ -252,7 +252,7 @@
 ;;;; Window movement/shifting settings
 
 ;; previous window
-(defun other-window-backward ()
+(defun ewhd-other-window-backward ()
   "Select the previous window."
   (interactive)
   (other-window -1))
