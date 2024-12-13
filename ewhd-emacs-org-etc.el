@@ -315,7 +315,7 @@
       org-agenda-block-separator 9472
       org-agenda-compact-blocks nil
       org-agenda-start-with-log-mode t
-      org-agenda-hide-tags-regexp (regexp-opt '("cf" "gtd"))
+      org-agenda-hide-tags-regexp (regexp-opt '("cf" "gtd" "sys"))
 					; hides specific tags
       org-agenda-remove-tags nil        ; t = hides all tags
       org-agenda-show-inherited-tags t
@@ -426,21 +426,12 @@
 
 ;; (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
 
-;; (setq org-agenda-custom-commands
-;;       '(("c" "Custom Agenda"
-;;          ((agenda "")
-;;           (alltodo "")))))
 
-
-(setq org-agenda-custom-commands
-      '(("d" "Todo and Due" ((org-ql-block '(or (and (todo) (scheduled :to 0))
-						(and (todo) (priority "A")))
-					   ((org-ql-block-header "Todo and Due")))
-			     (agenda)))))
 
 
 (setq ewhd-super-agenda-groups
-      '((:name "Check Scheduling:"
+      '((:discard (:category ("system")))
+	(:name "Check Scheduling:"
 	       :and (:todo "SCHD" :not (:scheduled t))
 	       :order 45)
 	(:name "Overdue"
@@ -473,6 +464,10 @@
 	(:todo "OPEN" :order 150)
 	(:discard (:todo ("PROJ")))))
 
+(setq ewhd-super-agenda-groups-system-only
+      '((:discard (:not (:category "system")))))
+
+
 (setq org-agenda-custom-commands
       '(("z" "Super view"
          ((agenda "" ((org-agenda-span 8)
@@ -491,7 +486,11 @@
 			      )
 			((org-ql-block-header "Upcoming (next 15 days):\n")))
 	  (alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
-                       (org-super-agenda-groups ewhd-super-agenda-groups)))))))
+                       (org-super-agenda-groups ewhd-super-agenda-groups)))))
+	("y" "System's View"
+	 alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
+                     (org-super-agenda-groups ewhd-super-agenda-groups-system-only)))
+	))
 
 
 
