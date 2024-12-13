@@ -21,6 +21,7 @@
       mouse-1-click-follows-link 'double
       make-backup-files nil             ; Disable Emacs backups
       fill-column 80
+      calendar-week-start-day 6
       )
 
 (global-visual-line-mode 1)
