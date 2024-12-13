@@ -11,7 +11,8 @@
 	 ("C-c ." . org-time-stamp)
 	 ("C-S-l" . org-toggle-link-display)
 	 ("C-x S" . org-save-all-org-buffers)
-         )
+	 ("C-c C-x C-s" . org-archive-to-archive-sibling)
+	 )
   :config
   (define-key org-mode-map (kbd "C-'") nil)
 					; Unbind C-' in org-mode so that it
