@@ -10,7 +10,7 @@
 
 
 ;; Set XDG Base Directory Specification variables
-(setq user-emacs-directory (expand-file-name (concat (getenv "XDG_CONFIG_HOME") "/emacs/") user-emacs-directory))
+(setq user-emacs-directory (expand-file-name (concat (getenv "XDG_CONFIG_HOME") "/emacs/")))
 (defvar user-emacs-cache-directory (expand-file-name (concat (getenv "XDG_CACHE_HOME") "/emacs/")))
 (defvar user-emacs-data-directory (expand-file-name (concat (getenv "XDG_DATA_HOME") "/emacs/")))
 
