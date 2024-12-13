@@ -36,6 +36,7 @@
    org-image-actual-width '(300)
    org-duration-format 'h:mm
    org-clock-report-include-clocking-task t
+   org-clock-out-remove-zero-time-clocks t
    )
   )
 
