@@ -336,14 +336,18 @@
    ("C-x C-a l" . activities-list)))
 
 ;; Olivetti
+;; https://emacs.stackexchange.com/a/47989/43990
 (use-package olivetti
-  ;; :hook
-  ;; ((text-mode . (lambda ()
-  ;;                 (unless (and buffer-file-name
-  ;;                              (string-match-p "gtd" (file-name-nondirectory buffer-file-name)))
-  ;;                   (olivetti-mode 1)))))
+  :hook (
+	 ;; (dired-mode . (lambda () (setup-olivetti 120)))
+	 (org-mode . (lambda () (setup-olivetti 100)))
+	 )
   :config
-  (add-hook 'olivetti-mode-on-hook (lambda () (olivetti-set-width 100))))
+  (defun setup-olivetti (width)
+    "Set up olivetti-mode with a specific body width."
+    (unless olivetti-mode
+      (setq olivetti-body-width width)
+      (olivetti-mode 1))))
 
 
 
@@ -351,7 +355,7 @@
 ;; Delight enables you to easily customise how major and minor modes appear in the ModeLine.
 ;; As per use-package README: delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with “-mode” appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely.
 (use-package delight
-;  :delight (org-indent-mode) ; This belongs in org section
+					;  :delight (org-indent-mode) ; This belongs in org section
   )
 ;(elpaca-wait) ; I'm unsure if this is needed
 
