@@ -248,6 +248,41 @@
 	(alist-get ?\; avy-dispatch-alist) 'avy-action-flyspell
 	(alist-get ?. avy-dispatch-alist) 'avy-action-embark
 	)
+
+
+  (setq avy-single-candidate-jump nil)  
+
+  (defun ewhd-avy-show-actions-auto (&rest _)
+    "Automatically display Avy action shortcuts in the minibuffer with formatted columns, trimming 'avy-action-' prefix and adding colors."
+    (when avy-dispatch-alist
+      (let* ((actions (mapcar (lambda (entry)
+				(let* ((action (cdr entry))
+                                       (action-name (if (functionp action)
+							(symbol-name action)  ;; Extract function name
+                                                      action)))  ;; Otherwise, it's already a string
+                                  (let ((action-name-colored
+					 (propertize
+                                          (replace-regexp-in-string "^avy-action-" "" action-name)
+                                          'face '(:foreground "cyan"))))
+                                    ;; Format the final string
+                                    (format "%s: %s"
+                                            (char-to-string (car entry))
+                                            action-name-colored))))
+                              avy-dispatch-alist))
+             (max-action-length (apply 'max (mapcar #'length actions)))
+             (column-width (+ max-action-length 2))  ;; Add some space between columns
+             (max-columns (/ (- (frame-width) 4) column-width))  ;; Full frame width
+             (rows (seq-partition actions max-columns))
+             (formatted-actions (mapconcat
+				 (lambda (row)
+                                   (mapconcat (lambda (action)
+						(format (concat "%-" (number-to-string column-width) "s") action))
+                                              row ""))
+				 rows "\n")))
+	(message "%s" formatted-actions))))
+
+
+  (advice-add 'avy-read :before #'ewhd-avy-show-actions-auto)
   )
 
 ;; Dirvish
