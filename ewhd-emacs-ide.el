@@ -87,7 +87,9 @@
   (global-set-key (kbd "C-<tab>") 'completion-at-point)
   ;; bind Ctrl + Shift + Tab to trigger completion of the first candidate
   ;; (keybing <iso-lefttab> may not work for your keyboard model)
-  (global-set-key (kbd "C-S-<iso-lefttab>") 'corfu-candidate-overlay-complete-at-point))
+  (global-set-key (kbd "C-S-<iso-lefttab>") 'corfu-candidate-overlay-complete-at-point)
+  (set-face-attribute 'corfu-candidate-overlay-face nil :foreground "#8E8371")
+  )
 
 
 ;; In theory dabbrev and cape go well with corfu, but I don't really understand what they do yet, but here's some maybe code:
@@ -112,4 +114,11 @@
   ;; :hook (after-init . envrc-global-mode)
   :config
   (envrc-global-mode 1)
+  )
+
+
+(use-package python
+  :ensure nil
+  :hook ((python-ts-mode . eglot-ensure))
+  :mode (("\\.py\\'" . python-ts-mode))
   )
