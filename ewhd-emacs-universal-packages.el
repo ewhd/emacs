@@ -14,6 +14,19 @@
 ;;   )
 
 
+;; centered-cursor-mode
+(use-package centered-cursor-mode
+  :ensure t
+  :bind
+  ("C-M-_" . centered-cursor-mode)
+  :config
+  (unbind-key "C-v" ccm-map)
+  (setq ccm-recenter-at-end-of-file t)
+  (setq ccm-vpos-init '(round (ccm-visible-text-lines) 3))
+  (add-to-list 'ccm-ignored-commands 'recenter-top-bottom)
+  )
+
+
 ;; persistent-scratch
 (use-package persistent-scratch
   :ensure t
