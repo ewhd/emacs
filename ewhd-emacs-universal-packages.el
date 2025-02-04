@@ -179,6 +179,7 @@
   :bind
   (("C-/" . avy-goto-char-timer)
    ("C-\\" . 'avy-goto-line)
+   ("C-|" . 'avy-goto-end-of-line)
    :map isearch-mode-map
    ("M-j" . avy-isearch)
    )
