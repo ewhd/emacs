@@ -22,6 +22,7 @@
       make-backup-files nil             ; Disable Emacs backups
       fill-column 80
       calendar-week-start-day 6
+      set-mark-command-repeat-pop t
       )
 
 (global-visual-line-mode 1)
