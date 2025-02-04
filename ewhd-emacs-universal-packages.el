@@ -176,10 +176,12 @@
 ;; avy
 (use-package avy
   :ensure t
-  :bind (("C-/" . avy-goto-char-timer)
-	 :map isearch-mode-map
-	 ("M-j" . avy-isearch)
-	 )
+  :bind
+  (("C-/" . avy-goto-char-timer)
+   ("C-\\" . 'avy-goto-line)
+   :map isearch-mode-map
+   ("M-j" . avy-isearch)
+   )
   :config
   (setq avy-timeout-seconds 1.5)
 
