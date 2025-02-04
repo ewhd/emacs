@@ -146,6 +146,8 @@
 					; replace keybinding for list-buffers
 					; with consult-buffer
 (global-set-key (kbd "M-V") 'scroll-other-window-down)
+(global-set-key (kbd "C-x M-b") 'view-buffer-other-window)
+(global-set-key (kbd "C-x M-f") 'find-file-other-window)
 
 
 ;;;; Tab Management
