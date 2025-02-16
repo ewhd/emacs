@@ -26,4 +26,5 @@
 ;; denote and configuration
 (load (locate-user-emacs-file "ewhd-emacs-denote.el") nil :nomessage)
 
-
+;; IDE settings (in progress)
+(load (locate-user-emacs-file "ewhd-emacs-ide.el") nil :nomessage)

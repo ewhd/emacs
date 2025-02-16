@@ -21,6 +21,8 @@
       mouse-1-click-follows-link 'double
       make-backup-files nil             ; Disable Emacs backups
       fill-column 80
+      calendar-week-start-day 6
+      set-mark-command-repeat-pop t
       )
 
 (global-visual-line-mode 1)
@@ -144,6 +146,8 @@
 					; replace keybinding for list-buffers
 					; with consult-buffer
 (global-set-key (kbd "M-V") 'scroll-other-window-down)
+(global-set-key (kbd "C-x M-b") 'view-buffer-other-window)
+(global-set-key (kbd "C-x M-f") 'find-file-other-window)
 
 
 ;;;; Tab Management

@@ -11,7 +11,8 @@
 	 ("C-c ." . org-time-stamp)
 	 ("C-S-l" . org-toggle-link-display)
 	 ("C-x S" . org-save-all-org-buffers)
-         )
+	 ("C-c C-x C-s" . org-archive-to-archive-sibling)
+	 )
   :config
   (define-key org-mode-map (kbd "C-'") nil)
 					; Unbind C-' in org-mode so that it
@@ -36,6 +37,7 @@
    org-image-actual-width '(300)
    org-duration-format 'h:mm
    org-clock-report-include-clocking-task t
+   org-clock-out-remove-zero-time-clocks t
    )
   )
 
@@ -313,7 +315,17 @@
       org-agenda-block-separator 9472
       org-agenda-compact-blocks nil
       org-agenda-start-with-log-mode t
-      org-agenda-hide-tags-regexp (regexp-opt '("cf" "gtd"))
+      org-agenda-hide-tags-regexp (regexp-opt '("cf"
+						"gtd"
+						"sys"
+						"DFR"
+						"WK"
+						"MTH"
+						"Q1"
+						"Q2"
+						"Q3"
+						"Q4"
+						))
 					; hides specific tags
       org-agenda-remove-tags nil        ; t = hides all tags
       org-agenda-show-inherited-tags t
@@ -424,21 +436,13 @@
 
 ;; (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
 
-;; (setq org-agenda-custom-commands
-;;       '(("c" "Custom Agenda"
-;;          ((agenda "")
-;;           (alltodo "")))))
 
-
-(setq org-agenda-custom-commands
-      '(("d" "Todo and Due" ((org-ql-block '(or (and (todo) (scheduled :to 0))
-						(and (todo) (priority "A")))
-					   ((org-ql-block-header "Todo and Due")))
-			     (agenda)))))
 
 
 (setq ewhd-super-agenda-groups
-      '((:name "Check Scheduling:"
+      '((:discard (:category ("system")))
+	(:discard (:tag ("DFR")))
+	(:name "Check Scheduling:"
 	       :and (:todo "SCHD" :not (:scheduled t))
 	       :order 45)
 	(:name "Overdue"
@@ -471,6 +475,65 @@
 	(:todo "OPEN" :order 150)
 	(:discard (:todo ("PROJ")))))
 
+(setq ewhd-super-agenda-groups-system-only
+      '((:discard (:not (:category "system")))
+	(:discard (:tag ("DFR")))
+	(:name "Bugs"
+	       :todo "BUG_")
+	(:name "Recently added / ready to add to Production"
+	       :todo ("PROD" "SHIP"))
+	(:name "Development and Testing"
+	       :todo ("DEV_" "TEST"))
+	(:name "Tasks"
+	       :todo "TASK")
+	(:name "Think about:"
+	       :todo ("IDEA" "STDY" "REVW"))
+	))
+
+(setq ewhd-super-agenda-next-week
+      '((:discard (:not (:tag ("DFR"))))
+	(:name "" :tag "WK")
+	(:discard (:not (:tag ("WK"))))
+	))
+
+(setq ewhd-super-agenda-next-month
+      '((:discard (:not (:tag ("DFR"))))
+	(:name "" :tag "MTH")
+	(:discard (:not (:tag ("MTH"))))
+	))
+
+(setq ewhd-super-agenda-next-Q1
+      '((:discard (:not (:tag ("DFR"))))
+	(:name "" :tag "Q1")
+	(:discard (:not (:tag ("Q1"))))
+	))
+
+(setq ewhd-super-agenda-next-Q2
+      '((:discard (:not (:tag ("DFR"))))
+	(:name "" :tag "Q2")
+	(:discard (:not (:tag ("Q2"))))
+	))
+
+(setq ewhd-super-agenda-next-Q3
+      '((:discard (:not (:tag ("DFR"))))
+	(:name "" :tag "Q3")
+	(:discard (:not (:tag ("Q3"))))
+	))
+
+(setq ewhd-super-agenda-next-Q4
+      '((:discard (:not (:tag ("DFR"))))
+	(:name "" :tag "Q4")
+	(:discard (:not (:tag ("Q4"))))
+	))
+
+(setq ewhd-super-agenda-next-year
+      '((:discard (:not (:tag ("DFR"))))
+	(:name "" :tag "WK")
+	(:discard (:not (:tag ("WK"))))
+	))
+
+
+
 (setq org-agenda-custom-commands
       '(("z" "Super view"
          ((agenda "" ((org-agenda-span 8)
@@ -489,7 +552,66 @@
 			      )
 			((org-ql-block-header "Upcoming (next 15 days):\n")))
 	  (alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
-                       (org-super-agenda-groups ewhd-super-agenda-groups)))))))
+                       (org-super-agenda-groups ewhd-super-agenda-groups)))))
+	("y" "System's View"
+	 alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
+                     (org-super-agenda-groups ewhd-super-agenda-groups-system-only)))
+	;; ("dw" "Deferred: Next Week"
+	;;  ((org-ql-block '(and (and (tags "DFR" "WK"))
+	;; 		      (todo)
+	;; 		      (not (done)))
+	;; 		((org-ql-block-header "Next Week:")))))
+	("dw" "Deferred: Next Week"
+	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
+                       (org-super-agenda-groups ewhd-super-agenda-next-week)))))
+	("dm" "Deferred: Next Month"
+	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
+		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Month")
+		       (org-super-agenda-groups ewhd-super-agenda-next-month)))))
+	("d1" "Deferred: Next Q1"
+	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
+		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Month")
+		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Q1")
+	               (org-super-agenda-groups ewhd-super-agenda-next-Q1)))))
+	("d2" "Deferred: Next Q2"
+	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
+		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Month")
+		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Q2")
+	               (org-super-agenda-groups ewhd-super-agenda-next-Q2)))))
+	("d3" "Deferred: Next Q3"
+	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
+		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Month")
+		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Q3")
+	               (org-super-agenda-groups ewhd-super-agenda-next-Q3)))))
+	("d4" "Deferred: Next Q4"
+	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
+		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Month")
+		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Q4")
+	               (org-super-agenda-groups ewhd-super-agenda-next-Q4)))))
+	;; ("dy" "Deferred: Next Year")
+	("da" "Deferred: All"
+	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
+		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Month")
+		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Q1")
+	               (org-super-agenda-groups ewhd-super-agenda-next-Q1)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Q2")
+	               (org-super-agenda-groups ewhd-super-agenda-next-Q2)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Q3")
+	               (org-super-agenda-groups ewhd-super-agenda-next-Q3)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Q4")
+	               (org-super-agenda-groups ewhd-super-agenda-next-Q4)))))
+	))
 
 
 

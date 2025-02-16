@@ -14,6 +14,19 @@
 ;;   )
 
 
+;; centered-cursor-mode
+(use-package centered-cursor-mode
+  :ensure t
+  :bind
+  ("C-M-_" . centered-cursor-mode)
+  :config
+  (unbind-key "C-v" ccm-map)
+  (setq ccm-recenter-at-end-of-file t)
+  (setq ccm-vpos-init '(round (ccm-visible-text-lines) 3))
+  (add-to-list 'ccm-ignored-commands 'recenter-top-bottom)
+  )
+
+
 ;; persistent-scratch
 (use-package persistent-scratch
   :ensure t
@@ -61,7 +74,7 @@
     (interactive)
     (magit-fetch-all-prune)
     (let* ((default-branch
-             (read-string "Default branch: " (magit-get-current-branch)))
+            (read-string "Default branch: " (magit-get-current-branch)))
            (merged-branches
             (magit-git-lines "branch"
                              "--format" "%(refname:short)"
@@ -76,7 +89,7 @@
         (message "Nothing to delete"))))
   
   (transient-append-suffix 'magit-branch "C"
-      '("K" "delete all merged" ewhd-delete-merged-branches))  
+    '("K" "delete all merged" ewhd-delete-merged-branches))  
   )
 
 
@@ -90,17 +103,17 @@
 ;;   :bind
 ;;   ()
 ;;   :config
-  ;; Additional dired+ specific configurations here
-  ;; Hide details by default
-  ;; (setq diredp-hide-details-initially-flag t)
-  
-  ;; (diredp-toggle-find-file-reuse-dir 1)  ;; start with diredp set to "reuse" buffer
-  
-  ;; (define-key dired-mode-map (kbd "S-") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
-  
-  ;; Enable image previews
-  ;; (setq diredp-image-preview-in-tooltip 128)
-  ;; )
+;; Additional dired+ specific configurations here
+;; Hide details by default
+;; (setq diredp-hide-details-initially-flag t)
+
+;; (diredp-toggle-find-file-reuse-dir 1)  ;; start with diredp set to "reuse" buffer
+
+;; (define-key dired-mode-map (kbd "S-") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+
+;; Enable image previews
+;; (setq diredp-image-preview-in-tooltip 128)
+;; )
 
 ;; (use-package dired-subtree
 ;;   :ensure t
@@ -160,6 +173,117 @@
 ;;           (window-parameters . ((mode-line-format . none)
 ;;                                 (header-line-format . none))))))
 
+;; avy
+(use-package avy
+  :ensure t
+  :bind
+  (("C-/" . avy-goto-char-timer)
+   ("C-\\" . 'avy-goto-line)
+   ("C-|" . 'avy-goto-end-of-line)
+   :map isearch-mode-map
+   ("M-j" . avy-isearch)
+   )
+  :config
+  (setq avy-timeout-seconds 1.5)
+
+  (defun avy-action-kill-whole-line (pt)
+    (save-excursion
+      (goto-char pt)
+      (kill-whole-line))
+    (select-window
+     (cdr
+      (ring-ref avy-ring 0)))
+    t)
+
+  (defun avy-action-copy-whole-line (pt)
+    (save-excursion
+      (goto-char pt)
+      (cl-destructuring-bind (start . end)
+          (bounds-of-thing-at-point 'line)
+        (copy-region-as-kill start end)))
+    (select-window
+     (cdr
+      (ring-ref avy-ring 0)))
+    t)
+
+  (defun avy-action-yank-whole-line (pt)
+    (avy-action-copy-whole-line pt)
+    (save-excursion (yank))
+    t)
+
+  (defun avy-action-teleport-whole-line (pt)
+    (avy-action-kill-whole-line pt)
+    (save-excursion (yank)) t)
+
+  (defun avy-action-mark-to-char (pt)
+    (activate-mark)
+    (goto-char pt))
+
+  (defun avy-action-flyspell (pt)
+    (save-excursion
+      (goto-char pt)
+      (when (require 'flyspell nil t)
+        (flyspell-auto-correct-word)))
+    (select-window
+     (cdr (ring-ref avy-ring 0)))
+    t)
+  (defun avy-action-embark (pt)
+    (unwind-protect
+        (save-excursion
+          (goto-char pt)
+          (embark-act))
+      (select-window
+       (cdr (ring-ref avy-ring 0))))
+    t)
+
+  (setf (alist-get ?k avy-dispatch-alist) 'avy-action-kill-stay
+        (alist-get ?K avy-dispatch-alist) 'avy-action-kill-whole-line
+	(alist-get ?y avy-dispatch-alist) 'avy-action-yank
+        (alist-get ?w avy-dispatch-alist) 'avy-action-copy
+        (alist-get ?W avy-dispatch-alist) 'avy-action-copy-whole-line
+        (alist-get ?Y avy-dispatch-alist) 'avy-action-yank-whole-line
+	(alist-get ?t avy-dispatch-alist) 'avy-action-teleport
+        (alist-get ?T avy-dispatch-alist) 'avy-action-teleport-whole-line
+	(alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char
+	(alist-get ?\; avy-dispatch-alist) 'avy-action-flyspell
+	(alist-get ?. avy-dispatch-alist) 'avy-action-embark
+	)
+
+
+  (setq avy-single-candidate-jump nil)  
+
+  (defun ewhd-avy-show-actions-auto (&rest _)
+    "Automatically display Avy action shortcuts in the minibuffer with formatted columns, trimming 'avy-action-' prefix and adding colors."
+    (when avy-dispatch-alist
+      (let* ((actions (mapcar (lambda (entry)
+				(let* ((action (cdr entry))
+                                       (action-name (if (functionp action)
+							(symbol-name action)  ;; Extract function name
+                                                      action)))  ;; Otherwise, it's already a string
+                                  (let ((action-name-colored
+					 (propertize
+                                          (replace-regexp-in-string "^avy-action-" "" action-name)
+                                          'face '(:foreground "cyan"))))
+                                    ;; Format the final string
+                                    (format "%s: %s"
+                                            (char-to-string (car entry))
+                                            action-name-colored))))
+                              avy-dispatch-alist))
+             (max-action-length (apply 'max (mapcar #'length actions)))
+             (column-width (+ max-action-length 2))  ;; Add some space between columns
+             (max-columns (/ (- (frame-width) 4) column-width))  ;; Full frame width
+             (rows (seq-partition actions max-columns))
+             (formatted-actions (mapconcat
+				 (lambda (row)
+                                   (mapconcat (lambda (action)
+						(format (concat "%-" (number-to-string column-width) "s") action))
+                                              row ""))
+				 rows "\n")))
+	(message "%s" formatted-actions))))
+
+
+  (advice-add 'avy-read :before #'ewhd-avy-show-actions-auto)
+  )
 
 ;; Dirvish
 (use-package dirvish
@@ -263,14 +387,18 @@
    ("C-x C-a l" . activities-list)))
 
 ;; Olivetti
+;; https://emacs.stackexchange.com/a/47989/43990
 (use-package olivetti
-  ;; :hook
-  ;; ((text-mode . (lambda ()
-  ;;                 (unless (and buffer-file-name
-  ;;                              (string-match-p "gtd" (file-name-nondirectory buffer-file-name)))
-  ;;                   (olivetti-mode 1)))))
+  :hook (
+	 ;; (dired-mode . (lambda () (setup-olivetti 120)))
+	 (org-mode . (lambda () (setup-olivetti 100)))
+	 )
   :config
-  (add-hook 'olivetti-mode-on-hook (lambda () (olivetti-set-width 100))))
+  (defun setup-olivetti (width)
+    "Set up olivetti-mode with a specific body width."
+    (unless olivetti-mode
+      (setq olivetti-body-width width)
+      (olivetti-mode 1))))
 
 
 
@@ -278,7 +406,7 @@
 ;; Delight enables you to easily customise how major and minor modes appear in the ModeLine.
 ;; As per use-package README: delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with “-mode” appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely.
 (use-package delight
-;  :delight (org-indent-mode) ; This belongs in org section
+					;  :delight (org-indent-mode) ; This belongs in org section
   )
 ;(elpaca-wait) ; I'm unsure if this is needed
 
