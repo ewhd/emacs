@@ -142,6 +142,7 @@
 (global-set-key (kbd "C-x C-d") 'dired) ; replace keybinding for list-directory
 					; with dired
 (global-set-key (kbd "C-x K") 'kill-this-buffer)
+(global-set-key (kbd "C-x C-k") 'kill-buffer-and-window)
 (global-set-key (kbd "C-x C-b") 'consult-buffer)
 					; replace keybinding for list-buffers
 					; with consult-buffer
