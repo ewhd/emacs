@@ -25,6 +25,7 @@
 	org-shiftleft
 	org-shiftright
 	org-yank
+	python-indent-dedent-line
 	query-replace
 	tab-next
 	text-scale-increase
@@ -36,6 +37,7 @@
       '(
 	end-of-buffer
 	ignore
+	mouse-set-region
 	org-mouse-down-mouse
 	org-return-and-maybe-indent
 	org-time-stamp-inactive
