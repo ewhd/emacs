@@ -320,6 +320,7 @@
 						"gtd"
 						"sys"
 						"DFR"
+						"NOW"
 						"WK"
 						"MTH"
 						"Q1"
