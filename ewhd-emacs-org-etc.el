@@ -38,6 +38,7 @@
    org-duration-format 'h:mm
    org-clock-report-include-clocking-task t
    org-clock-out-remove-zero-time-clocks t
+   org-todo-repeat-to-state t           ; Repeat to previous state
    )
   )
 
