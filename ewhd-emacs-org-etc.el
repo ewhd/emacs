@@ -443,7 +443,7 @@
 
 (setq ewhd-super-agenda-groups
       '((:discard (:category ("system")))
-	(:discard (:tag ("DFR")))
+	;; (:discard (:tag ("DFR")))
 	(:name "Check Scheduling:"
 	       :and (:todo "SCHD" :not (:scheduled t))
 	       :order 45)
@@ -492,6 +492,50 @@
 	       :todo ("IDEA" "STDY" "REVW"))
 	))
 
+(setq ewhd-super-agenda-current
+      '(;(:discard (:not (:tag ("DFR"))))
+	(:name "" :tag "NOW")
+	(:discard (:not (:tag ("NOW"))))
+	))
+
+(setq ewhd-super-agenda-current
+      '(
+	;; (:discard (:category ("system")))
+	;; (:discard (:tag ("DFR")))
+	(:discard (:not (:tag ("NOW"))))
+	(:name "Check Scheduling:"
+	       :and (:todo "SCHD" :not (:scheduled t))
+	       :order 45)
+	(:name "Overdue"
+	       :deadline past
+	       :order 10)
+	(:name "Behind Schedule"
+	       :scheduled past
+	       :order 20)
+	(:name "Check on these:"
+	       :todo ("SCHD" "DPND" "WAIT" "REVW")
+	       :order 64)
+	(:name "Prioritize:" :priority "A" :order 50)
+	(:name "Distractions:" :tag "Dstr" :order 63)
+	(:name "Take Action:"
+	       :and (:todo ("NEXT" "STRT") :priority>= "C")
+	       :order 60)
+	(:name "Prepare:"
+	       :and (:todo ("TODO" "PREP") :priority>= "C")
+	       :order 61)
+	(:name "Inbox"
+	       :tag "inbox"
+	       :order 200)
+	(:name "Define:"
+	       :and (:todo ("IDEA" "TASK") :priority>= "C")
+	       :order 62)
+	(:name "Someday:"
+	       :priority<= "D"
+	       :order 120)
+	(:name "Other Todo:" :todo "TODO" :order 80)
+	(:todo "OPEN" :order 150)
+	(:discard (:todo ("PROJ")))))
+
 (setq ewhd-super-agenda-next-week
       '((:discard (:not (:tag ("DFR"))))
 	(:name "" :tag "WK")
@@ -528,80 +572,61 @@
 	(:discard (:not (:tag ("Q4"))))
 	))
 
-(setq ewhd-super-agenda-next-year
-      '((:discard (:not (:tag ("DFR"))))
-	(:name "" :tag "WK")
-	(:discard (:not (:tag ("WK"))))
-	))
 
+(defun ewhd-custom-days-to-end-of-week()
+  "Return number of days until Sunday, or until next Sunday if Saturday
 
+Source:
+https://emacs.stackexchange.com/questions/58985/current-week-in-org-agenda-starting-today-and-ending-next-sunday"
+  (let ((dayspan 0)
+        (today (string-to-number (format-time-string "%u"))))
+    (cond
+     ((= today 6)
+      (setq dayspan 9))                 ; from Saturday until next Sunday
+     ((> today 0)
+      (setq dayspan (- 8 today)))       ; from today till sunday, today included
+     ((= today 0)
+      (setq dayspan 8)))))		; sunday to sunday
 
 (setq org-agenda-custom-commands
       '(("z" "Super view"
          ((agenda "" ((org-agenda-span 8)
 		      (org-agenda-use-time-grid t)))
-	  (org-ql-block '(and (or (scheduled :to 15)
-				  (deadline :to 15))
+	  (org-ql-block '(and (or (scheduled :to 30)
+				  (deadline :to 30))
 			      (not (todo "DONE" "CANC" "COMP" "FNSH"))
 			      )
-			((org-ql-block-header "Upcoming (next 15 days):\n")))
+			((org-ql-block-header "Upcoming (next 30 days):\n")))
           (alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
-                       (org-super-agenda-groups ewhd-super-agenda-groups)))))
-	("x" "Super view - no agenda"
-         ((org-ql-block '(and (or (scheduled :to 15)
-				  (deadline :to 15))
-			      (not (todo "DONE" "CANC" "COMP" "FNSH"))
-			      )
-			((org-ql-block-header "Upcoming (next 15 days):\n")))
-	  (alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
                        (org-super-agenda-groups ewhd-super-agenda-groups)))))
 	("y" "System's View"
 	 alltodo "" ((org-agenda-overriding-header "The only sin is impatience")
                      (org-super-agenda-groups ewhd-super-agenda-groups-system-only)))
-	;; ("dw" "Deferred: Next Week"
-	;;  ((org-ql-block '(and (and (tags "DFR" "WK"))
-	;; 		      (todo)
-	;; 		      (not (done)))
-	;; 		((org-ql-block-header "Next Week:")))))
-	("dw" "Deferred: Next Week"
-	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
-                       (org-super-agenda-groups ewhd-super-agenda-next-week)))))
-	("dm" "Deferred: Next Month"
-	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
-		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
-	  (alltodo "" ((org-agenda-overriding-header "Next Month")
-		       (org-super-agenda-groups ewhd-super-agenda-next-month)))))
-	("d1" "Deferred: Next Q1"
-	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
-		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
-	  (alltodo "" ((org-agenda-overriding-header "Next Month")
-		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
-	  (alltodo "" ((org-agenda-overriding-header "Next Q1")
-	               (org-super-agenda-groups ewhd-super-agenda-next-Q1)))))
-	("d2" "Deferred: Next Q2"
-	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
-		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
-	  (alltodo "" ((org-agenda-overriding-header "Next Month")
-		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
-	  (alltodo "" ((org-agenda-overriding-header "Next Q2")
-	               (org-super-agenda-groups ewhd-super-agenda-next-Q2)))))
-	("d3" "Deferred: Next Q3"
-	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
-		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
-	  (alltodo "" ((org-agenda-overriding-header "Next Month")
-		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
-	  (alltodo "" ((org-agenda-overriding-header "Next Q3")
-	               (org-super-agenda-groups ewhd-super-agenda-next-Q3)))))
-	("d4" "Deferred: Next Q4"
-	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
-		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
-	  (alltodo "" ((org-agenda-overriding-header "Next Month")
-		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
-	  (alltodo "" ((org-agenda-overriding-header "Next Q4")
-	               (org-super-agenda-groups ewhd-super-agenda-next-Q4)))))
-	;; ("dy" "Deferred: Next Year")
-	("da" "Deferred: All"
-	 ((alltodo "" ((org-agenda-overriding-header "Next Week")
+	("c" "Current"
+	 ((agenda ""
+		  ((org-agenda-start-on-weekday nil)
+		   (org-agenda-span (ewhd-custom-days-to-end-of-week))
+		   (org-agenda-use-time-grid t)))
+	  (org-ql-block '(and (or (scheduled :to (ewhd-custom-days-to-end-of-week))
+				  (deadline :to (ewhd-custom-days-to-end-of-week)))
+			      (not (todo "DONE" "CANC" "COMP" "FNSH"))
+			      )
+			((org-ql-block-header "Upcoming this week:\n")))
+	  (alltodo "" ((org-agenda-overriding-header "This Week")
+		       (org-super-agenda-groups ewhd-super-agenda-current)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Week")
+		       (org-super-agenda-groups ewhd-super-agenda-next-week)))))
+	("d" "Deferred"
+	 ((agenda "" ((org-agenda-span 16)
+		      (org-agenda-use-time-grid t)))
+	  (org-ql-block '(and (or (scheduled :to 60)
+				  (deadline :to 60))
+			      (not (todo "DONE" "CANC" "COMP" "FNSH"))
+			      )
+			((org-ql-block-header "Upcoming (next 60 days):\n")))
+	  (alltodo "" ((org-agenda-overriding-header "This Week")
+		       (org-super-agenda-groups ewhd-super-agenda-current)))
+	  (alltodo "" ((org-agenda-overriding-header "Next Week")
 		       (org-super-agenda-groups ewhd-super-agenda-next-week)))
 	  (alltodo "" ((org-agenda-overriding-header "Next Month")
 		       (org-super-agenda-groups ewhd-super-agenda-next-month)))
@@ -612,8 +637,8 @@
 	  (alltodo "" ((org-agenda-overriding-header "Next Q3")
 	               (org-super-agenda-groups ewhd-super-agenda-next-Q3)))
 	  (alltodo "" ((org-agenda-overriding-header "Next Q4")
-	               (org-super-agenda-groups ewhd-super-agenda-next-Q4)))))
-	))
+	               (org-super-agenda-groups ewhd-super-agenda-next-Q4))))
+	 )))
 
 
 
