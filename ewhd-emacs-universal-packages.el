@@ -92,6 +92,11 @@
     '("K" "delete all merged" ewhd-delete-merged-branches))  
   )
 
+;; Chezmoi
+(use-package chezmoi
+  :ensure t
+  )
+
 
 ;;;; Navigation
 ;; Dired+
