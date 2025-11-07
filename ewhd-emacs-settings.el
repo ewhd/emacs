@@ -48,6 +48,27 @@
       )
 (desktop-save-mode 1)
 
+;; Make #+... tags look nicer
+(setq-default prettify-symbols-alist
+	      (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+		      '(("#+begin_src" . ?)
+			("#+end_src" . ?)
+			;; ("#+begin_src" . "λ")
+			("#+begin_example" . ?)
+			("#+end_example"   . ?)
+			("#+begin_quote"   . ?)
+			("#+end_quote"     . ?)
+			("#+begin_comment" . ?)
+			("#+end_comment"   . ?)
+			("#+header:"       . ?)
+			;; ("#+name:"         . ?﮸)
+			("#+results:"      . ?)
+			("#+call:"         . ?)
+			(":properties:"    . ?)
+			(":logbook:"       . ?)
+			)))
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
+
 
 
 ;;; Revert Buffer Behavior:
