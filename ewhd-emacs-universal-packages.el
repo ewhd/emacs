@@ -298,6 +298,10 @@
   (dirvish-quick-access-entries ; It's a custom option, `setq' won't work
    '(("n" "~/Documents/notes/"          "Notes")
      ("e" "~/.config/emacs/"            "Emacs")
+     ("c" "~/.config/"                  "Config")
+     ("lb" "~/.local/bin/"              "Local Bin")
+     ("ls" "~/.local/share/"            "Local Share")
+     ("C" "~/.local/share/chezmoi"      "Chezmoi")
      ("d" "~/Documents/"                "Documents")
      ("D" "~/Downloads/"                "Downloads")
      ("m" "/mnt/"                       "Drives")
