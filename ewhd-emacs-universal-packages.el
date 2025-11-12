@@ -14,6 +14,15 @@
 ;;   )
 
 
+;; yaml-mode
+(use-package yaml-mode
+  :ensure t
+  :mode (("\\.ya?ml\\(?:\\.tmpl\\)?\\'" . yaml-mode)
+         ("\\.ya?ml\\.j2\\'" . yaml-mode))
+  :hook (yaml-mode . (lambda () (setq-local tab-width 2)))
+  )
+
+
 ;; centered-cursor-mode
 (use-package centered-cursor-mode
   :ensure t
