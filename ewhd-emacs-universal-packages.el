@@ -292,6 +292,7 @@
 
 ;; Dirvish
 (use-package dirvish
+  :disabled t
   :init
   (dirvish-override-dired-mode)
   :custom
