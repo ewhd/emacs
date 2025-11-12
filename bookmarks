@@ -2,16 +2,16 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("desktop:~/"
- (filename . "/ssh:desktop:~/")
- (front-context-string . "CF\n  drwxr-xr-x ")
- (rear-context-string . "024-06-11 17:23 ")
- (position . 70)
- (last-modified 26407 46510 703843 419000))
-("org-refile-last-stored"
- (filename . "~/Documents/notes/active-notes/20241022T151945--job-search-notes__career_loi.org")
- (front-context-string . "**** [2024-12-11")
- (rear-context-string . "eally stand out\n")
- (position . 19507)
- (last-modified 26458 4653 995859 416000))
+(("~/.local/bin"
+ (filename . "~/.local/bin/")
+ (front-context-string . "backup-file-in-p")
+ (rear-context-string . "025-11-11 15:38 ")
+ (position . 67)
+ (last-modified 26899 54532 661582 959000))
+("~/.config"
+ (filename . "~/.config/")
+ (front-context-string . "chezmoi\n  drwxr-")
+ (rear-context-string . "025-11-10 02:36 ")
+ (position . 216)
+ (last-modified 26899 54469 595938 457000))
 )
