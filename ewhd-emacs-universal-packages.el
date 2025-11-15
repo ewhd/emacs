@@ -292,6 +292,7 @@
 
 ;; Dirvish
 (use-package dirvish
+  :disabled t
   :init
   (dirvish-override-dired-mode)
   :custom
@@ -898,6 +899,26 @@
                     (format beancount-balance-command account))))
   
 (define-key beancount-mode-map (kbd "C-c J") #'beancount-query-balance-at-point)
+
+
+;;;; Markdown
+;; Markdown-Mode
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "pandoc")
+  :bind (:map markdown-mode-map
+              ("C-c C-e" . markdown-do))
+  :config
+  ;; Set custom markdown preview function
+  (setq markdown-live-preview-window-function #'markdown-live-preview-window-eww)
+
+  ;; always open the preview window at the right
+  (setq markdown-split-window-direction 'right)
+
+  ;; delete exported HTML file after markdown-live-preview-export is called
+  (setq markdown-live-preview-delete-export 'delete-on-export)
+  )
 
 
 ;;End
