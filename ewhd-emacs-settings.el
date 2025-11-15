@@ -33,20 +33,43 @@
 (tooltip-mode -1)
 (delete-selection-mode 1)               ; Replace region when inserting text
 
-
-(setq desktop-dirname "~/.cache"        ; set the directory /before/ enabling
-					; desktop mode
-      ;; desktop-dirname "/var/tmp/"
-      desktop-buffers-not-to-save
-      '("*Messages*" "*scratch*" "*Help*" "*info*" "*compilation*")
-      desktop-path (list desktop-dirname) ; ensures Emacs uses this path for
+;; Desktop
+(setq  desktop-dirname "~/.cache"        ; set /before/ enabling desktop mode
+       desktop-buffers-not-to-save '("*Messages*"
+				     "*scratch*"
+				     "*Help*"
+				     "*info*"
+				     "*compilation*")
+       desktop-path (list desktop-dirname)
+					; ensures Emacs uses this path for
 					; desktop files -- emacs won't seem to
 					; look in desktop-dirname without this
 					; line
-      desktop-auto-save-timeout 10
-      desktop-save t                    ; always save
-      )
+       desktop-auto-save-timeout 10 
+       desktop-save t                    ; always save
+       )
 (desktop-save-mode 1)
+
+;; Make #+... tags look nicer
+(setq-default prettify-symbols-alist
+	      (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+		      '(("#+begin_src" . ?)
+			("#+end_src" . ?)
+			;; ("#+begin_src" . "λ")
+			("#+begin_example" . ?)
+			("#+end_example"   . ?)
+			("#+begin_quote"   . ?)
+			("#+end_quote"     . ?)
+			("#+begin_comment" . ?)
+			("#+end_comment"   . ?)
+			("#+header:"       . ?)
+			;; ("#+name:"         . ?﮸)
+			("#+results:"      . ?)
+			("#+call:"         . ?)
+			(":properties:"    . ?)
+			(":logbook:"       . ?)
+			)))
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
 
 
 
@@ -397,4 +420,5 @@ Version 2020-06-26"
   (switch-to-buffer nil))
 
 (global-set-key (kbd "C-0") 'switch-to-last-buffer)
+
 
