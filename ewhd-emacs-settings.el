@@ -164,7 +164,7 @@
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C-x C-d") 'dired) ; replace keybinding for list-directory
 					; with dired
-(global-set-key (kbd "C-x K") 'kill-this-buffer)
+(global-set-key (kbd "C-x K") 'kill-current-buffer)
 (global-set-key (kbd "C-x C-b") 'consult-buffer)
 					; replace keybinding for list-buffers
 					; with consult-buffer
