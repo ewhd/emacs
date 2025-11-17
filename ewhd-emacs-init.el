@@ -20,6 +20,9 @@
 ;; Packages and their settings which I will always want
 (load (locate-user-emacs-file "ewhd-emacs-universal-packages.el") nil :nomessage)
 
+;; Packages for working with Common Lisp
+(load (locate-user-emacs-file "ewhd-emacs-cl.el") nil :nomessage)
+
 ;; Org Mode and attending packages
 (load (locate-user-emacs-file "ewhd-emacs-org-etc.el") nil :nomessage)
 

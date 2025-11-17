@@ -4,6 +4,11 @@
 ;;;; Appearance and Behavior
 
 ;; General:
+(setq-default fill-column 80
+              scroll-margin 2           ; Add a margin when scrolling vertically
+	      indent-tabs-mode nil
+	      )
+
 (setq inhibit-startup-screen t
       custom-file (make-temp-file "emacs-custom-")
 					; save all interactive customizations to
@@ -12,7 +17,7 @@
       visible-bell t
       help-window-select t              ; Focus new help windows when opened
       scroll-conservatively 101         ; Avoid recentering when scrolling far
-      scroll-margin 2                   ; Add a margin when scrolling vertically
+      scroll-margin 2
       mouse-wheel-scroll-amount '(1)
       sentence-end-double-space nil
       column-number-mode t
@@ -20,10 +25,10 @@
       mouse-drag-and-drop-region-cross-program t
       mouse-1-click-follows-link 'double
       make-backup-files nil             ; Disable Emacs backups
-      fill-column 80
       calendar-week-start-day 6
       set-mark-command-repeat-pop t
       )
+
 
 (global-visual-line-mode 1)
 (global-hl-line-mode 1)                 ; highlight current line
@@ -39,7 +44,8 @@
 				     "*scratch*"
 				     "*Help*"
 				     "*info*"
-				     "*compilation*")
+				     "*compilation*"
+				     "*eww*")
        desktop-path (list desktop-dirname)
 					; ensures Emacs uses this path for
 					; desktop files -- emacs won't seem to
