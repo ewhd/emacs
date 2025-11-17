@@ -18,6 +18,7 @@
 					; Unbind C-' in org-mode so that it
 					; doesn't conflict with expand-region
   (setq
+   org-directory (concat (getenv "HOME") "/Documents")
    org-startup-indented t
    org-startup-folded t
    org-fold-catch-invisible-edits 'show-and-error

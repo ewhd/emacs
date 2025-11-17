@@ -27,6 +27,7 @@
       make-backup-files nil             ; Disable Emacs backups
       calendar-week-start-day 6
       set-mark-command-repeat-pop t
+      next-error-message-highlight 'keep
       )
 
 
@@ -37,9 +38,10 @@
 (menu-bar-mode -1)
 (tooltip-mode -1)
 (delete-selection-mode 1)               ; Replace region when inserting text
+(recentf-mode 1)
 
 ;; Desktop
-(setq  desktop-dirname "~/.cache"        ; set /before/ enabling desktop mode
+(setq  desktop-dirname "~/.cache"       ; set /before/ enabling desktop mode
        desktop-buffers-not-to-save '("*Messages*"
 				     "*scratch*"
 				     "*Help*"
@@ -52,7 +54,7 @@
 					; look in desktop-dirname without this
 					; line
        desktop-auto-save-timeout 10 
-       desktop-save t                    ; always save
+       desktop-save t                   ; always save
        )
 (desktop-save-mode 1)
 
@@ -174,10 +176,11 @@
 (global-set-key (kbd "C-x C-b") 'consult-buffer)
 					; replace keybinding for list-buffers
 					; with consult-buffer
-(global-set-key (kbd "M-V") 'scroll-other-window-down)
+(global-set-key (kbd "M-V")     'scroll-other-window-down)
 (global-set-key (kbd "C-x M-b") 'view-buffer-other-window)
 (global-set-key (kbd "C-x M-f") 'find-file-other-window)
-
+(global-set-key (kbd "C-S-o")   'other-window)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
 
 ;;;; Tab Management
 ;; Unbind the default transpose-characters command
@@ -212,6 +215,7 @@
 (use-package dired
   :ensure nil                           ; dired is built-in, no need to install
   :commands (dired)
+  :hook (dired-mode-hook . dired-hide-details-mode)
   :config
   ;; Unbind the default C-t binding in Dired
   (define-key dired-mode-map (kbd "C-t") nil)
@@ -367,7 +371,7 @@ Version 2020-06-26"
 
 
 ;; Increment Number
-; https://www.emacswiki.org/emacs/IncrementNumber
+                                        ; https://www.emacswiki.org/emacs/IncrementNumber
 
 (defun ewhd-increment-number-decimal (&optional arg)
   "Increment the number forward from point by 'arg'."
@@ -420,8 +424,9 @@ Version 2020-06-26"
   (kill-emacs))
 
 
-;; swap to last buffer
+;; 
 (defun switch-to-last-buffer ()
+  "Swap to last buffer"
   (interactive)
   (switch-to-buffer nil))
 
