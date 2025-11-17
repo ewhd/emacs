@@ -432,4 +432,10 @@ Version 2020-06-26"
 
 (global-set-key (kbd "C-0") 'switch-to-last-buffer)
 
-
+;; Change C-w behavior when no 
+;; From: https://www.reddit.com/r/emacs/comments/16rbsnw/comment/k23kmxg/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+(defadvice kill-region (before unix-werase activate compile)
+  "When called interactively with no active region, delete a single word backwards instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (save-excursion (backward-word 1) (point)) (point)))))
