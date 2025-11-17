@@ -71,6 +71,10 @@
 
 
 ;;;; Source Control:
+;; git-timemachine
+(use-package git-timemachine
+  :ensure t)
+
 ;; Magit:
 (use-package magit
   :after transient
