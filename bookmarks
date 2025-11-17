@@ -2,7 +2,19 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("~/.local/bin"
+(("Downloads"
+ (filename . "~/Downloads/")
+ (front-context-string . "standard-effects")
+ (rear-context-string . "025-11-14 08:13 ")
+ (position . 347)
+ (last-modified 26906 32178 621641 959000))
+("Notes"
+ (filename . "~/Documents/notes/")
+ (front-context-string . "archive/\n  drwxr")
+ (rear-context-string . "025-11-11 17:32 ")
+ (position . 73)
+ (last-modified 26906 32156 164786 274000))
+("~/.local/bin"
  (filename . "~/.local/bin/")
  (front-context-string . "backup-file-in-p")
  (rear-context-string . "025-11-11 15:38 ")
