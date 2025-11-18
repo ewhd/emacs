@@ -5,11 +5,13 @@
       '(
 	beginning-of-visual-line
 	comment-line
+	electric-newline-and-maybe-indent
 	electric-pair-delete-pair
 	end-of-visual-line
 	eval-last-sexp
 	indent-for-tab-command
 	kill-region
+	kill-visual-line
 	multiple-cursors-mode
 	org-beginning-of-line
 	org-ctrl-c-ctrl-c
@@ -28,7 +30,11 @@
 	query-replace
 	tab-next
 	text-scale-increase
+	wdired--self-insert
+	wdired-finish-edit
 	xah-toggle-letter-case
+	yaml-electric-backspace
+	yaml-electric-dash-and-dot
 	zap-up-to-char
 	))
 
