@@ -6,13 +6,19 @@
 
 
 ;; bufler
-;; (use-package bufler
-;;   :ensure (bufler :fetcher github :repo "alphapapa/bufler.el"
-;;                   :files (:defaults (:exclude "helm-bufler.el")))
-;;   :config
-;;   (setq bufler-column-Path-max-width 80)
-;;   )
+(use-package bufler
+  :ensure t
+  ;; (bufler :fetcher github :repo "alphapapa/bufler.el"
+  ;; :files (:defaults (:exclude "helm-bufler.el")))
+  :config
+  (setq bufler-column-Path-max-width 80)
+  )
 
+;;; Manage Secretes
+(use-package auth-source-pass
+  :elpaca t
+  :config
+  (auth-source-pass-enable))
 
 ;; yaml-mode
 (use-package yaml-mode
