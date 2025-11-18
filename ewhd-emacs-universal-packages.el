@@ -945,5 +945,36 @@
   (setq markdown-live-preview-delete-export 'delete-on-export)
   )
 
+;;; AI integration
+(use-package gptel
+  :ensure t
+  :commands (gptel)
+  :init
+  ;; Default model for most queries
+  (setq gptel-default-model "gpt-4o-mini")
+  ;; Optional: set a fallback model
+  (setq gptel-fallback-model "gpt-3.5-turbo")
+  ;; Fetch API key securely from auth-source
+  (setq gptel-api-key
+        (auth-source-pick-first-password
+         :host "api.openai.com" :user 'emacs :port nil))
+  :config
+  ;; Keybinding to open GPTel quickly
+  (global-set-key (kbd "C-c a") 'gptel)
+
+  ;; Function to send selected region to GPTel
+  (defun ewhd-gptel-region (start end)
+    "Send the active region to GPTel and show the response in a new buffer."
+    (interactive "r")
+    (let ((prompt (buffer-substring-no-properties start end)))
+      (gptel prompt)))
+  ;; Optional: switch model quickly in an active GPTel buffer
+  (defun ewhd-gptel-set-model (model)
+    "Set the GPTel model in the current buffer."
+    (interactive
+     (list (completing-read "Model: " '("gpt-4o-mini" "gpt-4" "gpt-3.5-turbo"))))
+    (setq-local gptel-default-model model)
+    (message "GPTel model set to %s" model))
+  )
 
 ;;End
