@@ -209,6 +209,11 @@
 (define-key ctl-t-map (kbd "f")       'tab-bar-history-forward)
 
 
+;;; ibuffer
+(use-package ibuffer
+  :ensure nil
+  :hook (ibuffer . ibuffer-auto-mode))
+
 ;;;; dired config
 ;; check out http://xahlee.info/emacs/emacs/emacs_dired_tips.html
 
