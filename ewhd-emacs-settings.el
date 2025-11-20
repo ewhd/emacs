@@ -28,6 +28,8 @@
       calendar-week-start-day 6
       set-mark-command-repeat-pop t
       next-error-message-highlight 'keep
+      mouse-autoselect-window t
+      focus-follows-mouse t
       )
 
 
