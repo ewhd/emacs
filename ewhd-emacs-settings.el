@@ -210,6 +210,12 @@
 (define-key ctl-t-map (kbd "b")       'tab-bar-history-back)
 (define-key ctl-t-map (kbd "f")       'tab-bar-history-forward)
 
+;;; Manage Secrets
+(use-package auth-source
+  :ensure nil
+  :config
+  (auth-source-pass-enable)
+  )
 
 ;;; ibuffer
 (use-package ibuffer

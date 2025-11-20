@@ -14,11 +14,6 @@
   (setq bufler-column-Path-max-width 80)
   )
 
-;;; Manage Secretes
-(use-package auth-source-pass
-  :elpaca t
-  :config
-  (auth-source-pass-enable))
 
 ;; yaml-mode
 (use-package yaml-mode
