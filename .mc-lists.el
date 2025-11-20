@@ -25,6 +25,7 @@
         org-shiftleft
         org-shiftright
         org-yank
+        paredit-delete-char
         paredit-semicolon
         query-replace
         tab-next
