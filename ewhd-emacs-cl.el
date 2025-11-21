@@ -21,7 +21,7 @@
           lisp-mode
           lisp-interaction-mode
           ielm-mode
-          eval-expression-minibuffer-setup
+          ;; eval-expression-minibuffer-setup ;; interferes with eval-expression in the minibuffer
           slime-repl-mode) . enable-paredit-mode)
   :config
   ;; Override SLIME REPL backward-delete to play nicely with paredit
