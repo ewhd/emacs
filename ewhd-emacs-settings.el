@@ -42,8 +42,23 @@
 (delete-selection-mode 1)               ; Replace region when inserting text
 (recentf-mode 1)
 
+
+;; Set Font
+(when (display-graphic-p)  ;; Only for GUI Emacs
+  ;; Automatically pick a JetBrains Nerd Font if installed
+  (let* ((candidates '("JetBrainsMono Nerd Font"
+                       "JetBrains Mono Nerd Font"
+                       "JetBrainsMono NF"))
+         (found-font (seq-find #'(lambda (f)
+                                   (member f (font-family-list)))
+                               candidates)))
+    (when found-font
+      (set-frame-font (format "%s-11" found-font) nil t))))
+
+
+
 ;; Desktop
-(setq desktop-dirname "~/.cache"       ; set /before/ enabling desktop mode
+(setq desktop-dirname "~/.cache"        ; set /before/ enabling desktop mode
       desktop-buffers-not-to-save '("*Messages*"
 				    "*scratch*"
 				    "*Help*"
@@ -56,31 +71,9 @@
 					; look in desktop-dirname without this
 					; line
       desktop-auto-save-timeout 10 
-      desktop-save t                   ; always save
+      desktop-save t                    ; always save
       )
 (desktop-save-mode 1)
-
-;; Make #+... tags look nicer
-(setq-default prettify-symbols-alist
-	      (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-		      '(("#+begin_src" . ?)
-			("#+end_src" . ?)
-			;; ("#+begin_src" . "λ")
-			("#+begin_example" . ?)
-			("#+end_example"   . ?)
-			("#+begin_quote"   . ?)
-			("#+end_quote"     . ?)
-			("#+begin_comment" . ?)
-			("#+end_comment"   . ?)
-			("#+header:"       . ?)
-			;; ("#+name:"         . ?﮸)
-			("#+results:"      . ?)
-			("#+call:"         . ?)
-			(":properties:"    . ?)
-			(":logbook:"       . ?)
-			)))
-(add-hook 'org-mode-hook 'prettify-symbols-mode)
-
 
 
 ;;; Revert Buffer Behavior:

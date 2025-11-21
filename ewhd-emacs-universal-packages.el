@@ -66,9 +66,30 @@
 
 ;;;; Pretty icons
 ;; must run M-x all-the-icons-install-fonts to install fonts per machine
-(use-package all-the-icons
+;; (use-package all-the-icons
+;;   :ensure t
+;;   :if (display-graphic-p))
+
+(use-package nerd-icons
+  :ensure t)
+
+(use-package nerd-icons-dired
   :ensure t
-  :if (display-graphic-p))
+  :hook (dired-mode . nerd-icons-dired-mode))
+
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
+(use-package nerd-icons-completion
+  :ensure t
+  :hook ((vertico-mode . nerd-icons-completion-mode)
+         (ivy-mode . nerd-icons-completion-mode)
+         (helm-mode . nerd-icons-completion-mode)))
+
+(use-package nerd-icons-modeline
+  :ensure t
+  :hook (after-init . nerd-icons-modeline-mode))
 
 
 ;;;; Source Control:
