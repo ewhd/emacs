@@ -87,10 +87,6 @@
          (ivy-mode . nerd-icons-completion-mode)
          (helm-mode . nerd-icons-completion-mode)))
 
-(use-package nerd-icons-modeline
-  :ensure t
-  :hook (after-init . nerd-icons-modeline-mode))
-
 
 ;;;; Source Control:
 ;; git-timemachine
