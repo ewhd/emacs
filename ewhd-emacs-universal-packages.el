@@ -498,7 +498,133 @@
 (use-package delight
 					;  :delight (org-indent-mode) ; This belongs in org section
   )
-;(elpaca-wait) ; I'm unsure if this is needed
+                                        ;(elpaca-wait) ; I'm unsure if this is needed
+
+;; telephone-line
+(use-package telephone-line
+  :config
+  (telephone-line-defsegment* ewhd-telephone-line-file-name-absolute-path-segment ()
+    (propertize
+     (if (buffer-file-name)
+         (abbreviate-file-name (buffer-file-name))
+       (buffer-name))
+     'face 'mode-line-buffer-id))
+
+  (telephone-line-defsegment* ewhd-telephone-line-major-mode-segment ()
+    (cond
+     ((eq major-mode 'emacs-lisp-mode) "λ")
+     ((eq major-mode 'dired-mode) " ")
+     ((eq major-mode 'help-mode) "")
+     ((eq major-mode 'python-mode) "")
+     ((eq major-mode 'sh-mode) "")
+     ((eq major-mode 'prog-mode) "󱆃")
+     (t mode-name))) ;; fallback to normal mode-name
+
+  (defface ewhd-mode-line-custom-face
+    '((t (
+          :foreground "red"
+          :background nil
+          :inherit nil)))
+    "Custom modeline face")
+
+  ;; (telephone-line-defsegment* ewhd-telephone-line-airline-position-segment ()
+  ;;   (eval (propertize "%l:%c" 'face 'mode-line-custom-face)))
+
+  ;; (telephone-line-defsegment* ewhd-telephone-line-airline-position-segment ()
+  ;;   " %l:%c")
+  (telephone-line-defsegment* ewhd-telephone-line-airline-position-segment ()
+    ;; (let ((current (line-number-at-pos))  ; causes lag to line/column number update
+    ;;       (total   (line-number-at-pos (point-max)))
+    ;;       (column  (current-column)))
+    ;;   (format "%d/%d:%d" current total column))
+    "%l:%c"
+    )
+
+  ;; --- Cache variables ---
+  (defvar ewhd-chezmoi--source-files-cache nil
+    "Cached list of absolute paths to chezmoi source files.")
+
+  (defvar ewhd-chezmoi--target-files-cache nil
+    "Cached list of absolute paths to chezmoi target files.")
+
+  (defvar ewhd-chezmoi--cache-timestamp 0
+    "Time (in seconds) when the chezmoi file cache was last updated.")
+
+  (defvar ewhd-chezmoi--cache-ttl 300
+    "Time-to-live (seconds) for the chezmoi file cache. Refresh after this interval.")
+
+  (defface ewhd-chezmoi-source-face
+    '((t :foreground "#61AFEF" :weight bold))
+    "Face for chezmoi source files in the modeline.")
+
+  (defface ewhd-chezmoi-target-face
+    '((t :foreground "#98C379" :weight bold))
+    "Face for chezmoi target files in the modeline.")
+
+  (defun ewhd-chezmoi--refresh-cache ()
+    "Refresh cached lists of source and target files."
+    (setq ewhd-chezmoi--source-files-cache
+          (split-string
+           (shell-command-to-string "chezmoi managed -p source-absolute")
+           "\n" t))
+    (setq ewhd-chezmoi--target-files-cache
+          (split-string
+           (shell-command-to-string "chezmoi managed -p absolute")
+           "\n" t))
+    (setq ewhd-chezmoi--cache-timestamp (float-time)))
+
+  (defun ewhd-chezmoi--ensure-cache ()
+    "Ensure the cache is fresh, refresh if older than TTL."
+    (when (> (- (float-time) ewhd-chezmoi--cache-timestamp) ewhd-chezmoi--cache-ttl)
+      (ewhd-chezmoi--refresh-cache)))
+
+  ;; --- Buffer check functions ---
+  (defun ewhd-chezmoi-source-buffer-tracked-p ()
+    "Return non-nil if the current buffer's file is a chezmoi source file."
+    (ewhd-chezmoi--ensure-cache)
+    (and buffer-file-name
+         (member buffer-file-name ewhd-chezmoi--source-files-cache)))
+
+  (defun ewhd-chezmoi-target-buffer-tracked-p ()
+    "Return non-nil if the current buffer's file is a chezmoi target file."
+    (ewhd-chezmoi--ensure-cache)
+    (and buffer-file-name
+         (member buffer-file-name ewhd-chezmoi--target-files-cache)))
+
+  (telephone-line-defsegment* ewhd-telephone-line-buffer-segment ()
+    "Display buffer info with a chezmoi indicator if relevant."
+    (let ((chezmoi-indicator
+           (cond
+            ((ewhd-chezmoi-source-buffer-tracked-p) "") ;; source icon 
+            ((ewhd-chezmoi-target-buffer-tracked-p) "") ;; target icon 
+            (t "-"))))
+      `(""
+        mode-line-modified
+        mode-line-client
+        mode-line-remote
+        ,chezmoi-indicator)))
+
+
+
+  (setq telephone-line-lhs
+        '((evil   . (ewhd-telephone-line-buffer-segment))
+          (accent . (telephone-line-vc-segment
+                     telephone-line-erc-modified-channels-segment
+                     telephone-line-process-segment
+                     ))
+          (nil    . (
+                     ;; telephone-line-simple-minor-mode-segment
+                     ;; telephone-line-buffer-segment
+                     ;; ewhd-modeline-buffer-name-segment
+                     ewhd-telephone-line-file-name-absolute-path-segment
+                     ))))
+  (setq telephone-line-rhs
+        '((nil    . (telephone-line-misc-info-segment))
+          (accent . (ewhd-telephone-line-major-mode-segment))
+          (evil   . (ewhd-telephone-line-airline-position-segment))))
+
+  (telephone-line-mode 1)
+  )
 
 
 ;;;; Theme:
