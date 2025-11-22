@@ -30,6 +30,7 @@
       next-error-message-highlight 'keep
       mouse-autoselect-window t
       focus-follows-mouse t
+      project-vc-extra-root-markers '(".project-root")  ; mark non-vc dirs as project roots
       )
 
 
