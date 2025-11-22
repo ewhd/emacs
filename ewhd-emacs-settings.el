@@ -108,8 +108,38 @@
 (setq show-paren-when-point-inside-paren nil
       show-paren-style 'mixed)
 
-;; Parentheses Pairing Behavior:
 
+;; Modeline
+;; (setq mode-line-format
+;;       '("%e" ;; Error message
+;;         ;; mode-line-front-space
+;;         " "
+;;         (:propertize
+;;          (""
+;;           mode-line-client
+;;           mode-line-modified
+;;           mode-line-remote
+;;           mode-line-window-dedicated)
+;;          display (min-width (5.0))
+;;          )
+;;         ;; " %b" ;; Buffer name
+;;         ;; " (%f)" ;; Full file path in parentheses
+;;         (:eval (if (buffer-file-name)
+;;                    (format "[%s]" (abbreviate-file-name (buffer-file-name)))
+;;                  (format "[%s]" (buffer-name))))
+;;         ;; " [%p]" ;; Percentage of buffer scrolled
+;;         " [%l:%c]" ;; Line and column number
+;;         "%M" ;; Major mode
+;;         mode-line-misc-info
+;;         ;; " %(" ;; Start of minor modes
+;;         ;; (:eval (propertize (mapconcat #'symbol-name minor-mode-list " ") 'face 'mode-line-highlight))
+;;         ;; ") " ;; End of minor modes
+;;         ;; " %s" ;; Process indicator
+;;         (vc-mode vc-mode)
+;;         ))
+
+
+;; Parentheses Pairing Behavior:
 (use-package electric
   :ensure nil
   :init
