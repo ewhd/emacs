@@ -244,7 +244,18 @@
 ;;; ibuffer
 (use-package ibuffer
   :ensure nil
-  :hook (ibuffer . ibuffer-auto-mode))
+  :hook (ibuffer . ibuffer-auto-mode)
+  :bind (:map ibuffer-mode-map
+              ("{" . ibuffer-backwards-next-marked)
+              ("}" . ibuffer-forward-next-marked)
+              ("[" . ibuffer-backward-filter-group)
+              ("]" . ibuffer-forward-filter-group)
+              ("$" . ibuffer-toggle-filter-group)
+              ("<double-mouse-1>" . ibuffer-visit-buffer)
+              ("M-<double-mouse-1>" . ibuffer-visit-buffer-other-window)
+              )
+  :config
+  )
 
 ;;;; dired config
 ;; check out http://xahlee.info/emacs/emacs/emacs_dired_tips.html
