@@ -120,7 +120,7 @@
 ;;   :ensure (:host github :repo "emacs-compat/compat" :main "compat.el")
 ;;   )
 
-
+;; Completion at point
 (use-package corfu
   :ensure t
   ;; :after compat
@@ -133,20 +133,20 @@
 
   ;; Enable indentation+completion using the TAB key.
   ;; `completion-at-point' is often bound to M-TAB.
-  (tab-always-indent 'complete)  ;; this basically just has tab doing what C-tab is set to do in the candidate overlay, i.e. completion-at-point
+  (tab-always-indent 'complete) ;; this basically just has tab doing what C-tab is set to do in the candidate overlay, i.e. completion-at-point
 
   
-  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-auto nil)                  ; disable auto completion so corfu-candidate-overlay can work
+  (corfu-cycle t)  ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto nil) ; disable auto completion so corfu-candidate-overlay can work
   ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-  (corfu-preselect 'prompt)      ;; Preselect the prompt
+  (corfu-preselect 'prompt) ;; Preselect the prompt
   (corfu-auto-prefix 2)
   (corfu-auto-delay 0.1)
   (corfu-popupinfo-delay '(0.5 . 0.2))
-  (corfu-preview-current 'insert) ; insert previewed candidate
-  (corfu-on-exact-match nil)      ; Don't auto expand tempel snippets
+  (corfu-preview-current 'insert)       ; insert previewed candidate
+  (corfu-on-exact-match nil)            ; Don't auto expand tempel snippets
   ;; Optionally use TAB for cycling, default is `corfu-complete'.
   :bind (:map corfu-map
               ("M-S-SPC"       . corfu-insert-separator)
@@ -154,7 +154,7 @@
               ("S-<backspace>" . corfu-previous)
               ("S-TAB"         . corfu-previous)
               ("S-<return>"    . corfu-insert)
-	      ("<right>"       . corfu-separator)
+              ("<right>"       . corfu-separator)
               ("RET"           . nil)
 	      ("<escape>"      . corfu-quit))
 
@@ -169,7 +169,7 @@
   :init
   (global-corfu-mode)
   (corfu-history-mode)
-  (corfu-popupinfo-mode) ; Popup completion info
+  (corfu-popupinfo-mode)                ; Popup completion info
   )
 
 (use-package corfu-candidate-overlay
