@@ -26,6 +26,7 @@
         org-shiftright
         org-yank
         paredit-delete-char
+        paredit-open-round
         paredit-semicolon
         query-replace
         tab-next
@@ -41,6 +42,7 @@
         org-mouse-down-mouse
         org-return-and-maybe-indent
         org-time-stamp-inactive
+        paredit-mode
         text-scale-decrease
         wdired--self-insert
         ))
