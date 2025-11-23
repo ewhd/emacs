@@ -28,17 +28,15 @@
   (keymap-set ibuffer-mode-map "F" #'casual-ibuffer-filter-tmenu)
   (keymap-set ibuffer-mode-map "s" #'casual-ibuffer-sortby-tmenu)
 
-  ;; add to ibuffer block
-
 
   ;; man casual config
-  (keymap-set Man-mode-map "C-c ?" #'casual-man-tmenu)
-  (keymap-set Man-mode-map "n" #'casual-lib-browse-forward-paragraph)
-  (keymap-set Man-mode-map "p" #'casual-lib-browse-backward-paragraph)
-  (keymap-set Man-mode-map "[" #'Man-previous-section)
-  (keymap-set Man-mode-map "]" #'Man-next-section)
-  (keymap-set Man-mode-map "j" #'next-line)
-  (keymap-set Man-mode-map "k" #'previous-line)
-  (keymap-set Man-mode-map "K" #'Man-kill)
-  (keymap-set Man-mode-map "o" #'casual-man-occur-options)
+  ;; (keymap-set Man-mode-map "C-c ?" #'casual-man-tmenu)
+  ;; (keymap-set Man-mode-map "n" #'casual-lib-browse-forward-paragraph)
+  ;; (keymap-set Man-mode-map "p" #'casual-lib-browse-backward-paragraph)
+  ;; (keymap-set Man-mode-map "[" #'Man-previous-section)
+  ;; (keymap-set Man-mode-map "]" #'Man-next-section)
+  ;; (keymap-set Man-mode-map "j" #'next-line)
+  ;; (keymap-set Man-mode-map "k" #'previous-line)
+  ;; (keymap-set Man-mode-map "K" #'Man-kill)
+  ;; (keymap-set Man-mode-map "o" #'casual-man-occur-options)
   )
