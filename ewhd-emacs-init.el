@@ -31,3 +31,6 @@
 
 ;; IDE settings (in progress)
 (load (locate-user-emacs-file "ewhd-emacs-ide.el") nil :nomessage)
+
+;; Work in progress
+(load (locate-user-emacs-file "ewhd-emacs-wip.el") nil :nomessage)

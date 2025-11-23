@@ -6,12 +6,13 @@
 
 
 ;; bufler
-;; (use-package bufler
-;;   :ensure (bufler :fetcher github :repo "alphapapa/bufler.el"
-;;                   :files (:defaults (:exclude "helm-bufler.el")))
-;;   :config
-;;   (setq bufler-column-Path-max-width 80)
-;;   )
+(use-package bufler
+  :ensure t
+  ;; (bufler :fetcher github :repo "alphapapa/bufler.el"
+  ;; :files (:defaults (:exclude "helm-bufler.el")))
+  :config
+  (setq bufler-column-Path-max-width 80)
+  )
 
 
 ;; yaml-mode
@@ -65,9 +66,26 @@
 
 ;;;; Pretty icons
 ;; must run M-x all-the-icons-install-fonts to install fonts per machine
-(use-package all-the-icons
+;; (use-package all-the-icons
+;;   :ensure t
+;;   :if (display-graphic-p))
+
+(use-package nerd-icons
+  :ensure t)
+
+(use-package nerd-icons-dired
   :ensure t
-  :if (display-graphic-p))
+  :hook (dired-mode . nerd-icons-dired-mode))
+
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
+(use-package nerd-icons-completion
+  :ensure t
+  :hook ((vertico-mode . nerd-icons-completion-mode)
+         (ivy-mode . nerd-icons-completion-mode)
+         (helm-mode . nerd-icons-completion-mode)))
 
 
 ;;;; Source Control:
@@ -76,8 +94,14 @@
   :ensure t)
 
 ;; Magit:
+(use-package ov.el
+  ;; Needed for magit-log date headers, by alphapapa
+  ;; If I ever use it for anything else I'll move it elsewhere in the config
+  :ensure t
+  )
+
 (use-package magit
-  :after transient
+  :after (transient ov)
   :ensure t
   :bind (("C-x g" . magit))
   :config
@@ -103,7 +127,50 @@
   
   (transient-append-suffix 'magit-branch "C"
     '("K" "delete all merged" ewhd-delete-merged-branches))  
-  )
+  
+
+  (defun unpackaged/magit-log--add-date-headers (&rest _ignore)
+    "Add date headers to Magit log buffers."
+    (when (derived-mode-p 'magit-log-mode)
+      (save-excursion
+        (ov-clear 'date-header t)
+        (goto-char (point-min))
+        (cl-loop with last-age
+                 for this-age = (-some--> (ov-in 'before-string 'any (line-beginning-position) (line-end-position))
+                                  car
+                                  (overlay-get it 'before-string)
+                                  (get-text-property 0 'display it)
+                                  cadr
+                                  (s-match (rx (group (1+ digit) ; number
+                                                      " "
+                                                      (1+ (not blank))) ; unit
+                                               (1+ blank) eos)
+                                           it)
+                                  cadr)
+                 do (when (and this-age
+                               (not (equal this-age last-age)))
+                      (ov (line-beginning-position) (line-beginning-position)
+                          'after-string (propertize (concat " " this-age "\n")
+                                                    'face 'magit-section-heading)
+                          'date-header t)
+                      (setq last-age this-age))
+                 do (forward-line 1)
+                 until (eobp)))))
+
+  (define-minor-mode unpackaged/magit-log-date-headers-mode
+    "Display date/time headers in `magit-log' buffers."
+    :global t
+    (if unpackaged/magit-log-date-headers-mode
+        (progn
+          ;; Enable mode
+          (add-hook 'magit-post-refresh-hook #'unpackaged/magit-log--add-date-headers)
+          (advice-add #'magit-setup-buffer-internal :after #'unpackaged/magit-log--add-date-headers))
+      ;; Disable mode
+      (remove-hook 'magit-post-refresh-hook #'unpackaged/magit-log--add-date-headers)
+      (advice-remove #'magit-setup-buffer-internal #'unpackaged/magit-log--add-date-headers))
+
+    (unpackaged/magit-log-date-headers-mode 1)))
+
 
 ;; Chezmoi
 (use-package chezmoi
@@ -431,7 +498,133 @@
 (use-package delight
 					;  :delight (org-indent-mode) ; This belongs in org section
   )
-;(elpaca-wait) ; I'm unsure if this is needed
+                                        ;(elpaca-wait) ; I'm unsure if this is needed
+
+;; telephone-line
+(use-package telephone-line
+  :config
+  (telephone-line-defsegment* ewhd-telephone-line-file-name-absolute-path-segment ()
+    (propertize
+     (if (buffer-file-name)
+         (abbreviate-file-name (buffer-file-name))
+       (buffer-name))
+     'face 'mode-line-buffer-id))
+
+  (telephone-line-defsegment* ewhd-telephone-line-major-mode-segment ()
+    (cond
+     ((eq major-mode 'emacs-lisp-mode) "λ")
+     ((eq major-mode 'dired-mode) " ")
+     ((eq major-mode 'help-mode) "")
+     ((eq major-mode 'python-mode) "")
+     ((eq major-mode 'sh-mode) "")
+     ((eq major-mode 'lisp-mode) "")
+     (t mode-name))) ;; fallback to normal mode-name
+
+  (defface ewhd-mode-line-custom-face
+    '((t (
+          :foreground "red"
+          :background nil
+          :inherit nil)))
+    "Custom modeline face")
+
+  ;; (telephone-line-defsegment* ewhd-telephone-line-airline-position-segment ()
+  ;;   (eval (propertize "%l:%c" 'face 'mode-line-custom-face)))
+
+  ;; (telephone-line-defsegment* ewhd-telephone-line-airline-position-segment ()
+  ;;   " %l:%c")
+  (telephone-line-defsegment* ewhd-telephone-line-airline-position-segment ()
+    ;; (let ((current (line-number-at-pos))  ; causes lag to line/column number update
+    ;;       (total   (line-number-at-pos (point-max)))
+    ;;       (column  (current-column)))
+    ;;   (format "%d/%d:%d" current total column))
+    "%l:%c"
+    )
+
+  ;; --- Cache variables ---
+  (defvar ewhd-chezmoi--source-files-cache nil
+    "Cached list of absolute paths to chezmoi source files.")
+
+  (defvar ewhd-chezmoi--target-files-cache nil
+    "Cached list of absolute paths to chezmoi target files.")
+
+  (defvar ewhd-chezmoi--cache-timestamp 0
+    "Time (in seconds) when the chezmoi file cache was last updated.")
+
+  (defvar ewhd-chezmoi--cache-ttl 300
+    "Time-to-live (seconds) for the chezmoi file cache. Refresh after this interval.")
+
+  (defface ewhd-chezmoi-source-face
+    '((t :foreground "#61AFEF" :weight bold))
+    "Face for chezmoi source files in the modeline.")
+
+  (defface ewhd-chezmoi-target-face
+    '((t :foreground "#98C379" :weight bold))
+    "Face for chezmoi target files in the modeline.")
+
+  (defun ewhd-chezmoi--refresh-cache ()
+    "Refresh cached lists of source and target files."
+    (setq ewhd-chezmoi--source-files-cache
+          (split-string
+           (shell-command-to-string "chezmoi managed -p source-absolute")
+           "\n" t))
+    (setq ewhd-chezmoi--target-files-cache
+          (split-string
+           (shell-command-to-string "chezmoi managed -p absolute")
+           "\n" t))
+    (setq ewhd-chezmoi--cache-timestamp (float-time)))
+
+  (defun ewhd-chezmoi--ensure-cache ()
+    "Ensure the cache is fresh, refresh if older than TTL."
+    (when (> (- (float-time) ewhd-chezmoi--cache-timestamp) ewhd-chezmoi--cache-ttl)
+      (ewhd-chezmoi--refresh-cache)))
+
+  ;; --- Buffer check functions ---
+  (defun ewhd-chezmoi-source-buffer-tracked-p ()
+    "Return non-nil if the current buffer's file is a chezmoi source file."
+    (ewhd-chezmoi--ensure-cache)
+    (and buffer-file-name
+         (member buffer-file-name ewhd-chezmoi--source-files-cache)))
+
+  (defun ewhd-chezmoi-target-buffer-tracked-p ()
+    "Return non-nil if the current buffer's file is a chezmoi target file."
+    (ewhd-chezmoi--ensure-cache)
+    (and buffer-file-name
+         (member buffer-file-name ewhd-chezmoi--target-files-cache)))
+
+  (telephone-line-defsegment* ewhd-telephone-line-buffer-segment ()
+    "Display buffer info with a chezmoi indicator if relevant."
+    (let ((chezmoi-indicator
+           (cond
+            ((ewhd-chezmoi-source-buffer-tracked-p) "") ;; source icon 
+            ((ewhd-chezmoi-target-buffer-tracked-p) "") ;; target icon 
+            (t "-"))))
+      `(""
+        mode-line-modified
+        mode-line-client
+        mode-line-remote
+        ,chezmoi-indicator)))
+
+
+
+  (setq telephone-line-lhs
+        '((evil   . (ewhd-telephone-line-buffer-segment))
+          (accent . (telephone-line-vc-segment
+                     telephone-line-erc-modified-channels-segment
+                     telephone-line-process-segment
+                     ))
+          (nil    . (
+                     ;; telephone-line-simple-minor-mode-segment
+                     ;; telephone-line-buffer-segment
+                     ;; ewhd-modeline-buffer-name-segment
+                     ewhd-telephone-line-file-name-absolute-path-segment
+                     ))))
+  (setq telephone-line-rhs
+        '((nil    . (telephone-line-misc-info-segment))
+          (accent . (ewhd-telephone-line-major-mode-segment))
+          (evil   . (ewhd-telephone-line-airline-position-segment))))
+
+  (telephone-line-mode 1)
+  )
 
 
 ;;;; Theme:
@@ -939,5 +1132,36 @@
   (setq markdown-live-preview-delete-export 'delete-on-export)
   )
 
+;;; AI integration
+(use-package gptel
+  :ensure t
+  :commands (gptel)
+  :init
+  ;; Default model for most queries
+  (setq gptel-default-model "gpt-4o-mini")
+  ;; Optional: set a fallback model
+  (setq gptel-fallback-model "gpt-3.5-turbo")
+  ;; Fetch API key securely from auth-source
+  (setq gptel-api-key
+        (auth-source-pick-first-password
+         :host "api.openai.com" :user 'emacs :port nil))
+  :config
+  ;; Keybinding to open GPTel quickly
+  (global-set-key (kbd "C-c a") 'gptel)
+
+  ;; Function to send selected region to GPTel
+  (defun ewhd-gptel-region (start end)
+    "Send the active region to GPTel and show the response in a new buffer."
+    (interactive "r")
+    (let ((prompt (buffer-substring-no-properties start end)))
+      (gptel prompt)))
+  ;; Optional: switch model quickly in an active GPTel buffer
+  (defun ewhd-gptel-set-model (model)
+    "Set the GPTel model in the current buffer."
+    (interactive
+     (list (completing-read "Model: " '("gpt-4o-mini" "gpt-4" "gpt-3.5-turbo"))))
+    (setq-local gptel-default-model model)
+    (message "GPTel model set to %s" model))
+  )
 
 ;;End

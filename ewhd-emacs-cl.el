@@ -21,14 +21,23 @@
           lisp-mode
           lisp-interaction-mode
           ielm-mode
-          eval-expression-minibuffer-setup
+          ;; eval-expression-minibuffer-setup ;; interferes with eval-expression in the minibuffer
           slime-repl-mode) . enable-paredit-mode)
+  :bind
+  (:map paredit-mode-map
+        ("C-M-<left>" . paredit-backward)
+        ("C-M-<right>" . paredit-forward))
   :config
   ;; Override SLIME REPL backward-delete to play nicely with paredit
   (defun ewhd-override-slime-del-key ()
     (define-key slime-repl-mode-map
-		(read-kbd-macro paredit-backward-delete-key) nil))
-  (add-hook 'slime-repl-mode-hook #'ewhd-override-slime-del-key))
+	        (read-kbd-macro paredit-backward-delete-key) nil))
+  (add-hook 'slime-repl-mode-hook #'ewhd-override-slime-del-key)
+  (with-eval-after-load 'paredit
+    (define-key paredit-mode-map (kbd "C-<left>") nil)
+    (define-key paredit-mode-map (kbd "C-<right>") nil)
+    )
+  )
 
 ;; Rainbow Delimiters
 (use-package rainbow-delimiters

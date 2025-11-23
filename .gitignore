@@ -65,3 +65,10 @@ flycheck_*.el
 /transient/
 /tree-sitter/
 /history
+
+# autogen files:
+recentf
+.persistent-scratch
+
+# project.el designation file
+.project-root

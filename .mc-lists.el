@@ -5,13 +5,19 @@
       '(
         beginning-of-visual-line
         comment-line
+<<<<<<< HEAD
         electric-newline-and-maybe-indent
+=======
+>>>>>>> d633b89d7a31d46456a5e35d253f3455f7421c0e
         electric-pair-delete-pair
         end-of-visual-line
         eval-last-sexp
         indent-for-tab-command
         kill-region
+<<<<<<< HEAD
         kill-visual-line
+=======
+>>>>>>> d633b89d7a31d46456a5e35d253f3455f7421c0e
         multiple-cursors-mode
         org-beginning-of-line
         org-ctrl-c-ctrl-c
@@ -27,6 +33,7 @@
         org-shiftleft
         org-shiftright
         org-yank
+<<<<<<< HEAD
         query-replace
         tab-next
         text-scale-increase
@@ -35,6 +42,15 @@
         xah-toggle-letter-case
         yaml-electric-backspace
         yaml-electric-dash-and-dot
+=======
+        paredit-delete-char
+        paredit-open-round
+        paredit-semicolon
+        query-replace
+        tab-next
+        text-scale-increase
+        xah-toggle-letter-case
+>>>>>>> d633b89d7a31d46456a5e35d253f3455f7421c0e
         zap-up-to-char
         ))
 
@@ -42,9 +58,18 @@
       '(
         end-of-buffer
         ignore
+<<<<<<< HEAD
         mouse-set-region
         org-mouse-down-mouse
         org-return-and-maybe-indent
         org-time-stamp-inactive
         text-scale-decrease
+=======
+        org-mouse-down-mouse
+        org-return-and-maybe-indent
+        org-time-stamp-inactive
+        paredit-mode
+        text-scale-decrease
+        wdired--self-insert
+>>>>>>> d633b89d7a31d46456a5e35d253f3455f7421c0e
         ))

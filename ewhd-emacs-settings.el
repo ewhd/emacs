@@ -28,6 +28,9 @@
       calendar-week-start-day 6
       set-mark-command-repeat-pop t
       next-error-message-highlight 'keep
+      mouse-autoselect-window t
+      focus-follows-mouse t
+      project-vc-extra-root-markers '(".project-root")  ; mark non-vc dirs as project roots
       )
 
 
@@ -40,45 +43,38 @@
 (delete-selection-mode 1)               ; Replace region when inserting text
 (recentf-mode 1)
 
+
+;; Set Font
+(when (display-graphic-p)  ;; Only for GUI Emacs
+  ;; Automatically pick a JetBrains Nerd Font if installed
+  (let* ((candidates '("JetBrainsMono Nerd Font"
+                       "JetBrains Mono Nerd Font"
+                       "JetBrainsMono NF"))
+         (found-font (seq-find #'(lambda (f)
+                                   (member f (font-family-list)))
+                               candidates)))
+    (when found-font
+      (set-frame-font (format "%s-11" found-font) nil t))))
+
+
+
 ;; Desktop
-(setq  desktop-dirname "~/.cache"       ; set /before/ enabling desktop mode
-       desktop-buffers-not-to-save '("*Messages*"
-				     "*scratch*"
-				     "*Help*"
-				     "*info*"
-				     "*compilation*"
-				     "*eww*")
-       desktop-path (list desktop-dirname)
+(setq desktop-dirname "~/.cache"        ; set /before/ enabling desktop mode
+      desktop-buffers-not-to-save '("*Messages*"
+				    "*scratch*"
+				    "*Help*"
+				    "*info*"
+				    "*compilation*"
+				    "*eww*")
+      desktop-path (list desktop-dirname)
 					; ensures Emacs uses this path for
 					; desktop files -- emacs won't seem to
 					; look in desktop-dirname without this
 					; line
-       desktop-auto-save-timeout 10 
-       desktop-save t                   ; always save
-       )
+      desktop-auto-save-timeout 10 
+      desktop-save t                    ; always save
+      )
 (desktop-save-mode 1)
-
-;; Make #+... tags look nicer
-(setq-default prettify-symbols-alist
-	      (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-		      '(("#+begin_src" . ?)
-			("#+end_src" . ?)
-			;; ("#+begin_src" . "λ")
-			("#+begin_example" . ?)
-			("#+end_example"   . ?)
-			("#+begin_quote"   . ?)
-			("#+end_quote"     . ?)
-			("#+begin_comment" . ?)
-			("#+end_comment"   . ?)
-			("#+header:"       . ?)
-			;; ("#+name:"         . ?﮸)
-			("#+results:"      . ?)
-			("#+call:"         . ?)
-			(":properties:"    . ?)
-			(":logbook:"       . ?)
-			)))
-(add-hook 'org-mode-hook 'prettify-symbols-mode)
-
 
 
 ;;; Revert Buffer Behavior:
@@ -113,8 +109,38 @@
 (setq show-paren-when-point-inside-paren nil
       show-paren-style 'mixed)
 
-;; Parentheses Pairing Behavior:
 
+;; Modeline
+;; (setq mode-line-format
+;;       '("%e" ;; Error message
+;;         ;; mode-line-front-space
+;;         " "
+;;         (:propertize
+;;          (""
+;;           mode-line-client
+;;           mode-line-modified
+;;           mode-line-remote
+;;           mode-line-window-dedicated)
+;;          display (min-width (5.0))
+;;          )
+;;         ;; " %b" ;; Buffer name
+;;         ;; " (%f)" ;; Full file path in parentheses
+;;         (:eval (if (buffer-file-name)
+;;                    (format "[%s]" (abbreviate-file-name (buffer-file-name)))
+;;                  (format "[%s]" (buffer-name))))
+;;         ;; " [%p]" ;; Percentage of buffer scrolled
+;;         " [%l:%c]" ;; Line and column number
+;;         "%M" ;; Major mode
+;;         mode-line-misc-info
+;;         ;; " %(" ;; Start of minor modes
+;;         ;; (:eval (propertize (mapconcat #'symbol-name minor-mode-list " ") 'face 'mode-line-highlight))
+;;         ;; ") " ;; End of minor modes
+;;         ;; " %s" ;; Process indicator
+;;         (vc-mode vc-mode)
+;;         ))
+
+
+;; Parentheses Pairing Behavior:
 (use-package electric
   :ensure nil
   :init
@@ -208,6 +234,28 @@
 (define-key ctl-t-map (kbd "b")       'tab-bar-history-back)
 (define-key ctl-t-map (kbd "f")       'tab-bar-history-forward)
 
+;;; Manage Secrets
+(use-package auth-source
+  :ensure nil
+  :config
+  (auth-source-pass-enable)
+  )
+
+;;; ibuffer
+(use-package ibuffer
+  :ensure nil
+  :hook (ibuffer . ibuffer-auto-mode)
+  :bind (:map ibuffer-mode-map
+              ("{" . ibuffer-backwards-next-marked)
+              ("}" . ibuffer-forward-next-marked)
+              ("[" . ibuffer-backward-filter-group)
+              ("]" . ibuffer-forward-filter-group)
+              ("$" . ibuffer-toggle-filter-group)
+              ("<double-mouse-1>" . ibuffer-visit-buffer)
+              ("M-<double-mouse-1>" . ibuffer-visit-buffer-other-window)
+              )
+  :config
+  )
 
 ;;;; dired config
 ;; check out http://xahlee.info/emacs/emacs/emacs_dired_tips.html
