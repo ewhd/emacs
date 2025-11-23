@@ -517,7 +517,7 @@
      ((eq major-mode 'help-mode) "")
      ((eq major-mode 'python-mode) "")
      ((eq major-mode 'sh-mode) "")
-     ((eq major-mode 'prog-mode) "󱆃")
+     ((eq major-mode 'lisp-mode) "")
      (t mode-name))) ;; fallback to normal mode-name
 
   (defface ewhd-mode-line-custom-face
