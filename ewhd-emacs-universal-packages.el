@@ -94,7 +94,7 @@
   :ensure t)
 
 ;; Magit:
-(use-package ov.el
+(use-package ov
   ;; Needed for magit-log date headers, by alphapapa
   ;; If I ever use it for anything else I'll move it elsewhere in the config
   :ensure t
