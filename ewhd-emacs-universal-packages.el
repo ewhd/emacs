@@ -1135,6 +1135,7 @@
 ;;; AI integration
 (use-package gptel
   :ensure t
+  :defer t
   :commands (gptel)
   :init
   ;; Default model for most queries
