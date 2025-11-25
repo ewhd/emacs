@@ -4,6 +4,9 @@
 (use-package transient
   :ensure t)
 
+;; Fuzzy-find and then preview fonts
+(use-package show-font
+  :ensure t)
 
 ;; bufler
 (use-package bufler

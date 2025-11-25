@@ -45,16 +45,18 @@
 
 
 ;; Set Font
-(when (display-graphic-p)  ;; Only for GUI Emacs
-  ;; Automatically pick a JetBrains Nerd Font if installed
-  (let* ((candidates '("JetBrainsMono Nerd Font"
-                       "JetBrains Mono Nerd Font"
-                       "JetBrainsMono NF"))
-         (found-font (seq-find #'(lambda (f)
-                                   (member f (font-family-list)))
-                               candidates)))
-    (when found-font
-      (set-frame-font (format "%s-11" found-font) nil t))))
+(defun font-available-p (font-name)
+  (find-font (font-spec :name font-name)))
+
+(when (window-system)
+  (cond
+   ((font-available-p "Iosevka Nerd Font Mono")
+    (set-frame-font "Iosevka Nerd Font Mono-12.5"))
+   ((font-available-p "JetBrainsMono Nerd Font")
+    (set-frame-font "JetBrainsMono Nerd Font-11"))
+   ((font-available-p "Noto Sans Mono")
+    (set-frame-font "Noto Sans Mono-11"))
+   ))
 
 
 
