@@ -461,23 +461,35 @@
 
 
 ;; activities
-(use-package activities
-  :init
-  (activities-mode)
-  ;; (activities-tabs-mode)  # this will activate tab-bar-mode
-  ;; Prevent `edebug' default bindings from interfering.
-  (setq edebug-inhibit-emacs-lisp-mode-bindings t)
-
-  :bind
-  (("C-x C-a C-n" . activities-new)
-   ("C-x C-a C-d" . activities-define)
-   ("C-x C-a C-a" . activities-resume)
-   ("C-x C-a C-s" . activities-suspend)
-   ("C-x C-a C-k" . activities-kill)
-   ("C-x C-a RET" . activities-switch)
-   ("C-x C-a b" . activities-switch-buffer)
-   ("C-x C-a g" . activities-revert)
-   ("C-x C-a l" . activities-list)))
+;; This covers why I don't use this:
+;; https://github.com/alphapapa/activities.el/issues/46
+;; (use-package activities
+;;   :init
+;;   (activities-mode)
+;;   (activities-tabs-mode)  ; this will activate tab-bar-mode
+;;   ;; Prevent `edebug' default bindings from interfering.
+;;   (setq edebug-inhibit-emacs-lisp-mode-bindings t)
+;;   :custom
+;;   (activities-bookmark-store t)
+;;   :bind
+;;   (("C-x C-a C-n" . activities-new)
+;;    ("C-x C-a C-d" . activities-define)
+;;    ("C-x C-a C-a" . activities-resume)
+;;    ("C-x C-a C-s" . activities-suspend)
+;;    ("C-x C-a C-k" . activities-kill)
+;;    ("C-x C-a RET" . activities-switch)
+;;    ("C-x C-a b" . activities-switch-buffer)
+;;    ("C-x C-a g" . activities-revert)
+;;    ("C-x C-a l" . activities-list))
+;;   :config
+;;   ;; Example: Define an activity for a project
+;;   (activities-define 'notes
+;;                      :setup (lambda ()
+;;                               (find-file "~/Documents/tmpnote.org")
+;;                               (split-window-right)
+;;                               (find-dired "~/Documents/notes")
+;;                               ))
+;;   )
 
 ;; Olivetti
 ;; https://emacs.stackexchange.com/a/47989/43990
