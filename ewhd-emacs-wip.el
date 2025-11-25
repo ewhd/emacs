@@ -154,3 +154,54 @@
 ;;   ;; loads mode-line-misc-string. This might be helpful to implementing
 ;;   ;; modeline support for persp-mode
 ;;   )
+
+
+
+
+(use-package tabspaces
+  :ensure t
+  :init
+  (setq tab-bar-show t) ; needed to make tabs-bar visible, I think?
+  (setq tabspaces-keymap-prefix (kbd "C-x x"))
+  (tabspaces-mode 1)
+  :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
+  ;; :commands (tabspaces-switch-or-create-workspace
+  ;;            tabspaces-open-or-create-project-and-workspace)
+
+  ;; (use-package tabspaces
+  ;;   :ensure t
+  ;;   :init (setq tabspaces-keymap-prefix (kbd "C-x x"))
+  ;;   :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
+  ;;   ;; :commands (tabspaces-switch-or-create-workspace
+  ;;   ;; tabspaces-open-or-create-project-and-workspace)
+  :custom
+  (tabspaces-use-filtered-buffers-as-default t)
+  (tabspaces-default-tab "Default")
+  (tabspaces-remove-to-default t)
+  (tabspaces-include-buffers '("*scratch*"))
+  (tabspaces-initialize-project-with-todo t)
+  (tabspaces-todo-file-name "project-todo.org")
+  ;; sessions
+  (tabspaces-session t)
+  (tabspaces-session-auto-restore t)
+  ;; additional options
+  (tabspaces-fully-resolve-paths t) ; Resolve relative project paths to absolute
+  (tabspaces-exclude-buffers '("*Messages*" "*Compile-Log*")) ; Additional buffers to exclude
+  (tab-bar-new-tab-choice "*scratch*")
+  :config
+  (defvar tabspaces-command-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map (kbd "C") 'tabspaces-clear-buffers)
+      ;; (define-key map (kbd "b") 'tabspaces-switch-to-buffer)
+      (define-key map (kbd "d") 'tabspaces-close-workspace)
+      (define-key map (kbd "k") 'tabspaces-kill-buffers-close-workspace)
+      (define-key map (kbd "o") 'tabspaces-open-or-create-project-and-workspace)
+      (define-key map (kbd "r") 'tabspaces-remove-current-buffer)
+      (define-key map (kbd "R") 'tabspaces-remove-selected-buffer)
+      (define-key map (kbd "s") 'tabspaces-switch-or-create-workspace)
+      (define-key map (kbd "t") 'tabspaces-switch-buffer-and-tab)
+      (define-key map (kbd "w") 'tabspaces-show-workspaces)
+      (define-key map (kbd "T") 'tabspaces-toggle-echo-area-display)
+      map)
+    "Keymap for tabspace/workspace commands after `tabspaces-keymap-prefix'.")
+  )
