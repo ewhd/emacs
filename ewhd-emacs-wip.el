@@ -76,11 +76,13 @@
 
 (use-package perspective
   :ensure t
+  :disable t
   :bind
   ;; ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
   :custom
   (persp-mode-prefix-key (kbd "C-x x")) ; pick your own prefix key here
   (persp-state-default-file "~/.cache/emacs/perspective-save")
+  (persp-load)
   :init
   (persp-mode)
   :bind
@@ -93,9 +95,9 @@
         (lambda (win buff bury-or-kill)
           (not (persp-is-current-buffer buff))))
 
-  ;; ;; play nice with consult
-  ;; (consult-customize consult--source-buffer :hidden t :default nil)
-  ;; (add-to-list 'consult-buffer-sources persp-consult-source)
+  ;; play nice with consult
+  (consult-customize consult--source-buffer :hidden t :default nil)
+  (add-to-list 'consult-buffer-sources persp-consult-source)
 
   ;; persp-ibuffer
   (add-hook 'ibuffer-hook
