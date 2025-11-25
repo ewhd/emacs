@@ -61,3 +61,25 @@
       (save-selected-window
         (other-window 1)
         (switch-to-buffer (other-buffer))))))
+
+
+
+(use-package perspective
+  :ensure t
+  :bind
+  ;; ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
+  :custom
+  (persp-mode-prefix-key (kbd "C-c C-p"))  ; pick your own prefix key here
+  :init
+  (persp-mode)
+  :config
+  ;; previous-buffer and next-buffer can be made Perspective-aware using the
+  ;; switch-to-prev-buffer-skip variable as follows:
+  (setq switch-to-prev-buffer-skip
+        (lambda (win buff bury-or-kill)
+          (not (persp-is-current-buffer buff))))
+
+  ;; play nice with consult
+  (consult-customize consult--source-buffer :hidden t :default nil)
+  (add-to-list 'consult-buffer-sources persp-consult-source)
+  )

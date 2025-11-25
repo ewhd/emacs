@@ -59,22 +59,22 @@
 
 
 ;; Desktop
-(setq desktop-dirname "~/.cache"        ; set /before/ enabling desktop mode
-      desktop-buffers-not-to-save '("*Messages*"
-				    "*scratch*"
-				    "*Help*"
-				    "*info*"
-				    "*compilation*"
-				    "*eww*")
-      desktop-path (list desktop-dirname)
-					; ensures Emacs uses this path for
-					; desktop files -- emacs won't seem to
-					; look in desktop-dirname without this
-					; line
-      desktop-auto-save-timeout 10 
-      desktop-save t                    ; always save
-      )
-(desktop-save-mode 1)
+;; (setq desktop-dirname "~/.cache"        ; set /before/ enabling desktop mode
+;;       desktop-buffers-not-to-save '("*Messages*"
+;; 				    "*scratch*"
+;; 				    "*Help*"
+;; 				    "*info*"
+;; 				    "*compilation*"
+;; 				    "*eww*")
+;;       desktop-path (list desktop-dirname)
+;; 					; ensures Emacs uses this path for
+;; 					; desktop files -- emacs won't seem to
+;; 					; look in desktop-dirname without this
+;; 					; line
+;;       desktop-auto-save-timeout 10
+;;       desktop-save t                    ; always save
+;;       )
+;; (desktop-save-mode 1)
 
 
 ;;; Revert Buffer Behavior:
