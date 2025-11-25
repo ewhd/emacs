@@ -16,20 +16,19 @@
          ;; ("C-c ?" . casual-ibuffer-tmenu)
          ;; ("F" . casual-ibuffer-filter-tmenu)
          ;; ("s" . casual-ibuffer-sortby-tmenu)
-         :map Man-mode-map
-         ("C-c ?" . casual-man-tmenu)
-         ("n" . casual-lib-browse-forward-paragraph)
-         ("p" . casual-lib-browse-backward-paragraph)
-         ("[" . Man-previous-section)
-         ("]" . Man-next-section)
-         ("j" . next-line)
-         ("k" . previous-line)
-         ("K" . Man-kill)
-         ("o" . casual-man-occur-options)
+         ;; :map Man-mode-map
+         ;; ("C-c ?" . casual-man-tmenu)
+         ;; ("n" . casual-lib-browse-forward-paragraph)
+         ;; ("p" . casual-lib-browse-backward-paragraph)
+         ;; ("[" . Man-previous-section)
+         ;; ("]" . Man-next-section)
+         ;; ("j" . next-line)
+         ;; ("k" . previous-line)
+         ;; ("K" . Man-kill)
+         ;; ("o" . casual-man-occur-optsions)
          )
   :hook
   (ibuffer-mode . ewhd-ibuffer-keys)
-  (Man-mode . ewhd-Man-keys)
   :config
   ;; dired ediff config
   (casual-ediff-install) ; run this to enable Casual Ediff
