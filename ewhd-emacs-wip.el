@@ -1,44 +1,49 @@
 ;; ewhd emacs work in progress -*- lexical-binding: t; -*-
 
 (use-package casual
-  :ensure t
-  :config
-  ;;dired casual config
-  (keymap-set dired-mode-map "C-c ?" #'casual-dired-tmenu)
-  (keymap-set dired-mode-map "s" #'casual-dired-sort-by-tmenu)
-  (keymap-set dired-mode-map "/" #'casual-dired-search-replace-tmenu)
 
+  :ensure t
+  :bind (
+         :map dired-mode-map
+         ("C-c ?" . casual-dired-tmenu)
+         ("s"     . casual-dired-sort-by-tmenu)
+         ("/"     . casual-dired-search-replace-tmenu)
+         :map emacs-lisp-mode-map
+         ("C-c ?" . casual-elisp-tmenu)
+         :map help-mode-map
+         ("C-c ?" . casual-help-tmenu)
+         ;; :map ibuffer-mode-map
+         ;; ("C-c ?" . casual-ibuffer-tmenu)
+         ;; ("F" . casual-ibuffer-filter-tmenu)
+         ;; ("s" . casual-ibuffer-sortby-tmenu)
+         :map Man-mode-map
+         ("C-c ?" . casual-man-tmenu)
+         ("n" . casual-lib-browse-forward-paragraph)
+         ("p" . casual-lib-browse-backward-paragraph)
+         ("[" . Man-previous-section)
+         ("]" . Man-next-section)
+         ("j" . next-line)
+         ("k" . previous-line)
+         ("K" . Man-kill)
+         ("o" . casual-man-occur-options)
+         )
+  :hook
+  (ibuffer-mode . ewhd-ibuffer-keys)
+  (Man-mode . ewhd-Man-keys)
+  :config
   ;; dired ediff config
   (casual-ediff-install) ; run this to enable Casual Ediff
   (add-hook 'ediff-keymap-setup-hook
             (lambda ()
               (keymap-set ediff-mode-map "C-c ?" #'casual-ediff-tmenu)))
 
-  ;; elisp casual config
-  (keymap-set emacs-lisp-mode-map "C-c ?" #'casual-elisp-tmenu)
-
-  ;; eshell casual config
-  ;; (keymap-set eshell-mode-map "C-c ?" #'casual-eshell-tmenu)
-
-  ;; help casual config
-  (keymap-set help-mode-map "C-c ?" #'casual-help-tmenu)
-
-  ;;ibuffer casual config
-  (keymap-set ibuffer-mode-map "C-c ?" #'casual-ibuffer-tmenu)
-  (keymap-set ibuffer-mode-map "F" #'casual-ibuffer-filter-tmenu)
-  (keymap-set ibuffer-mode-map "s" #'casual-ibuffer-sortby-tmenu)
-
-
-  ;; man casual config
-  ;; (keymap-set Man-mode-map "C-c ?" #'casual-man-tmenu)
-  ;; (keymap-set Man-mode-map "n" #'casual-lib-browse-forward-paragraph)
-  ;; (keymap-set Man-mode-map "p" #'casual-lib-browse-backward-paragraph)
-  ;; (keymap-set Man-mode-map "[" #'Man-previous-section)
-  ;; (keymap-set Man-mode-map "]" #'Man-next-section)
-  ;; (keymap-set Man-mode-map "j" #'next-line)
-  ;; (keymap-set Man-mode-map "k" #'previous-line)
-  ;; (keymap-set Man-mode-map "K" #'Man-kill)
-  ;; (keymap-set Man-mode-map "o" #'casual-man-occur-options)
+  ;; keymap load hooked to ibuffer, since ibuffer-mode-map doesn't exist until
+  ;; ibuffer is loaded for the first time
+  (defun ewhd-ibuffer-keys ()
+    (keymap-set ibuffer-mode-map "C-c ?" #'casual-ibuffer-tmenu)
+    (keymap-set ibuffer-mode-map "F" #'casual-ibuffer-filter-tmenu)
+    (keymap-set ibuffer-mode-map "s" #'casual-ibuffer-sortby-tmenu)
+    )
   )
 
 
