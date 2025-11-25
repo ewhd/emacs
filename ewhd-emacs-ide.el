@@ -56,7 +56,7 @@
   )
 
 (use-package combobulate
-  :ensure (combobulate :host "github" :repo "mickeynp/combobulate")
+  :ensure (combobulate :host "github.com" :repo "mickeynp/combobulate")
   :requires treesit
   :custom
   ;; You can customize Combobulate's key prefix here.
