@@ -244,7 +244,24 @@
 ;;; ibuffer
 (use-package ibuffer
   :ensure nil
-  :hook (ibuffer . ibuffer-auto-mode)
+  :custom
+  (ibuffer-display-summary t)
+  (ibuffer-use-other-window nil)
+  (ibuffer-show-empty-filter-groups t)
+  (ibuffer-formats
+   '((mark modified read-only " "
+           (name 18 18 :left :elide)
+           " "
+           (size 9 -1 :right)
+           " "
+           (mode 16 16 :left :elide)
+           " "
+           (filename-and-process 30 30 :left)
+           "\n")))
+  :hook
+  (ibuffer . ibuffer-auto-mode)
+  (ibuffer-mode . (lambda ()
+                    (ibuffer-switch-to-saved-filter-groups "Main")))
   :bind (:map ibuffer-mode-map
               ("{" . ibuffer-backwards-next-marked)
               ("}" . ibuffer-forward-next-marked)
