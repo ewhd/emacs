@@ -461,7 +461,7 @@
 (use-package activities
   :init
   (activities-mode)
-  (activities-tabs-mode)
+  ;; (activities-tabs-mode)  # this will activate tab-bar-mode
   ;; Prevent `edebug' default bindings from interfering.
   (setq edebug-inhibit-emacs-lisp-mode-bindings t)
 
