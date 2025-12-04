@@ -4,20 +4,16 @@
 (setq mc/cmds-to-run-for-all
       '(
         beginning-of-visual-line
+        combobulate-python-indent-for-tab-command
         comment-line
-<<<<<<< HEAD
         electric-newline-and-maybe-indent
-=======
->>>>>>> d633b89d7a31d46456a5e35d253f3455f7421c0e
         electric-pair-delete-pair
+        elpy-nav-indent-shift-right
         end-of-visual-line
         eval-last-sexp
         indent-for-tab-command
         kill-region
-<<<<<<< HEAD
         kill-visual-line
-=======
->>>>>>> d633b89d7a31d46456a5e35d253f3455f7421c0e
         multiple-cursors-mode
         org-beginning-of-line
         org-ctrl-c-ctrl-c
@@ -32,44 +28,44 @@
         org-self-insert-command
         org-shiftleft
         org-shiftright
+        org-toggle-checkbox
         org-yank
-<<<<<<< HEAD
+        outshine-self-insert-command
+        paredit-delete-char
+        paredit-forward-barf-sexp
+        paredit-forward-kill-word
+        paredit-open-round
+        paredit-semicolon
+        query-replace
         query-replace
         tab-next
+        tab-next
+        text-scale-increase
         text-scale-increase
         wdired--self-insert
         wdired-finish-edit
         xah-toggle-letter-case
+        xah-toggle-letter-case
         yaml-electric-backspace
         yaml-electric-dash-and-dot
-=======
-        paredit-delete-char
-        paredit-open-round
-        paredit-semicolon
-        query-replace
-        tab-next
-        text-scale-increase
-        xah-toggle-letter-case
->>>>>>> d633b89d7a31d46456a5e35d253f3455f7421c0e
         zap-up-to-char
         ))
 
 (setq mc/cmds-to-run-once
       '(
         end-of-buffer
+        handle-select-window
         ignore
-<<<<<<< HEAD
         mouse-set-region
         org-mouse-down-mouse
-        org-return-and-maybe-indent
-        org-time-stamp-inactive
-        text-scale-decrease
-=======
         org-mouse-down-mouse
         org-return-and-maybe-indent
+        org-return-and-maybe-indent
         org-time-stamp-inactive
+        org-time-stamp-inactive
+        org-tree-to-indirect-buffer
         paredit-mode
         text-scale-decrease
+        text-scale-decrease
         wdired--self-insert
->>>>>>> d633b89d7a31d46456a5e35d253f3455f7421c0e
         ))
