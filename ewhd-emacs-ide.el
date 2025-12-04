@@ -183,6 +183,29 @@
   )
 
 
+;;; Documentation
+(use-package eldoc-box
+  :ensure t
+  :init
+  (defun ewhd-eldoc-toggle ()
+    ;; heavily modified from https://emacs.stackexchange.com/a/83013
+    (interactive)
+    (if (and (boundp 'eldoc-box--frame)
+             eldoc-box--frame
+             (frame-visible-p eldoc-box--frame))
+        (progn
+          (mapc #'delete-overlay eglot--highlights)
+          (eldoc-box-quit-frame))
+      (eldoc-box-help-at-point)))
+  :bind
+  (:map prog-mode-map
+        ("C-h ." . eldoc-box-help-at-point)
+        ("C-h ," . eldoc-box-quit-frame)
+        ("C-?" . ewhd-eldoc-toggle)
+        )
+  )
+
+
 ;;; Common Lisp
 (use-package slime
   ;; REPL for Common Lisp
