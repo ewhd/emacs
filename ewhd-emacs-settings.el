@@ -1,177 +1,133 @@
-;; ewhd emacs settings -*- lexical-binding: t; -*-
+;;; ewhd-emacs-settings.el --- built-in Emacs settings
+;; -*- lexical-binding: t; -*-
+
+;;; Commentary:
+;;
+
+;;; Custom Interactive Functions:
+(defun ewhd-switch-to-last-buffer ()
+  "Switch to the previously used buffer.
+
+This behaves like repeatedly invoking `switch-to-buffer` with no argument,
+toggling between the current buffer and the last one."
+  (interactive)
+  (switch-to-buffer nil))
 
 
-;;;; Appearance and Behavior
+(defun xah-toggle-letter-case ()
+  "Toggle the letter case of current word or text selection.
+always cycle in this order: Init Caps, ALL CAPS, all lower.
 
-;; General:
-(setq-default fill-column 80
-              scroll-margin 2           ; Add a margin when scrolling vertically
-	      indent-tabs-mode nil
-	      )
-
-(setq inhibit-startup-screen t
-      custom-file (make-temp-file "emacs-custom-")
-					; save all interactive customizations to
-					; a temp file (permanent customizations
-					; should be coded)
-      visible-bell t
-      help-window-select t              ; Focus new help windows when opened
-      scroll-conservatively 101         ; Avoid recentering when scrolling far
-      scroll-margin 2
-      mouse-wheel-scroll-amount '(1)
-      sentence-end-double-space nil
-      column-number-mode t
-      pop-up-frames nil
-      mouse-drag-and-drop-region-cross-program t
-      mouse-1-click-follows-link 'double
-      make-backup-files nil             ; Disable Emacs backups
-      calendar-week-start-day 6
-      set-mark-command-repeat-pop t
-      next-error-message-highlight 'keep
-      mouse-autoselect-window t
-      focus-follows-mouse t
-      project-vc-extra-root-markers '(".project-root")  ; mark non-vc dirs as project roots
-      )
+URL `http://xahlee.info/emacs/emacs/modernization_upcase-word.html'
+Version 2020-06-26"
+  (interactive)
+  (let (
+        (deactivate-mark nil)
+        $p1 $p2)
+    (if (use-region-p)
+        (setq $p1 (region-beginning) $p2 (region-end))
+      (save-excursion
+        (skip-chars-backward "[:alpha:]")
+        (setq $p1 (point))
+        (skip-chars-forward "[:alpha:]")
+        (setq $p2 (point))))
+    (when (not (eq last-command this-command))
+      (put this-command 'state 0))
+    (cond
+     ((equal 0 (get this-command 'state))
+      (upcase-initials-region $p1 $p2)
+      (put this-command 'state 1))
+     ((equal 1 (get this-command 'state))
+      (upcase-region $p1 $p2)
+      (put this-command 'state 2))
+     ((equal 2 (get this-command 'state))
+      (downcase-region $p1 $p2)
+      (put this-command 'state 0)))))
 
 
-(global-visual-line-mode 1)
-(global-hl-line-mode 1)                 ; highlight current line
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(menu-bar-mode -1)
-(tooltip-mode -1)
-(delete-selection-mode 1)               ; Replace region when inserting text
-(recentf-mode 1)
+(defun ewhd-increment-number-decimal (&optional arg)
+  "Increment the decimal number at point by 'ARG', preserving its width.
+
+Moves backward to the start of the current number, increments it, and
+replaces it with a zero-padded result of the same length. If the result
+would be negative, it wraps within the field’s width. With no prefix
+argument, increments by 1.
+
+URL `https://www.emacswiki.org/emacs/IncrementNumber'"
+  (interactive "p*")
+  (save-excursion
+    (save-match-data
+      (let (inc-by field-width answer)
+        (setq inc-by (if arg arg 1))
+        (skip-chars-backward "0123456789")
+        (when (re-search-forward "[0-9]+" nil t)
+          (setq field-width (- (match-end 0) (match-beginning 0)))
+          (setq answer (+ (string-to-number (match-string 0) 10) inc-by))
+          (when (< answer 0)
+            (setq answer (+ (expt 10 field-width) answer)))
+          (replace-match (format (concat "%0" (int-to-string field-width) "d")
+                                 answer)))))))
 
 
-;; Set Font
-(defun font-available-p (font-name)
-  (find-font (font-spec :name font-name)))
+(defun ewhd-decrement-number-decimal (&optional arg)
+  "Decrement the number forward from point by 'ARG'.
 
-(when (window-system)
-  (cond
-   ((font-available-p "Iosevka Nerd Font Mono")
-    (set-frame-font "Iosevka Nerd Font Mono-12.5"))
-   ((font-available-p "JetBrainsMono Nerd Font")
-    (set-frame-font "JetBrainsMono Nerd Font-11"))
-   ((font-available-p "Noto Sans Mono")
-    (set-frame-font "Noto Sans Mono-11"))
-   ))
+URL `https://www.emacswiki.org/emacs/IncrementNumber'"
+  (interactive "p*")
+  (ewhd-increment-number-decimal (if arg (- arg) -1)))
 
 
+(defun ewhd-increment-string (string)
+  "Return a copy of STRING with its first decimal number incremented by one.
 
-;; Desktop
-;; (setq desktop-dirname "~/.cache"        ; set /before/ enabling desktop mode
-;;       desktop-buffers-not-to-save '("*Messages*"
-;; 				    "*scratch*"
-;; 				    "*Help*"
-;; 				    "*info*"
-;; 				    "*compilation*"
-;; 				    "*eww*")
-;;       desktop-path (list desktop-dirname)
-;; 					; ensures Emacs uses this path for
-;; 					; desktop files -- emacs won't seem to
-;; 					; look in desktop-dirname without this
-;; 					; line
-;;       desktop-auto-save-timeout 10
-;;       desktop-save t                    ; always save
-;;       )
-;; (desktop-save-mode 1)
+If STRING contains a sequence of digits, only the first such sequence is
+located and increased. All surrounding text is preserved. If no number is
+found, the function returns STRING unchanged."
+  (interactive "*")
+  (setq start (string-match "\\([0-9]+\\)" string))
+  (setq end (match-end 0))
+  (setq number (string-to-number (substring string start end)))
+  (setq new-num-string (number-to-string (+ 1 number)))
+  (concat (substring string 0 start) new-num-string (substring string end)))
 
 
-;;; Revert Buffer Behavior:
-;; - Automatically revert files which have been changed on disk, unless the
-;; - buffer contains unsaved changes
-(global-auto-revert-mode 1)
-(setq global-auto-revert-non-file-buffers t)
-					; Don't revert Buffer Menu (makes it
-					; unusable)
-					; https://github.com/syl20bnr/spacemacs/issues/7661#issuecomment-258481672
-					; https://www.reddit.com/r/emacs/comments/t01efg/comment/iat14ob/?utm_source=share&utm_medium=web2x&context=3
-;; (require 'autorevert)
-(add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode)
+(defun ewhd-yank-increment ()
+  "Yank the latest kill, incrementing the first number found before inserting it.
 
-;; Line Numbers:
-(global-display-line-numbers-mode 1)
-(setq display-line-numbers-type 'relative) ; sets the default line number type
-;; Disable line numbers for some modes
-(dolist (mode '(org-mode-hook
-		term-mode-hook
-                shell-mode-hook
-                treemacs-mode-hook
-                eshell-mode-hook
-                help-mode-hook
-                org-agenda-mode-hook
-		chart-mode
-		))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-;; Highlight Parentheses:
-(show-paren-mode 1)
-(setq show-paren-when-point-inside-paren nil
-      show-paren-style 'mixed)
+The updated text is inserted at point and also pushed back onto the kill
+ring, replacing the top entry."
+  (interactive "*")
+  (setq new-text (ewhd-increment-string (current-kill 0)))
+  (insert-for-yank new-text)
+  (kill-new new-text t))
 
 
-;; Modeline
-;; (setq mode-line-format
-;;       '("%e" ;; Error message
-;;         ;; mode-line-front-space
-;;         " "
-;;         (:propertize
-;;          (""
-;;           mode-line-client
-;;           mode-line-modified
-;;           mode-line-remote
-;;           mode-line-window-dedicated)
-;;          display (min-width (5.0))
-;;          )
-;;         ;; " %b" ;; Buffer name
-;;         ;; " (%f)" ;; Full file path in parentheses
-;;         (:eval (if (buffer-file-name)
-;;                    (format "[%s]" (abbreviate-file-name (buffer-file-name)))
-;;                  (format "[%s]" (buffer-name))))
-;;         ;; " [%p]" ;; Percentage of buffer scrolled
-;;         " [%l:%c]" ;; Line and column number
-;;         "%M" ;; Major mode
-;;         mode-line-misc-info
-;;         ;; " %(" ;; Start of minor modes
-;;         ;; (:eval (propertize (mapconcat #'symbol-name minor-mode-list " ") 'face 'mode-line-highlight))
-;;         ;; ") " ;; End of minor modes
-;;         ;; " %s" ;; Process indicator
-;;         (vc-mode vc-mode)
-;;         ))
+(defun ewhd-server-shutdown ()
+  "Save modified buffers and cleanly terminate the current Emacs session.
 
+  Prompts to save any unsaved buffers according to `save-some-buffers`,
+  then exits Emacs.
 
-;; Parentheses Pairing Behavior:
-(use-package electric
-  :ensure nil
-  :init
-  (defun my/setup-org-electric-pair ()
-    "Disable pairing for < and > only in Org mode."
-    (setq-local electric-pair-inhibit-predicate
-                (lambda (char)
-                  (if (eq major-mode 'org-mode)
-                      (or (char-equal char ?<) (char-equal char ?>))
-                    (electric-pair-default-inhibit char)))))
+URL `https://emacs.stackexchange.com/a/55799'"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs))
 
-  :config
-  (electric-pair-mode 1)                ; Enable electric-pair-mode globally
-  (setq electric-pair-preserve-balance t
-	electric-pair-delete-adjacent-pairs t)
+;; Change C-w behavior when no
+(defadvice kill-region (before unix-werase activate compile)
+  "When called interactively with no active region, delete a single word backwards instead.
 
-  ;; Apply the custom inhibit predicate only in Org mode
-  (add-hook 'org-mode-hook 'my/setup-org-electric-pair)
-  )
+URL `https://www.reddit.com/r/emacs/comments/16rbsnw/comment/k23kmxg/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button'"
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (save-excursion (backward-word 1) (point)) (point)))))
 
+(defun ewhd-split-window-sensibly (&optional window)
+  "Split 'WINDOW' sensibly, preferring a vertical (side-by-side) split.
 
-
-
-;; Window Splitting Behavior:
-(setq split-height-threshold 80
-      split-width-threshold 80)
-
-(defun my-split-window-sensibly (&optional window)
-  "replacement `split-window-sensibly' function which prefers vertical splits"
+If 'WINDOW' can be split vertically, `split-window-right` is used; otherwise,
+falls back to a horizontal (top-bottom) split with `split-window-below`.
+Defaults to the selected window if none is provided."
   (interactive)
   (let ((window (or window (selected-window))))
     (or (and (window-splittable-p window t)
@@ -181,60 +137,191 @@
              (with-selected-window window
                (split-window-below))))))
 
-(setq split-window-preferred-function 'my-split-window-sensibly)
 
-;; General Key Remapping:
-(global-set-key (kbd "C-v") 'yank)
-(global-set-key (kbd "M-v") 'kill-ring-save)
-;; (global-set-key (kbd "C-S-v") 'scroll-up-command)
-(global-set-key (kbd "C-:") 'comment-region)
-(global-set-key (kbd "C-h n") nil)
-(global-set-key (kbd "C-h C-n") nil)
-;; (global-set-key (kbd "C-x 4-s") 'window-swap-states) ; not working
-(global-set-key (kbd "M-z") 'zap-up-to-char)
-(global-set-key (kbd "<mouse-3>") 'mouse-major-mode-menu)
-(global-set-key (kbd "<C-mouse-3>") 'mouse-popup-menubar)
-(global-unset-key (kbd "C-_"))
-(global-set-key (kbd "C-_") 'text-scale-decrease)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "C-+") 'text-scale-increase)
-(global-set-key (kbd "C-x C-d") 'dired) ; replace keybinding for list-directory
-					; with dired
-(global-set-key (kbd "C-x K") 'kill-current-buffer)
-(global-set-key (kbd "C-x C-b") 'consult-buffer)
-					; replace keybinding for list-buffers
-					; with consult-buffer
-(global-set-key (kbd "M-V")     'scroll-other-window-down)
-(global-set-key (kbd "C-x M-b") 'view-buffer-other-window)
-(global-set-key (kbd "C-x M-f") 'find-file-other-window)
-(global-set-key (kbd "C-S-o")   'other-window)
-(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+;;; General Behavior and Settings:
+(setq-default fill-column 80)           ; Wrap at 80 chars
+(setq-default truncate-lines nil)       ; Allow wrapping by default
+(setq-default visual-line-mode t)       ; Wrap at word boundaries
+(setq-default comment-column 40)        ; Comments start at column 40
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq-default scroll-margin 2)          ; Add a margin when scrolling vertically
+(setq-default show-trailing-whitespace t) ; highlight trailing whitespace
 
-;;;; Tab Management
-;; Unbind the default transpose-characters command
-;; (global-unset-key (kbd "C-t"))
 
-;; ;; Define C-t as a prefix key
-;; (define-prefix-command 'ctl-t-map)
-;; (global-set-key (kbd "C-t") 'ctl-t-map)
+(setq project-vc-extra-root-markers '(".project")) ; mark dir as project root
+(setq make-backup-files nil)            ; Disable Emacs backups
+(setq custom-file (make-temp-file "emacs-custom-"))
+(setq calendar-week-start-day 6)
+(setq undo-limit (* 1024 1024 10))      ; Set undo limit to 10MiB
+(setq inhibit-startup-screen t)
+(setq visible-bell t)
+(setq help-window-select t)             ; Focus new help windows when opened
+(setq scroll-conservatively 101)        ; Avoid recentering when scrolling far
+(setq mouse-wheel-scroll-amount '(1))
+(setq sentence-end-double-space nil)
+(setq column-number-mode t)
+(setq pop-up-frames nil)
+(setq mouse-drag-and-drop-region-cross-program t)
+(setq mouse-1-click-follows-link 'double)
+(setq set-mark-command-repeat-pop t)
+(setq next-error-message-highlight 'keep)
+(setq mouse-autoselect-window t)
+(setq focus-follows-mouse t)
+(setq show-paren-when-point-inside-paren nil)
+(setq show-paren-style 'mixed)
+(setq split-height-threshold 80)
+(setq split-width-threshold 80)
+(setq split-window-preferred-function 'ewhd-split-window-sensibly)
+(setq enable-recursive-minibuffers t)
+(setq minibuffer-depth-indicate-mode t)
 
-;; ;; dired has some C-t- prefixed commands for images/thumbnails, but I want these
-;; ;; tab controls to override them, which is done in the dired config below
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
+(tooltip-mode -1)
+(show-paren-mode 1)
+(delete-selection-mode 1)               ; Replace region when inserting text
+(recentf-mode 1)
+(global-hl-line-mode 1)                 ; highlight current line
+(savehist-mode 1)                       ; Persist history over Emacs restarts.
+                                        ; Required by Vertico
 
-;; ;; new tab control keybindings
-;; (define-key ctl-t-map (kbd "n")       'tab-next)
-;; (define-key ctl-t-map (kbd "p")       'tab-previous)
-;; (define-key ctl-t-map (kbd "u")       'tab-undo)
-;; (define-key ctl-t-map (kbd "N")       'tab-new)
-;; (define-key ctl-t-map (kbd "x")       'tab-close)
-;; (define-key ctl-t-map (kbd "r")       'tab-reopen)
-;; (define-key ctl-t-map (kbd "m")       'tab-move)
-;; (define-key ctl-t-map (kbd "d")       'tab-duplicate)
-;; (define-key ctl-t-map (kbd "<right>") 'tab-bar-switch-to-next-tab)
-;; (define-key ctl-t-map (kbd "<left>")  'tab-bar-switch-to-prev-tab)
-;; (define-key ctl-t-map (kbd "RET")     'tab-bar-select-tab-by-name)
-;; (define-key ctl-t-map (kbd "b")       'tab-bar-history-back)
-;; (define-key ctl-t-map (kbd "f")       'tab-bar-history-forward)
+;; Do not treat < or > as delimiters in text modes
+(defun ewhd-text-mode-syntax-setup ()
+  "Remove < and > as paired delimiters in text modes."
+  (modify-syntax-entry ?< "." (syntax-table))
+  (modify-syntax-entry ?> "." (syntax-table)))
+
+(add-hook 'text-mode-hook 'ewhd-text-mode-syntax-setup)
+
+
+;;; Revert Buffers:
+;; Don't revert Buffer Menu (makes it unusable)
+(setq global-auto-revert-non-file-buffers t)
+(global-auto-revert-mode 1)
+(add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode)
+
+
+;;; Indentation and EOL behavior:
+;; Only display line numbers on wide windows
+(defun ewhd-programming-text-behavior ()
+  "Configure buffer for programming text editing."
+  (setq truncate-lines t)               ; Don't wrap
+  ;; (display-line-numbers-mode 1)      ; Show line numbers
+  (setq display-line-numbers-type 'relative)
+  (display-fill-column-indicator-mode 1)  ; Show 80-char guide
+  (setq show-trailing-whitespace t)       ; Highlight trailing spaces
+  (setq indent-tabs-mode nil)             ; Use spaces
+  (display-fill-column-indicator-mode 1))  ; Visually indicate column width
+
+(defvar ewhd-line-numbers-min-width 90
+  "Minimum window width to show line numbers.")
+
+(defun ewhd-smart-display-line-numbers ()
+  "Toggle line numbers based on window width."
+  (display-line-numbers-mode
+   (if (>= (window-width) ewhd-line-numbers-min-width) 1 -1)))
+
+;; Soft wrap prose
+(add-hook 'text-mode-hook 'visual-line-mode)
+
+;; Apply custom settings for programming modes
+(add-hook 'prog-mode-hook 'ewhd-programming-text-behavior)
+
+;; Apply ewhd-smart-display-line-numbers to programming modes
+(add-hook 'prog-mode-hook 'ewhd-smart-display-line-numbers)
+
+;; Apply ewhd-smart-display-line-numbers to programming modes when window size
+;; changes
+(add-hook 'window-configuration-change-hook
+          (lambda ()
+            (when (derived-mode-p 'prog-mode)
+              (ewhd-smart-display-line-numbers))))
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+		            term-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook
+                help-mode-hook
+                org-agenda-mode-hook
+		            chart-mode
+                ibuffer-mode-hook
+                dired-mode-hook
+		            ))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+;; Hard wrap (auto-fill) only code comments
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (setq comment-auto-fill-only-comments t)
+            (auto-fill-mode 1)))
+
+;; Lisp modes: 2-space indentation, no tabs
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (setq tab-width 2)))
+
+;; Python: 4-space indentation, no tabs (PEP 8)
+(add-hook 'python-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (setq tab-width 4)
+            (setq python-indent-offset 4)))
+
+
+
+;;; Set Font
+(defun font-available-p (font-name)
+  "Check if a font is available.
+Argument FONT-NAME is the name of a font."
+  (find-font (font-spec :name font-name)))
+
+(when (window-system)
+  (cond
+   ;; ((font-available-p "Iosevka Nerd Font Mono")
+   ;;  (set-frame-font "Iosevka Nerd Font Mono-12.5"))
+   ((font-available-p "JetBrainsMono Nerd Font")
+    (set-frame-font "JetBrainsMono Nerd Font-11"))
+   ((font-available-p "Noto Sans Mono")
+    (set-frame-font "Noto Sans Mono-11"))
+   ))
+
+
+;;; Keybindings
+(use-package emacs
+  :ensure nil
+  :bind (("C-v"         . yank)
+         ("C-:"         . comment-region)
+         ("C-h n"       . nil)
+         ("C-h C-n"     . nil)
+         ("M-z"         . zap-up-to-char)
+         ("s-z"         . zap-up-to-char)
+         ("<mouse-3>"   . mouse-major-mode-menu)
+         ("<C-mouse-3>" . mouse-popup-menubar)
+         ("C-_"         . text-scale-decrease)
+         ("C-+"         . text-scale-increase)
+         ("C-x C-d"     . dired)        ; replace list-directory with dired
+         ("C-x K"       . kill-current-buffer)
+         ("C-x C-b"     . consult-buffer) ; replaces list-buffers
+         ("M-V"         . scroll-other-window-down)
+         ("C-x M-b"     . view-buffer-other-window)
+         ("C-x M-f"     . find-file-other-window)
+         ("C-S-o"       . other-window)
+         ("C-x C-r"     . recentf-open-files)
+         ("M-SPC"       . execute-extended-command)
+         ("C--"         . window-swap-states)
+         ;; Custom Functions:
+         ("C-0"         . ewhd-switch-to-last-buffer)
+         ;; ("C-c C-y"     . ewhd-yank-increment)
+         ("M-c"         . xah-toggle-letter-case)
+         ("C-c C-="     . ewhd-increment-number-decimal)
+         ("C-c C--"     . ewhd-decrement-number-decimal)
+         ))
+
 
 ;;; Manage Secrets
 (use-package auth-source
@@ -250,20 +337,13 @@
   (ibuffer-display-summary t)
   (ibuffer-use-other-window nil)
   (ibuffer-show-empty-filter-groups t)
-  (ibuffer-formats
-   '((mark modified read-only " "
-           (name 18 18 :left :elide)
-           " "
-           (size 9 -1 :right)
-           " "
-           (mode 16 16 :left :elide)
-           " "
-           (filename-and-process 30 30 :left)
-           "\n")))
   :hook
-  (ibuffer . ibuffer-auto-mode)
-  (ibuffer-mode . (lambda ()
-                    (ibuffer-switch-to-saved-filter-groups "Main")))
+  ((ibuffer . ibuffer-auto-mode)
+   (ibuffer-mode . (lambda ()
+                     (ibuffer-switch-to-saved-filter-groups "Main")))
+   (ibuffer-mode . (lambda () (visual-line-mode -1)))
+   (ibuffer-mode . (lambda () (toggle-truncate-lines 1)))
+   )
   :bind (:map ibuffer-mode-map
               ("{" . ibuffer-backwards-next-marked)
               ("}" . ibuffer-forward-next-marked)
@@ -274,7 +354,49 @@
               ("M-<double-mouse-1>" . ibuffer-visit-buffer-other-window)
               )
   :config
-  )
+  (defun ewhd-generate-project-filters ()
+    "Generate ibuffer groups for each open project."
+    (let (groups)
+      (dolist (buf (buffer-list))
+        (with-current-buffer buf
+          (let ((proj (project-current)))
+            (when proj
+              (let* ((root (cdr proj))
+                     (label (format "Project: %s" root)))
+                (push (list label (cons 'filename (buffer-file-name buf)))
+                      groups))))))
+      groups))
+
+
+  (setq ibuffer-saved-filter-groups
+        '(("Main"
+           ("unsaved" (and (modified) (not (or (starred-name) (mode . magit-mode) (mode . magit-process-mode))))) ; All unsaved buffers
+           ("dired"   (mode          . dired-mode))          ; Filter by mode
+           ("magit"   (or
+                       (mode          . magit-mode)
+                       (mode          . magit-process-mode))) ; Filter by mode
+           ("org/md"    (or
+                         (name . "^\\*Org Agenda\\*$")
+                         (mode . org-mode)
+                         (and (mode . markdown-mode)
+                              (not (starred-name)))))
+           ("config (probably)"     (and
+                                     (or
+                                      (filename      . ".org")
+                                      (filename      . ".yaml")
+                                      (filename      . ".yml")
+                                      (filename      . ".toml")
+                                      (filename      . ".conf"))
+                                     (not (or
+                                           (mode          . magit-mode)
+                                           (mode          . magit-process-mode))))) ; By filename
+           ("scratch"   (name          . "^\\*scratch\\*$")) ; By regexp
+           ;; ("Scheme"  (directory     . "~/scheme*"))   ; By directory
+           ("stars"   (starred-name))   ; Group *starred*
+           )
+          ("testList"
+           ("projects" ,@(ewhd-generate-project-filters)) ;; Programmatically generated filters
+           ))))
 
 ;;;; dired config
 ;; check out http://xahlee.info/emacs/emacs/emacs_dired_tips.html
@@ -366,15 +488,17 @@
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
 
-(global-set-key (kbd "C-c <end>") 'winner-redo)
 (global-set-key (kbd "C-c <home>") 'winner-undo)
+(global-set-key (kbd "C-M-[") 'winner-undo)
+(global-set-key (kbd "C-c <end>") 'winner-redo)
+(global-set-key (kbd "C-M-]") 'winner-redo)
 
 ;; windmove
 ;; https://www.emacswiki.org/emacs/WindMove
 (windmove-mode 1)
 
 (defun ignore-error-wrapper (fn)
-  "Return a new function that ignores errors.
+  "Return a new function from function FN that ignores errors.
 The function wraps a function with the `ignore-errors` macro."
   (lambda ()
     (interactive)
@@ -401,108 +525,22 @@ The function wraps a function with the `ignore-errors` macro."
 (global-set-key (kbd "C-c S-<down>")  (ignore-error-wrapper 'windmove-swap-states-down))
 
 
-;;;; Extra Functions
-;; Toggle Letter Case
+(provide 'ewhd-emacs-settings)
 
-(defun xah-toggle-letter-case ()
-  "Toggle the letter case of current word or text selection.
-always cycle in this order: Init Caps, ALL CAPS, all lower.
-
-URL `http://xahlee.info/emacs/emacs/modernization_upcase-word.html'
-Version 2020-06-26"
-  (interactive)
-  (let (
-        (deactivate-mark nil)
-        $p1 $p2)
-    (if (use-region-p)
-        (setq $p1 (region-beginning) $p2 (region-end))
-      (save-excursion
-        (skip-chars-backward "[:alpha:]")
-        (setq $p1 (point))
-        (skip-chars-forward "[:alpha:]")
-        (setq $p2 (point))))
-    (when (not (eq last-command this-command))
-      (put this-command 'state 0))
-    (cond
-     ((equal 0 (get this-command 'state))
-      (upcase-initials-region $p1 $p2)
-      (put this-command 'state 1))
-     ((equal 1 (get this-command 'state))
-      (upcase-region $p1 $p2)
-      (put this-command 'state 2))
-     ((equal 2 (get this-command 'state))
-      (downcase-region $p1 $p2)
-      (put this-command 'state 0)))))
-
-(global-set-key (kbd "M-c") 'xah-toggle-letter-case)
-
-
-;; Increment Number
-                                        ; https://www.emacswiki.org/emacs/IncrementNumber
-
-(defun ewhd-increment-number-decimal (&optional arg)
-  "Increment the number forward from point by 'arg'."
-  (interactive "p*")
-  (save-excursion
-    (save-match-data
-      (let (inc-by field-width answer)
-        (setq inc-by (if arg arg 1))
-        (skip-chars-backward "0123456789")
-        (when (re-search-forward "[0-9]+" nil t)
-          (setq field-width (- (match-end 0) (match-beginning 0)))
-          (setq answer (+ (string-to-number (match-string 0) 10) inc-by))
-          (when (< answer 0)
-            (setq answer (+ (expt 10 field-width) answer)))
-          (replace-match (format (concat "%0" (int-to-string field-width) "d")
-                                 answer)))))))
-
-(defun ewhd-decrement-number-decimal (&optional arg)
-  (interactive "p*")
-  (ewhd-increment-number-decimal (if arg (- arg) -1)))
-
-(global-set-key (kbd "C-c C-=") 'ewhd-increment-number-decimal)
-(global-set-key (kbd "C-c C--") 'ewhd-decrement-number-decimal)
-
-(defun ewhd-increment-string (string)
-  (interactive "*")
-  (setq start (string-match "\\([0-9]+\\)" string))
-  (setq end (match-end 0))
-  (setq number (string-to-number (substring string start end)))
-  (setq new-num-string (number-to-string (+ 1 number)))
-  (concat (substring string 0 start) new-num-string (substring string end)))
-
-(defun ewhd-yank-increment ()
-  "Yank text, incrementing the first integer found in it."
-  (interactive "*")
-  (setq new-text (ewhd-increment-string (current-kill 0)))
-  (insert-for-yank new-text)
-  (kill-new new-text t))
-
-;; (global-set-key (kbd "C-c C-y") 'ewhd-yank-increment)
-
-;;; Server shutdown
-;; I use this to safely shutdown the server, mostly when I want to restart it
-;; after making config changes -- probably unnecessary if I use systemd to start
-;; my daemon, but currently I don't https://emacs.stackexchange.com/a/55799
-(defun ewhd-server-shutdown ()
-  "Save buffers, Quit, and Shutdown (kill) server"
-  (interactive)
-  (save-some-buffers)
-  (kill-emacs))
-
-
-;; 
-(defun switch-to-last-buffer ()
-  "Swap to last buffer"
-  (interactive)
-  (switch-to-buffer nil))
-
-(global-set-key (kbd "C-0") 'switch-to-last-buffer)
-
-;; Change C-w behavior when no 
-;; From: https://www.reddit.com/r/emacs/comments/16rbsnw/comment/k23kmxg/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
-(defadvice kill-region (before unix-werase activate compile)
-  "When called interactively with no active region, delete a single word backwards instead."
-  (interactive
-   (if mark-active (list (region-beginning) (region-end))
-     (list (save-excursion (backward-word 1) (point)) (point)))))
+;;; Other
+(use-package which-key
+  ;; As of Emacs 30.1, which-key is part of Emacs core
+  :init
+  (which-key-mode)
+  :config
+  (which-key-setup-side-window-bottom)
+  (setq which-key-sort-order 'which-key-key-order)
+  ;; Allow C-h to trigger which-key before it is done automatically
+  (setq which-key-show-early-on-C-h t)
+  ;; make sure which-key doesn't show normally but refreshes quickly after it is
+  ;; triggered.
+  (setq which-key-idle-delay 10)
+  (setq which-key-idle-secondary-delay 0.05)
+  :bind (("C-h m" . which-key-show-top-level))
+  :delight which-key-mode)
+;;; ewhd-emacs-settings.el ends here
