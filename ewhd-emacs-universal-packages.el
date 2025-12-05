@@ -265,11 +265,9 @@
         mode-line-remote
         ,chezmoi-indicator)))
 
-
-
   (setq telephone-line-lhs
         '((evil   . (ewhd-telephone-line-buffer-segment))
-          (accent . (telephone-line-vc-segment
+          (accent . (ewhd-telephone-line-airline-position-segment
                      telephone-line-erc-modified-channels-segment
                      telephone-line-process-segment
                      ))
@@ -282,7 +280,7 @@
   (setq telephone-line-rhs
         '((nil    . (telephone-line-misc-info-segment))
           (accent . (ewhd-telephone-line-major-mode-segment))
-          (evil   . (ewhd-telephone-line-airline-position-segment))))
+          (evil   . (telephone-line-vc-segment))))
 
   (telephone-line-mode 1)
   )
