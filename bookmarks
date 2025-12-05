@@ -2,7 +2,10 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("Downloads"
+(("Activity: test5"
+ (activities-name . "test5")
+ (handler . activities-bookmark-handler))
+("Downloads"
  (filename . "~/Downloads/")
  (front-context-string . "standard-effects")
  (rear-context-string . "025-11-14 08:13 ")
