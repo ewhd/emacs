@@ -398,7 +398,7 @@ Argument FONT-NAME is the name of a font."
            ("projects" ,@(ewhd-generate-project-filters)) ;; Programmatically generated filters
            ))))
 
-;;;; dired config
+;;; dired config
 ;; check out http://xahlee.info/emacs/emacs/emacs_dired_tips.html
 
 (use-package dired
@@ -408,10 +408,10 @@ Argument FONT-NAME is the name of a font."
   :config
   ;; Unbind the default C-t binding in Dired
   (define-key dired-mode-map (kbd "C-t") nil)
-  
+
   ;; Assign C-t as a prefix in Dired mode
   (define-key dired-mode-map (kbd "C-t") 'ctl-t-map)
-  
+
   ;; General Dired settings
   (setq dired-kill-when-opening-new-dired-buffer nil
         dired-recursive-deletes 'always ; 'always means no asking
@@ -419,7 +419,7 @@ Argument FONT-NAME is the name of a font."
         delete-by-moving-to-trash t     ; move to trash instead of deleting
         dired-listing-switches
         "-aGFhlv --group-directories-first --time-style=long-iso"
-					; list dirs first
+                                        ; list dirs first
         dired-dwim-target t             ; suggest target dir on split pane
         dired-free-space nil            ; Emacs 29.1
         dired-mouse-drag-files t        ; Emacs 29.1
@@ -428,15 +428,15 @@ Argument FONT-NAME is the name of a font."
   ;; Load dired-x and configure it
   (require 'dired-x)
   (put 'dired-find-alternate-file 'disabled nil)
-					; enable dired-find-alternate-file (set
-					; to a)
+                                        ; enable dired-find-alternate-file (set
+                                        ; to a)
 
   ;; Start in dired-omit-mode
   (add-hook 'dired-mode-hook 'dired-omit-mode)
   
   ;; Keybindings for Dired mode
-  (define-key dired-mode-map (kbd "h") 'dired-omit-mode)
-  (define-key dired-mode-map (kbd "I") 'dired-hide-details-mode)
+  (define-key dired-mode-map (kbd "O") 'dired-omit-mode)
+  (define-key dired-mode-map (kbd "h") 'dired-hide-details-mode)
   (define-key dired-mode-map (kbd ",") #'dired-prev-dirline)
   (define-key dired-mode-map (kbd ".") #'dired-next-dirline)
   (define-key dired-mode-map (kbd "<") #'dired-prev-subdir)
@@ -452,8 +452,9 @@ Argument FONT-NAME is the name of a font."
                 (seq bol "." (not (any "."))) ; dot-files
                 (seq "~" eol)                 ; backup-files
                 (seq bol "CVS" eol)           ; CVS dirs
-		(seq bol (or "." "..") eol)   ; Include . and ..
-                ))))
+		            (seq bol (or "." "..") eol)   ; Include . and ..
+                )))
+  )
 
 (use-package wdired
   :ensure nil
