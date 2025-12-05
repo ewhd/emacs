@@ -1,6 +1,14 @@
 ;;; ewhd emacs work in progress -*- lexical-binding: t; -*-
 
 
+;; Source - https://stackoverflow.com/a/11701899
+;; Posted by Nicolas Dudebout
+;; Retrieved 2025-12-04, License - CC BY-SA 3.0
+
+(defun ewhd-toggle-show-trailing-whitespace ()
+  "Toggle show-trailing-whitespace between t and nil"
+  (interactive)
+  (setq show-trailing-whitespace (not show-trailing-whitespace)))
 
 
 
@@ -31,6 +39,7 @@
 
 
 (use-package hideshow
+  :disabled t
   :hook
   (prog-mode . hs-minor-mode)
   :bind
