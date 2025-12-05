@@ -237,6 +237,7 @@
   )
 
 (use-package elpy
+  :disabled t
   :ensure t
   :init
   (elpy-enable))
