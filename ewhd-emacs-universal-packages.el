@@ -424,12 +424,9 @@
 ;;; Workspaces/Context
 (use-package tabspaces
   :ensure t
+  :demand t                             ; needed to load properly
   :init
-  ;; (setq tab-bar-show t)  ; needed to make tabs-bar visible, I think?
   (setq tabspaces-keymap-prefix (kbd "C-q"))
-  ;; (tabspaces-mode 1)
-  ;; :hook
-  ;; (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
   :custom
   (tabspaces-session-project-session-store 'project)
   (tabspaces-use-filtered-buffers-as-default t)
@@ -437,50 +434,68 @@
   (tabspaces-remove-to-default t)
   (tabspaces-include-buffers '("*scratch*"))
   (tabspaces-initialize-project-with-todo nil)
-  (tabspaces-session t)                ; save sessions automatically
-  ;; (tabspaces-session-auto-restore t)   ; Auto-restore sessions on
-                                        ; startup and when opening
-                                        ; projects (doesn't auto
-                                        ; when opening projects
-
-  (tabspaces-fully-resolve-paths t)     ; Resolve relative project
-                                        ; paths to absolute
+  (tabspaces-session t)
+  (tabspaces-fully-resolve-paths t)
   (tabspaces-exclude-buffers '("*Messages*" "*Compile-Log*"))
-                                        ; Additional buffers to exclude
   (tab-bar-new-tab-choice t)
+  (tab-bar-show t)
   :bind
   (:map tabspaces-command-map
         ("C" . tabspaces-clear-buffers)
-        ("d" . tabspaces-close-workspace)
-        ("D" . tabspaces-kill-buffers-close-workspace)
+        ("x" . tabspaces-close-workspace)
+        ("X" . tabspaces-kill-buffers-close-workspace)
         ("o" . tabspaces-open-or-create-project-and-workspace)
+        ("w" . tabspaces-switch-or-create-workspace)
         ("r" . tabspaces-restore-session)
         ("s" . tabspaces-save-session)
         ("S" . tabspaces-save-current-project-session)
         ("k" . tabspaces-remove-selected-buffer)
         ("K" . tabspaces-remove-current-buffer)
-        ("w" . tabspaces-switch-or-create-workspace)
         ("b" . tabspaces-switch-buffer-and-tab)
         ("q" . tabspaces-show-workspaces)
-        ;; ("T" . tabspaces-toggle-echo-area-display))
         ("n" . tab-next)
         ("p" . tab-previous)
         ("u" . tab-undo)
         ("N" . tab-new)
-        ("x" . tab-close)
+        ;; ("x" . tab-close)
         ("m" . tab-move)
-        ("<right>" . tab-bar-switch-to-next-tab)
-        ("<left>" . tab-bar-switch-to-prev-tab)
+        ("<right>" . tab-next)
+        ("<left>" . tab-previous)
         ("RET" . tab-bar-select-tab-by-name)
-        ("b" . tab-bar-history-back)
-        ("f" . tab-bar-history-forward))
+        ;; ("b" . tab-bar-history-back)
+        ;; ("f" . tab-bar-history-forward)
+        )
   :config
-  (setq tab-bar-show t)  ; needed to make tabs-bar visible, I think?
-  (tab-bar-mode)
-  (tabspaces-mode)
+  ;; (message "Before tab-bar-mode: tab-bar-mode=%s" tab-bar-mode)
+  (tab-bar-mode 1)
+  ;; (message "After tab-bar-mode: tab-bar-mode=%s" tab-bar-mode)
+  ;; (message "Before tabspaces-mode: tabspaces-mode=%s" tabspaces-mode)
+  ;; (add-hook 'emacs-startup-hook #'tabspaces-mode)
+  (tabspaces-mode 1)
+  ;; (message "After tabspaces-mode: tabspaces-mode=%s" tabspaces-mode)
+
+
+  ;; Filter Buffers for Consult-Buffer
+
+  (with-eval-after-load 'consult
+    ;; hide full buffer list (still available with "b" prefix)
+    (consult-customize consult--source-buffer :hidden t :default nil)
+    ;; set consult-workspace buffer list
+    (defvar consult--source-workspace
+      (list :name     "Workspace Buffers"
+            :narrow   ?w
+            :history  'buffer-name-history
+            :category 'buffer
+            :state    #'consult--buffer-state
+            :default  t
+            :items    (lambda () (consult--buffer-query
+                                  :predicate #'tabspaces--local-buffer-p
+                                  :sort 'visibility
+                                  :as #'buffer-name)))
+
+      "Set workspace buffer list for consult-buffer.")
+    (add-to-list 'consult-buffer-sources 'consult--source-workspace))
   )
-
-
 
 
 
