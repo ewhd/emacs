@@ -296,6 +296,18 @@
 
 
 ;;; Navigation
+(use-package outshine
+  :ensure t
+  :init
+  (defvar outline-minor-mode-prefix "\M-#")
+  :hook ((emacs-lisp-mode . outshine-mode))
+  :config
+  ;; Emacs running on a terminal may have issues with M-up and M-down bindings.
+  ;; Enabling these two lines should help
+  ;; (define-key input-decode-map "\e\eOA" [(meta up)])
+  ;; (define-key input-decode-map "\e\eOB" [(meta down)])
+  )
+
 (use-package avy
   ;; Jump to point
   :ensure t
