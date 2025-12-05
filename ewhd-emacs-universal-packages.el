@@ -439,6 +439,7 @@
   (tabspaces-exclude-buffers '("*Messages*" "*Compile-Log*"))
   (tab-bar-new-tab-choice t)
   (tab-bar-show t)
+  (tab-bar-tab-hints t)                 ; Numbered tabs
   :bind
   (:map tabspaces-command-map
         ("C" . tabspaces-clear-buffers)
@@ -464,6 +465,15 @@
         ("RET" . tab-bar-select-tab-by-name)
         ;; ("b" . tab-bar-history-back)
         ;; ("f" . tab-bar-history-forward)
+        ("1" . (lambda () (interactive) (tab-bar-select-tab 1)))
+        ("2" . (lambda () (interactive) (tab-bar-select-tab 2)))
+        ("3" . (lambda () (interactive) (tab-bar-select-tab 3)))
+        ("4" . (lambda () (interactive) (tab-bar-select-tab 4)))
+        ("5" . (lambda () (interactive) (tab-bar-select-tab 5)))
+        ("6" . (lambda () (interactive) (tab-bar-select-tab 6)))
+        ("7" . (lambda () (interactive) (tab-bar-select-tab 7)))
+        ("8" . (lambda () (interactive) (tab-bar-select-tab 8)))
+        ("9" . (lambda () (interactive) (tab-bar-select-tab 9)))
         )
   :config
   ;; (message "Before tab-bar-mode: tab-bar-mode=%s" tab-bar-mode)
@@ -476,7 +486,6 @@
 
 
   ;; Filter Buffers for Consult-Buffer
-
   (with-eval-after-load 'consult
     ;; hide full buffer list (still available with "b" prefix)
     (consult-customize consult--source-buffer :hidden t :default nil)
