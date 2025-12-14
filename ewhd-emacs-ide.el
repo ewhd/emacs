@@ -1,6 +1,9 @@
 ;;; ewhd-emacs-ide.el --- coding related packages
 ;; -*- lexical-binding: t; -*-
 
+;; follow output in REPL
+(setq comint-scroll-to-bottom-on-output t)
+
 ;;; Treesit
 (use-package treesit
   :ensure nil
@@ -112,7 +115,7 @@
 (use-package expand-region
   :ensure t
   :bind (("C-'" . er/expand-region)
-	       ("C-\"" . er/mark-outside-quotes)
+	       ("C-\"" . (lambda () (interactive) (er/expand-region -1)))
 	       ))
 
 
