@@ -165,11 +165,22 @@
 (use-package telephone-line
   :config
   (telephone-line-defsegment* ewhd-telephone-line-file-name-absolute-path-segment ()
-    (propertize
-     (if (buffer-file-name)
-         (abbreviate-file-name (buffer-file-name))
-       (buffer-name))
-     'face 'mode-line-buffer-id))
+    (let* ((max-width 50)
+           (name (if (buffer-file-name)
+                     (abbreviate-file-name (buffer-file-name))
+                   (buffer-name))))
+      (propertize
+       (if (> (length name) max-width)
+           (concat "…" (substring name (- (length name) (1- max-width))))
+         name)
+       'face 'mode-line-buffer-id)))
+
+  ;; (telephone-line-defsegment* ewhd-telephone-line-file-name-absolute-path-segment ()
+  ;;   (propertize
+  ;;    (if (buffer-file-name)
+  ;;        (abbreviate-file-name (buffer-file-name))
+  ;;      (buffer-name))
+  ;;    'face 'mode-line-buffer-id))
 
   (telephone-line-defsegment* ewhd-telephone-line-major-mode-segment ()
     (cond
