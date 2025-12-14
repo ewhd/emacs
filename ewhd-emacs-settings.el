@@ -316,7 +316,7 @@ Argument FONT-NAME is the name of a font."
          ("C--"         . window-swap-states)
          ;; Custom Functions:
          ("C-0"         . ewhd-switch-to-last-buffer)
-         ;; ("C-c C-y"     . ewhd-yank-increment)
+         ("C-c C-y"     . ewhd-yank-increment)
          ("M-c"         . xah-toggle-letter-case)
          ("C-c C-="     . ewhd-increment-number-decimal)
          ("C-c C--"     . ewhd-decrement-number-decimal)
