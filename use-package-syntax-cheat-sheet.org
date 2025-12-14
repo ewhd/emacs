@@ -1,0 +1,97 @@
+This is a cheat-sheet for use-package keywords and syntax
+
+#+begin_src elisp
+;; Complete use-package example with all keywords
+
+
+(use-package example
+  ;;; Package Metadata / Loading Behavior / Dependency Control
+  :ensure t                               ; Automatically install if not present
+  :disabled t                             ; Prevents the entire block from loading
+  :pin melpa-stable                       ; Pin to specific package archive
+  :defer 2                                ; Defer loading for N seconds after startup
+  :demand                                 ; Forces the package to load immediately, overriding :defer
+  :after (yasnippet lsp-mode)             ; Load after these packages are loaded
+  :requires (yasnippet)                   ; Only abort if these features aren't available
+  :if (display-graphic-p)                 ; Load if condition is true
+  :when (display-graphic-p)               ; Alternative to :if
+  :unless (eq system-type 'windows-nt)    ; Load only if condition is false
+  :load-path "~/my-elisp/example-extras/" ; Add to load-path before loading
+  :load                                   ; Directly load a file before configuring (rarely needed; :load-path + package is more common).
+  :no-require t                           ; Don't actually require the package (for virtual packages)
+                                          ; Prevents (require 'package) in the expansion
+   ;;; Sections for early code
+  :preface                                ; Code run before anything else (even :if checks)
+  (defun my-example-helper ()
+    "Custom helper for example configuration."
+    (message "Example helper loaded"))
+  :init                                   ; Code run BEFORE package is loaded
+  (setq example-global-modes '(not erc-mode message-mode help-mode))
+
+  ;;; Byte-compiler hints
+  :defines (example-some-internal-var)    ; Suppress byte-compiler warnings for these variables
+  :functions (example-some-helper-fn)     ; Suppress byte-compiler warnings for these functions
+
+  ;;; Autoload / Triggering Loading
+  :commands (example-complete)     ; Autoload these commands (triggers lazy loading)
+  :mode                                   ; Associate file extensions with modes
+  ("\\.example\\'" . example-config-mode)
+  :interpreter                            ; Associate interpreters with modes
+  ("example-script" . example-script-mode)
+  :magic                                  ; Load based on file content matching pattern
+  ("^# Example Config" . example-config-mode) 
+  :magic-fallback                         ; Like :magic but lower priority
+  ("example:" . example-config-mode)
+
+  ;;; Hooks and Bindings
+  :hook                                  ; Add functions to hooks
+  ((prog-mode . example-mode)
+   (text-mode . example-mode)
+   (after-init . (lambda () (my-example-helper))))
+  :bind                                   ; Global key bindings
+  (("M-/" . example-complete)
+         ("C-c y" . example-yasnippet))
+  :bind*                                  ; Key bindings that override minor modes
+  (("M-TAB" . example-complete))
+  (:map example-active-map                ; Bind keys in specific keymaps
+         ("C-n" . example-select-next)
+         ("C-p" . example-select-previous)
+         ("C-d" . example-show-doc-buffer)
+         ("M-." . example-show-location)
+         :map example-search-map
+         ("C-n" . example-select-next)
+         ("C-p" . example-select-previous))
+  :bind-keymap                            ; Bind prefix key to entire keymap
+  ("C-c c" . example-command-map)
+  :bind-keymap*                           ; Like :bind-keymap, but binds at a higher precedence (equivalent to :bind* vs :bind).   
+ 
+
+  ;;; Customization  
+  :custom                                 ; Set custom
+                                          ; variables
+                                          ; (preferred over
+                                          ; setq in :config)
+  (example-idle-delay 0.3 "Time before completion popup appears")
+  (example-minimum-prefix-length 2 "Start completing after 2 chars")
+  (example-selection-wrap-around t "Wrap around in completion list")
+  (example-tooltip-align-annotations t "Align annotations to right")
+  :custom-face                            ; Customize faces
+  (example-tooltip ((t (:background "lightgray" :foreground "black"))))
+  (example-tooltip-selection ((t (:background "steelblue" :foreground "white"))))
+
+  ;;; Mode-line handling
+  :diminish example-mode                  ; Hide or abbreviate mode line lighter
+  :delight "Cmp"                          ; Alternative to :diminish with more options
+
+
+  ;;; Section for late code
+  :config                                 ; Code run AFTER package is loaded
+  (setq example-backends
+        '((example-files
+           example-keywords
+           example-capf
+           example-yasnippet)))
+  (global-example-mode 1)
+  (my-example-helper))
+
+#+end_src
