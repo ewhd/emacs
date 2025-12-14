@@ -146,7 +146,6 @@ Defaults to the selected window if none is provided."
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default scroll-margin 2)          ; Add a margin when scrolling vertically
-(setq-default show-trailing-whitespace t) ; highlight trailing whitespace
 
 
 (setq project-vc-extra-root-markers '(".project")) ; mark dir as project root
@@ -205,17 +204,17 @@ Defaults to the selected window if none is provided."
 
 ;;; Indentation and EOL behavior:
 ;; Only display line numbers on wide windows
-(defun ewhd-programming-text-behavior ()
-  "Configure buffer for programming text editing."
+(defun ewhd-prog-conf-text-behavior ()
+  "Configure buffer for editing programming and conf files."
   (setq truncate-lines t)               ; Don't wrap
-  ;; (display-line-numbers-mode 1)      ; Show line numbers
+  (display-line-numbers-mode 1)      ; Show line numbers
   (setq display-line-numbers-type 'relative)
   (display-fill-column-indicator-mode 1)  ; Show 80-char guide
-  (setq show-trailing-whitespace t)       ; Highlight trailing spaces
+  ;; (setq show-trailing-whitespace t)       ; Highlight trailing spaces
   (setq indent-tabs-mode nil)             ; Use spaces
   (display-fill-column-indicator-mode 1))  ; Visually indicate column width
 
-(defvar ewhd-line-numbers-min-width 90
+(defvar ewhd-line-numbers-min-width 84
   "Minimum window width to show line numbers.")
 
 (defun ewhd-smart-display-line-numbers ()
@@ -226,8 +225,9 @@ Defaults to the selected window if none is provided."
 ;; Soft wrap prose
 (add-hook 'text-mode-hook 'visual-line-mode)
 
-;; Apply custom settings for programming modes
-(add-hook 'prog-mode-hook 'ewhd-programming-text-behavior)
+;; Apply custom settings for programming and conf modes
+(add-hook 'prog-mode-hook 'ewhd-prog-conf-text-behavior)
+(add-hook 'conf-mode-hook 'ewhd-prog-conf-text-behavior)
 
 ;; Apply ewhd-smart-display-line-numbers to programming modes
 (add-hook 'prog-mode-hook 'ewhd-smart-display-line-numbers)
