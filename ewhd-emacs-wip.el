@@ -1,6 +1,7 @@
 ;;; ewhd emacs work in progress -*- lexical-binding: t; -*-
 
 
+
 ;; Source - https://stackoverflow.com/a/11701899
 ;; Posted by Nicolas Dudebout
 ;; Retrieved 2025-12-04, License - CC BY-SA 3.0
@@ -11,6 +12,7 @@
   (setq show-trailing-whitespace (not show-trailing-whitespace)))
 
 
+(setq flymake-no-changes-timeout nil)
 
 
 ;; (use-package project
@@ -80,3 +82,15 @@
      (setq this-command 'hs-global-show))
     (_ (hs-hide-all))))
 
+
+
+
+(setq-default cursor-type t)
+
+
+(use-package treesit-jump
+  :ensure (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
+  :config
+  ;; Optional: add some queries to filter out of results (since they can be too
+  ;; cluttered sometimes)
+  (setq treesit-jump-queries-filter-list '("inner" "test" "param")))
