@@ -14,6 +14,7 @@
         indent-for-tab-command
         kill-region
         kill-visual-line
+        mouse-drag-region-rectangle
         multiple-cursors-mode
         org-beginning-of-line
         org-ctrl-c-ctrl-c
