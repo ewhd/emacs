@@ -6,6 +6,7 @@
         beginning-of-visual-line
         combobulate-python-indent-for-tab-command
         comment-line
+        dired-toggle-read-only
         electric-newline-and-maybe-indent
         electric-pair-delete-pair
         elpy-nav-indent-shift-right
@@ -68,5 +69,5 @@
         paredit-mode
         text-scale-decrease
         text-scale-decrease
-        wdired--self-insert
+        ;; wdired--self-insert
         ))

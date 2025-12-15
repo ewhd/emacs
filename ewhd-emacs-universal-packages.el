@@ -37,7 +37,7 @@
 (use-package olivetti
   ;; https://emacs.stackexchange.com/a/47989/43990
   :hook
-  ((org-mode . (lambda () (setup-olivetti 100))))
+  ((org-mode . (lambda () (setup-olivetti 90))))
   :config
   (defun setup-olivetti (width)
     "Set up olivetti-mode with a specific body width."
@@ -165,11 +165,22 @@
 (use-package telephone-line
   :config
   (telephone-line-defsegment* ewhd-telephone-line-file-name-absolute-path-segment ()
-    (propertize
-     (if (buffer-file-name)
-         (abbreviate-file-name (buffer-file-name))
-       (buffer-name))
-     'face 'mode-line-buffer-id))
+    (let* ((max-width 50)
+           (name (if (buffer-file-name)
+                     (abbreviate-file-name (buffer-file-name))
+                   (buffer-name))))
+      (propertize
+       (if (> (length name) max-width)
+           (concat "…" (substring name (- (length name) (1- max-width))))
+         name)
+       'face 'mode-line-buffer-id)))
+
+  ;; (telephone-line-defsegment* ewhd-telephone-line-file-name-absolute-path-segment ()
+  ;;   (propertize
+  ;;    (if (buffer-file-name)
+  ;;        (abbreviate-file-name (buffer-file-name))
+  ;;      (buffer-name))
+  ;;    'face 'mode-line-buffer-id))
 
   (telephone-line-defsegment* ewhd-telephone-line-major-mode-segment ()
     (cond
@@ -265,11 +276,9 @@
         mode-line-remote
         ,chezmoi-indicator)))
 
-
-
   (setq telephone-line-lhs
         '((evil   . (ewhd-telephone-line-buffer-segment))
-          (accent . (telephone-line-vc-segment
+          (accent . (ewhd-telephone-line-airline-position-segment
                      telephone-line-erc-modified-channels-segment
                      telephone-line-process-segment
                      ))
@@ -282,7 +291,7 @@
   (setq telephone-line-rhs
         '((nil    . (telephone-line-misc-info-segment))
           (accent . (ewhd-telephone-line-major-mode-segment))
-          (evil   . (ewhd-telephone-line-airline-position-segment))))
+          (evil   . (telephone-line-vc-segment))))
 
   (telephone-line-mode 1)
   )
