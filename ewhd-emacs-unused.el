@@ -427,3 +427,33 @@
   (setq-default cursor-type '(bar . 1)) ; normal
   (setq modalka-cursor-type 'box)       ; modalka-mode
   )
+
+
+;; I like this package, but it doens't apply to any window which is vertically
+;; split. Which isn't /actually/ a problem for my needs? And is maybe actually
+;; the right choice? But I'm annoyed I can't control that, so I'm sticking with
+;; just using olivetti everywhere.
+(use-package perfect-margin
+  :ensure t
+  :disabled t
+  :custom
+  (perfect-margin-visible-width 90)  
+  ;; :hook (after-init . perfect-margin-mode)
+  :config
+  ;; enable perfect-mode
+  ;; (perfect-margin-mode t)  
+  
+  ;; auto-center minibuffer windows
+  ;; (setq perfect-margin-ignore-filters nil)
+  
+  ;; auto-center special windows
+  ;; (setq perfect-margin-ignore-regexps nil)
+  
+  ;; add additinal bding on margin area
+  ;; (dolist (margin '("<left-margin> " "<right-margin> "))
+  ;;   (global-set-key (kbd (concat margin "<mouse-1>")) 'ignore)
+  ;;   (global-set-key (kbd (concat margin "<mouse-3>")) 'ignore)
+  ;;   (dolist (multiple '("" "double-" "triple-"))
+  ;;     (global-set-key (kbd (concat margin "<" multiple "wheel-up>")) 'mwheel-scroll)
+  ;;     (global-set-key (kbd (concat margin "<" multiple "wheel-down>")) 'mwheel-scroll)))
+  )
