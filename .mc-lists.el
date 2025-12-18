@@ -55,6 +55,7 @@
 
 (setq mc/cmds-to-run-once
       '(
+        beginning-of-buffer
         end-of-buffer
         handle-select-window
         ignore
@@ -69,5 +70,4 @@
         paredit-mode
         text-scale-decrease
         text-scale-decrease
-        ;; wdired--self-insert
         ))
