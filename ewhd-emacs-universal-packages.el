@@ -438,7 +438,10 @@
   (setq tabspaces-keymap-prefix (kbd "C-q"))
   :custom
   (tabspaces-session-project-session-store 'project)
-  (tabspaces-use-filtered-buffers-as-default t)
+  (tabspaces-use-filtered-buffers-as-default nil) ; I use consult-buffer
+                                        ; instead, so I want to keep
+                                        ; switch-to-buffer to adding open
+                                        ; buffers to a tabspace
   (tabspaces-default-tab "Default")
   (tabspaces-remove-to-default t)
   (tabspaces-include-buffers '("*scratch*"))

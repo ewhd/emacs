@@ -306,7 +306,7 @@ Argument FONT-NAME is the name of a font."
          ("C-+"         . text-scale-increase)
          ("C-x C-d"     . dired)        ; replace list-directory with dired
          ("C-x K"       . kill-current-buffer)
-         ("C-x C-b"     . consult-buffer) ; replaces list-buffers
+         ("C-x C-b"     . switch-to-buffer) 
          ("M-V"         . scroll-other-window-down)
          ("C-x M-b"     . view-buffer-other-window)
          ("C-x M-f"     . find-file-other-window)
