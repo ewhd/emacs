@@ -427,3 +427,12 @@
   (setq-default cursor-type '(bar . 1)) ; normal
   (setq modalka-cursor-type 'box)       ; modalka-mode
   )
+
+
+;; Install adaptive-wrap package
+(use-package adaptive-wrap
+  :ensure t
+  ;; :hook (visual-line-mode . adaptive-wrap-prefix-mode)
+  )
+;; I think this is causing some bugging with the way org-indent-mode handles
+;; wrapped line indentation, so I'm disabling it for now

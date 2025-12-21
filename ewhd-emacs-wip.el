@@ -29,11 +29,6 @@
 
 
 
-;; Install adaptive-wrap package
-(use-package adaptive-wrap
-  :ensure t
-  :hook (visual-line-mode . adaptive-wrap-prefix-mode))
-
 
 
 
