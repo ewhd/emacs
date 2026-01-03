@@ -7,6 +7,7 @@
         combobulate-python-indent-for-tab-command
         comment-line
         dired-toggle-read-only
+        drag-stuff-right
         electric-newline-and-maybe-indent
         electric-pair-delete-pair
         elpy-nav-indent-shift-right
@@ -20,6 +21,7 @@
         org-ctrl-c-ctrl-c
         org-cycle
         org-delete-char
+        org-do-demote
         org-end-of-line
         org-kill-line
         org-meta-return
@@ -68,5 +70,4 @@
         paredit-mode
         text-scale-decrease
         text-scale-decrease
-        ;; wdired--self-insert
         ))
