@@ -382,51 +382,7 @@
    ))
 
 
-(use-package modalka
-  :ensure t
-  :disabled t
-  :config
-  ;; Translate regular keybindings
-  (modalka-define-kbd "W" "M-w")
-  (modalka-define-kbd "Y" "M-y")
-  (modalka-define-kbd "a" "C-a")
-  (modalka-define-kbd "b" "C-b")
-  (modalka-define-kbd "e" "C-e")
-  (modalka-define-kbd "f" "C-f")
-  (modalka-define-kbd "g" "C-g")
-  (modalka-define-kbd "n" "C-n")
-  (modalka-define-kbd "p" "C-p")
-  (modalka-define-kbd "w" "C-w")
-  (modalka-define-kbd "y" "C-y")
-  (modalka-define-kbd "K" "C-k")
-  (modalka-define-kbd "m" "C-SPC")
 
-  ;; Bind a command directly
-  ;; (define-key modalka-mode-map (kbd "Q") #'my-command)
-
-  ;; Bind a prefix key for another keymap
-  ;; (define-key modalka-mode-map "x" ctl-x-map)
-  ;; (define-key ctl-x-map (kbd "e") #'eval-last-sexp)
-  ;; (define-key ctl-x-map (kbd "s") #'save-buffer)
-
-  ;; Activate modalka-mode
-  ;; (global-set-key (kbd "<return>") #'modalka-mode)
-  ;; (global-set-key (kbd "C-m") #'modalka-mode)
-
-  ;; Enable modalka minor mode everywhere by default (except minibuffer)
-  ;; (modalka-global-mode 1)
-  
-  ;; Disable modalka-mode in these major modes:
-  ;; (add-to-list 'modalka-excluded-modes 'magit-status-mode)
-
-  ;; Enable modalka-mode when other certain modes are called:
-  ;; (add-hook 'text-mode-hook #'modalka-mode)
-  ;; (add-hook 'prog-mode-hook #'modalka-mode)
-
-  ;; Set cursor for visual feedback
-  (setq-default cursor-type '(bar . 1)) ; normal
-  (setq modalka-cursor-type 'box)       ; modalka-mode
-  )
 
 
 ;; Install adaptive-wrap package
