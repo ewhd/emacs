@@ -34,16 +34,15 @@
   )
 
 
+
+
 (use-package olivetti
-  ;; https://emacs.stackexchange.com/a/47989/43990
+  :custom
+  (olivetti-body-width 90)
   :hook
-  ((org-mode . (lambda () (setup-olivetti 90))))
-  :config
-  (defun setup-olivetti (width)
-    "Set up olivetti-mode with a specific body width."
-    (unless olivetti-mode
-      (setq olivetti-body-width width)
-      (olivetti-mode 1)))
+  ((text-mode . olivetti-mode))
+  ((prog-mode . olivetti-mode))
+  ((conf-mode . olivetti-mode))
   )
 
 

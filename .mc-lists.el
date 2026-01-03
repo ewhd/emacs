@@ -16,6 +16,7 @@
         indent-for-tab-command
         kill-region
         kill-visual-line
+        mouse-drag-region-rectangle
         multiple-cursors-mode
         org-beginning-of-line
         org-ctrl-c-ctrl-c
@@ -56,6 +57,7 @@
 
 (setq mc/cmds-to-run-once
       '(
+        beginning-of-buffer
         end-of-buffer
         handle-select-window
         ignore
